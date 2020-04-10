@@ -5,8 +5,8 @@
 #ifndef TRACKGENERATOR_DBCONNECTION_H
 #define TRACKGENERATOR_DBCONNECTION_H
 
-#include "planet.h"
-#include "track.h"
+#include "../model/planet.h"
+#include "../model/track.h"
 
 /*
  * Fetches all Planets from the database.

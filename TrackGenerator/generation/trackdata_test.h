@@ -14,7 +14,15 @@
  */
 int TrackData_test(Block* testBlocks, int numBlocks);
 
+/*
+ * Simple test with predefined Blocks to test
+ */
 int TrackData_Test_simple();
+
+/*
+ * Test generating random unique blocks,
+ * and testing them
+ */
 int TrackData_Test_random();
 
 #endif //TRACKGENERATOR_TRACKDATA_TEST_H_H

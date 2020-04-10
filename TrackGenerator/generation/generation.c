@@ -9,8 +9,8 @@
 #include <time.h>
 #include <math.h>
 
-#include "planet.h"
-#include "track.h"
+#include "../model/planet.h"
+#include "../model/track.h"
 #include "generation.h"
 
 

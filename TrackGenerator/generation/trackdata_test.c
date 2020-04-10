@@ -118,11 +118,6 @@ int TrackData_Test_random(){
             }
         }
     }
-/*
-    for(int i=0; i<RANDOM_TEST_SIZE; i++) {
-        Block_print(&blocks[i]);
-    }*/
-
     int result = TrackData_test(blocks, RANDOM_TEST_SIZE);
 
     if( result )

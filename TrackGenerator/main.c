@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "planet.h"
-#include "track.h"
-#include "generation.h"
-#include "trackdata.h"
-#include "trackdata_test.h"
+#include "model/planet.h"
+#include "model/track.h"
+#include "generation/generation.h"
+#include "generation/trackdata.h"
+#include "generation/trackdata_test.h"
 
 int main() {
    /* Planet planet;
