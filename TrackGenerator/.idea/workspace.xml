@@ -15,19 +15,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="abbedfc5-98de-4f57-aafe-c87f5bbf06a3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbconnection.c" beforeDir="false" afterPath="$PROJECT_DIR$/networking/dbconnection.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbconnection.h" beforeDir="false" afterPath="$PROJECT_DIR$/networking/dbconnection.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generation.c" beforeDir="false" afterPath="$PROJECT_DIR$/generation/generation.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generation.h" beforeDir="false" afterPath="$PROJECT_DIR$/generation/generation.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation/trackdata.c" beforeDir="false" afterPath="$PROJECT_DIR$/generation/trackdata.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation/trackdata.h" beforeDir="false" afterPath="$PROJECT_DIR$/generation/trackdata.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generation/trackdata_test.c" beforeDir="false" afterPath="$PROJECT_DIR$/generation/trackdata_test.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/planet.h" beforeDir="false" afterPath="$PROJECT_DIR$/model/planet.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/track.c" beforeDir="false" afterPath="$PROJECT_DIR$/model/track.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/track.h" beforeDir="false" afterPath="$PROJECT_DIR$/model/track.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trackdata.c" beforeDir="false" afterPath="$PROJECT_DIR$/generation/trackdata.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trackdata.h" beforeDir="false" afterPath="$PROJECT_DIR$/generation/trackdata.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trackdata_test.c" beforeDir="false" afterPath="$PROJECT_DIR$/generation/trackdata_test.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trackdata_test.h" beforeDir="false" afterPath="$PROJECT_DIR$/generation/trackdata_test.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/planet.h" beforeDir="false" afterPath="$PROJECT_DIR$/model/planet.h" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,11 +34,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="41">
-              <caret line="12" selection-start-line="12" selection-end-line="12" />
+            <state relative-caret-position="250">
+              <caret line="56" column="9" lean-forward="true" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -66,11 +58,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generation/generation.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="219" column="26" lean-forward="true" selection-start-line="219" selection-start-column="26" selection-end-line="219" selection-end-column="26" />
+            <state relative-caret-position="247">
+              <caret line="13" column="23" lean-forward="true" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
               <folding>
                 <element signature="e#42#61#0" expanded="true" />
               </folding>
@@ -81,8 +73,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generation/generation.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="18" column="22" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
+            <state relative-caret-position="79">
+              <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -90,8 +82,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/planet.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+            <state relative-caret-position="38">
+              <caret line="2" column="2" lean-forward="true" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -99,17 +91,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/track.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generation/trackdata.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
+            <state relative-caret-position="-7">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
             </state>
           </provider>
         </entry>
@@ -117,8 +100,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generation/trackdata.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-12">
-              <caret line="163" column="1" selection-start-line="163" selection-start-column="1" selection-end-line="163" selection-end-column="1" />
+            <state relative-caret-position="226">
+              <caret line="302" column="28" lean-forward="true" selection-start-line="302" selection-start-column="28" selection-end-line="302" selection-end-column="28" />
               <folding>
                 <element signature="e#2#24#0" expanded="true" />
               </folding>
@@ -129,8 +112,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generation/trackdata_test.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="9" column="2" lean-forward="true" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
+            <state relative-caret-position="247">
+              <caret line="13" column="3" selection-start-line="13" selection-start-column="3" selection-end-line="13" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -138,11 +121,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generation/trackdata_test.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="101" column="4" selection-start-line="101" selection-start-column="4" selection-end-line="101" selection-end-column="63" />
+            <state relative-caret-position="-1383">
+              <caret line="14" column="54" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
               <folding>
                 <element signature="e#1#20#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generation/trackdata.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="84">
+              <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -152,6 +144,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>Block_cre</find>
+      <find>trackData</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -176,9 +170,13 @@
         <option value="$PROJECT_DIR$/trackdata.c" />
         <option value="$PROJECT_DIR$/trackdata_test.h" />
         <option value="$PROJECT_DIR$/trackdata_test.c" />
-        <option value="$PROJECT_DIR$/main.c" />
-        <option value="$PROJECT_DIR$/generation/trackdata_test.c" />
         <option value="$PROJECT_DIR$/generation/trackdata_test.h" />
+        <option value="$PROJECT_DIR$/generation/generation.c" />
+        <option value="$PROJECT_DIR$/model/planet.h" />
+        <option value="$PROJECT_DIR$/generation/trackdata_test.c" />
+        <option value="$PROJECT_DIR$/generation/trackdata.h" />
+        <option value="$PROJECT_DIR$/main.c" />
+        <option value="$PROJECT_DIR$/generation/trackdata.c" />
       </list>
     </option>
   </component>
@@ -266,28 +264,28 @@
       <option name="presentableId" value="Default" />
       <updated>1586433804003</updated>
       <workItem from="1586433805796" duration="22085000" />
-      <workItem from="1586498649838" duration="15555000" />
+      <workItem from="1586498649838" duration="23716000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37640000" />
+    <option name="totallyTimeSpent" value="45801000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.50084037" side_tool="true" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.49915966" visible="true" weight="0.23242188" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.49915966" visible="true" weight="0.23242188" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="CMake" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="3" />
-      <window_info anchor="bottom" id="Messages" order="4" weight="0.32769832" />
+      <window_info anchor="bottom" id="Messages" order="4" weight="0.63979197" />
       <window_info anchor="bottom" id="Message" order="5" />
       <window_info anchor="bottom" id="Find" order="6" />
-      <window_info anchor="bottom" id="Run" order="7" weight="0.8374512" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.46684006" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
@@ -352,20 +350,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/planet.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/track.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/track.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
@@ -376,63 +360,77 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generation/trackdata.c">
+    <entry file="file://$PROJECT_DIR$/generation/generation.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-12">
-          <caret line="163" column="1" selection-start-line="163" selection-start-column="1" selection-end-line="163" selection-end-column="1" />
-          <folding>
-            <element signature="e#2#24#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="79">
+          <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.c">
+    <entry file="file://$PROJECT_DIR$/model/planet.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="38">
+          <caret line="2" column="2" lean-forward="true" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generation/trackdata.h">
+    <entry file="file://$PROJECT_DIR$/model/track.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generation/trackdata_test.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="2" lean-forward="true" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
+        <state relative-caret-position="-7">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/generation/trackdata_test.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="101" column="4" selection-start-line="101" selection-start-column="4" selection-end-line="101" selection-end-column="63" />
+        <state relative-caret-position="-1383">
+          <caret line="14" column="54" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
           <folding>
             <element signature="e#1#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generation/generation.h">
+    <entry file="file://$PROJECT_DIR$/generation/trackdata.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="18" column="22" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
+        <state relative-caret-position="84">
+          <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generation/trackdata_test.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" column="3" selection-start-line="13" selection-start-column="3" selection-end-line="13" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generation/trackdata.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="302" column="28" lean-forward="true" selection-start-line="302" selection-start-column="28" selection-end-line="302" selection-end-column="28" />
+          <folding>
+            <element signature="e#2#24#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/generation/generation.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="219" column="26" lean-forward="true" selection-start-line="219" selection-start-column="26" selection-end-line="219" selection-end-column="26" />
+        <state relative-caret-position="247">
+          <caret line="13" column="23" lean-forward="true" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
           <folding>
             <element signature="e#42#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="56" column="9" lean-forward="true" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

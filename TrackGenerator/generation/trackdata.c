@@ -80,6 +80,7 @@ TrackData* TrackData_create(){
     trackData->firstChunk = NULL;
     trackData->numBlocks = 0;
     trackData->numChunks = 0;
+    trackData->numCheckpoints = 0;
     return trackData;
 }
 
@@ -103,7 +104,7 @@ void TrackData_setBlock(TrackData* trackData, int x, int y, char blockType){
     block->type = blockType;
 }
 
-void TrackData_forEachBlock(TrackData* trackData, void (*blockCallback)(Block*), int skipWalls){
+void TrackData_forEachBlock(TrackData* trackData, void (*blockCallback)(Block*, void*), void* data, int skipWalls){
     Chunk* chunk = trackData->firstChunk;
     while(chunk != NULL){
         // Initialize blocks
@@ -111,12 +112,39 @@ void TrackData_forEachBlock(TrackData* trackData, void (*blockCallback)(Block*),
             for( int x=0; x<CHUNK_SIZE; x++) {
                 Block* block = &chunk->blocks[y][x];
                 if( !skipWalls || block->type != 0) {
-                    blockCallback(block);
+                    blockCallback(block, data);
                 }
             }
         }
         chunk = chunk->next;
     }
+}
+
+void TrackData_addCheckpoint(TrackData* trackData, int x, int y){
+    Checkpoint* newCheckpoint = (Checkpoint*) malloc(sizeof(Checkpoint));
+    if( newCheckpoint == NULL ){
+        printf("ERROR: Couldn't allocate Checkpoint for TrackData\n");
+        return;
+    }
+
+    newCheckpoint->x = x;
+    newCheckpoint->y = y;
+    newCheckpoint->next = NULL;
+
+    trackData->numCheckpoints++;
+
+    // New CP is first
+    if( trackData->firstCheckpoint == NULL){
+        trackData->firstCheckpoint = newCheckpoint;
+        return;
+    }
+
+    // Find tail of linked checkpoint list
+    Checkpoint* checkpoint = trackData->firstCheckpoint;
+    while( checkpoint->next != NULL ){
+        checkpoint = checkpoint->next;
+    }
+    checkpoint->next = newCheckpoint;
 }
 
 
@@ -165,7 +193,11 @@ void Block_print(Block* block){
 
 
 void TrackData_print(TrackData* trackData){
-    printf("TrackData( numChunks=%d, numBlocks=%d )\n", trackData->numChunks, trackData->numBlocks );
+    printf("TrackData( numChunks=%d, numBlocks=%d, numCheckpoints=%d )\n", trackData->numChunks, trackData->numBlocks, trackData->numCheckpoints );
+}
+
+void Checkpoint_print(Checkpoint* checkpoint) {
+    printf("Checkpoint( x=%d, y=%d, hasNext=%s)\n", checkpoint->x, checkpoint->y, checkpoint->next == NULL ? "false" : "true");
 }
 
 
@@ -185,9 +217,96 @@ int Block_equals(Block* block1, Block* block2) {
     if( block1 == NULL || block2 == NULL ) return 0;
     if( block1 == block2) return 1; // Pointers are equals
     return (block1->x == block2->x && block1->y == block2->y && block1->type == block2->type);
+
 }
 
 
-// ================================================================================================
-// Testing
 
+
+
+
+void TrackBinaryData_free(TrackBinaryData* data){
+    if( data->data != NULL )
+        free(data->data);
+    free(data);
+}
+
+
+void TrackBinaryData_appendCheckpoint(TrackBinaryData* data, Checkpoint* block){
+    int* intPtr = data->last;
+
+    *intPtr = block->x;
+    intPtr++;
+    *intPtr = block->y;
+    intPtr++;
+
+    data->last = intPtr;
+    data->size += SIZEOF_CHECKPOINT;
+}
+
+void TrackBinaryData_appendBlock(TrackBinaryData* data, Block* block){
+    int* intPtr = data->last;
+
+    *intPtr = block->x;
+    intPtr++;
+    *intPtr = block->y;
+    intPtr++;
+
+    char* charPtr = (char*) intPtr;
+    *charPtr = block->type;
+    charPtr++;
+
+    data->last = charPtr;
+    data->size += SIZEOF_BLOCK;
+}
+
+
+void storeBlock(Block* block, void* data){
+    TrackBinaryData* binaryData = (TrackBinaryData*) data;
+    TrackBinaryData_appendBlock(binaryData, block);
+}
+
+
+
+TrackBinaryData* TrackData_toBinaryData(TrackData* trackData) {
+
+    TrackBinaryData *binaryTrack = (TrackBinaryData*) malloc(sizeof(TrackBinaryData));
+
+    // Calculate how large the data should be
+    size_t dataSize = (unsigned int) ((trackData->numBlocks+1) * SIZEOF_BLOCK + trackData->numCheckpoints * SIZEOF_CHECKPOINT);
+
+    binaryTrack->data = malloc(dataSize);
+    binaryTrack->last = binaryTrack->data;
+    binaryTrack->size = 0;
+
+    if (binaryTrack->data == NULL) {
+        printf("ERROR: Couldn't allocate %d bytes when converting TrackData!\n", dataSize);
+        TrackBinaryData_free(binaryTrack);
+        return NULL;
+    }
+
+    // Append each block
+    TrackData_forEachBlock(trackData, &storeBlock, binaryTrack, 1);
+
+    // The end of the Block data is signalled by Block which is all 0
+    Block endBlock = {0,0,0};
+    TrackBinaryData_appendBlock(binaryTrack, &endBlock);
+
+
+    // Add all checkpoints
+    Checkpoint* checkpoint = trackData->firstCheckpoint;
+    while(checkpoint != NULL){
+        TrackBinaryData_appendCheckpoint(binaryTrack, checkpoint);
+        checkpoint = checkpoint->next;
+    }
+
+    // Check that size match
+    if( binaryTrack->size != dataSize ){
+        printf("ERROR: Resulting size (%d) does not equal allocated size (%d), when converting TrackData!\n",
+                binaryTrack->size, dataSize);
+        TrackBinaryData_free(binaryTrack);
+        return NULL;
+    }
+
+    return binaryTrack;
+}

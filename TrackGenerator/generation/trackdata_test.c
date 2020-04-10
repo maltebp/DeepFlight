@@ -7,7 +7,7 @@ Block* testBlocks = NULL;
 int numTestBlocks = 0;
 int test_CallbackSuccess = 1;
 
-void testBlockCallback(Block* block){
+void testBlockCallback(Block* block, void* data){
     if( test_CallbackSuccess ){
         printf("\tChecking: ");
         Block_print(block);
@@ -53,7 +53,7 @@ int TrackData_test(Block* blocks, int numBlocks){
     testBlocks = blocks;
     numTestBlocks = numBlocks;
     test_CallbackSuccess = 1;
-    TrackData_forEachBlock(trackData, &testBlockCallback, 1);
+    TrackData_forEachBlock(trackData, &testBlockCallback, NULL, 1);
     if( test_CallbackSuccess ){
         printf("'TrackData_forEachBlock(..)': SUCCESS\n");
         TrackData_free(trackData);

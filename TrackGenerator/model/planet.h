@@ -5,7 +5,6 @@
 #ifndef TRACKGENERATOR_PLANET_H
 #define TRACKGENERATOR_PLANET_H
 
-
 typedef struct Planet {
     long id;
     char name[100];

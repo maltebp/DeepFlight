@@ -18,10 +18,9 @@ int main() {
     Track_print(track);*/
 
 
-    TrackData_Test_random();
+    //TrackData_Test_random();
 
    //test_TrackData();
-/*
     TrackData* trackData = TrackData_create();
 
     TrackData_setBlock(trackData, 0, 0, BLOCK_TYPE_SPACE);
@@ -32,11 +31,45 @@ int main() {
     TrackData_setBlock(trackData, -1234,500, BLOCK_TYPE_SPACE);
     TrackData_setBlock(trackData, 1000,200, BLOCK_TYPE_SPACE);
 
-    TrackData_forEachBlock(trackData, &Block_print, 1);
 
-    TrackData_print(trackData);
+    TrackData_addCheckpoint(trackData, 100, 100);
+    TrackData_addCheckpoint(trackData, -1, -1);
+    TrackData_addCheckpoint(trackData, 0, 0);
 
-    TrackData_free(trackData);*/
+
+    TrackBinaryData* binaryTrack = TrackData_toBinaryData(trackData);
+    if( binaryTrack == NULL ) return 0;
+    void* ptr = binaryTrack->data;
+    size_t size = 0;
+    while(1){
+        int x = *((int*) (ptr+size));
+        size += sizeof(int);
+        int y = *((int*) (ptr+size));
+        size += sizeof(int);
+        char type = *((char*) (ptr+size));
+        size += sizeof(char);
+
+        printf("%d:\tx=%d, y=%d, type=%d\n", size-SIZEOF_BLOCK, x, y, type);
+
+        if( x == 0 && y == 0 && type == 0 ){
+            printf("Reached end block\n");
+            break;
+        }
+    };
+
+
+
+    while( size < binaryTrack->size ){
+        int x = *((int*) (ptr+size));
+        size += sizeof(int);
+        int y = *((int*) (ptr+size));
+        size += sizeof(int);
+        printf("%d:\tx=%d, y=%d\n", size-SIZEOF_BLOCK, x, y);
+    }
+
+    TrackBinaryData_free(binaryTrack);
+    TrackData_free(trackData);
+
 
     return 0;
 }
