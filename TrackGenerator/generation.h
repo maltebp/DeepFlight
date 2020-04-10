@@ -12,4 +12,30 @@ Track* generateTrackFromSeed(Planet *planet, TrackList *existingTracks, long see
 
 Track* generateTrack(Planet *planet, TrackList *existingTracks);
 
+
+
+
+typedef struct Node{
+    struct Node* next;
+    int x;
+    int y;
+} Node;
+
+
+typedef struct NodePool{
+    struct NodePool* next;
+    Node* nodes;
+    int used;
+    int size;
+} NodePool;
+
+
+Node* NodePool_getNode(NodePool* pool);
+
+NodePool* NodePool_create(int size);
+
+void NodePool_free(NodePool* pool);
+
+
+
 #endif //TRACKGENERATOR_GENERATOR_H

@@ -3,4 +3,4 @@ project(TrackGenerator)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(TrackGenerator main.c track.h generation.h planet.h dbconnection.h dbconnection.c generation.c track.c)
+add_executable(TrackGenerator main.c track.h generation.h planet.h dbconnection.h dbconnection.c generation.c track.c trackdata.h trackdata.c trackdata_test.h trackdata_test.c)
