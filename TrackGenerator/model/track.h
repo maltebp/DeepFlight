@@ -5,6 +5,9 @@
 #ifndef TRACKGENERATOR_TRACK_H
 #define TRACKGENERATOR_TRACK_H
 
+#include <stdio.h>
+#include <stdint.h>
+
 #include "planet.h"
 
 
@@ -15,30 +18,15 @@ typedef struct TrackImage{
 
 typedef struct Track {
     char name[100];
-    long id;
-    long seed;
+    int64_t id;
+    int64_t seed;
     Planet *planet;
     int numCheckpoints;
-    float resistance;
     double length;
     TrackImage *image;
-    void *data;
+    size_t data_size;
+    char *data;
 } Track;
-
-
-typedef struct TrackBlock {
-    char size;
-    int x;
-    int y;
-
-} TrackBlock;
-
-
-typedef struct TrackCheckpoint {
-    int x;
-    int y;
-} TrackCheckpoint;
-
 
 typedef struct TrackList {
     int size;
@@ -47,6 +35,19 @@ typedef struct TrackList {
 
 
 void Track_print(Track*);
+
+
+Track* Track_create();
+
+/*
+ * Frees the Track, including the freeing 'data' and the 'image'.
+ * It does NOT free the 'planet'.
+ */
+void Track_free(Track*);
+
+
+
+void Track_saveToFile(Track* track, const char* fileName);
 
 
 

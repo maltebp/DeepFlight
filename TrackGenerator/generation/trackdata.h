@@ -6,6 +6,7 @@
 #define TRACKGENERATOR_TRACKDATA_H
 
 #include <stdio.h>
+#include "../model/track.h"
 
 // Width and height of Chunk
 #define CHUNK_SIZE 10
@@ -47,11 +48,6 @@ typedef struct TrackData {
 } TrackData;
 
 
-typedef struct TrackBinaryData {
-    void* data;
-    size_t size; // number of bytes
-    void* last;
-} TrackBinaryData;
 
 
 // Tracka Data functions
@@ -61,8 +57,7 @@ Block* TrackData_getBlock(TrackData* trackData, int x, int y, int createNew);
 void TrackData_setBlock(TrackData* trackData, int x, int y, char blockType);
 void TrackData_addCheckpoint(TrackData* trackData, int x, int y);
 //void TrackData_saveToFile(TrackData* trackData, const char* fileName);
-TrackBinaryData* TrackData_toBinaryData(TrackData* trackData);
-void TrackBinaryData_free(TrackBinaryData* data);
+void TrackData_storeAsBinary(Track *track, TrackData *trackData);
 
 
 void TrackData_forEachBlock(TrackData* trackData, void (*blockCallback)(Block* block, void* data), void* data, int skipWalls);

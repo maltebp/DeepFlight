@@ -8,7 +8,7 @@
 typedef struct Planet {
     long id;
     char name[100];
-    char color[4]; // rgba
+    char color[3]; // rgba
 
     // How long tracks are
     int lengthFactor;

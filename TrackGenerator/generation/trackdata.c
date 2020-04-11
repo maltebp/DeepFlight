@@ -223,13 +223,16 @@ int Block_equals(Block* block1, Block* block2) {
 
 
 
+// ===================================================================================================
+// BINARY TRACK CONVERSION
+
+typedef struct TrackBinaryData {
+    void* data;
+    size_t size; // number of bytes
+    void* last;
+} TrackBinaryData;
 
 
-void TrackBinaryData_free(TrackBinaryData* data){
-    if( data->data != NULL )
-        free(data->data);
-    free(data);
-}
 
 
 void TrackBinaryData_appendCheckpoint(TrackBinaryData* data, Checkpoint* block){
@@ -256,6 +259,9 @@ void TrackBinaryData_appendBlock(TrackBinaryData* data, Block* block){
     *charPtr = block->type;
     charPtr++;
 
+/*    printf("Storing block: ");
+    Block_print(block);*/
+
     data->last = charPtr;
     data->size += SIZEOF_BLOCK;
 }
@@ -268,11 +274,15 @@ void storeBlock(Block* block, void* data){
 
 
 
-TrackBinaryData* TrackData_toBinaryData(TrackData* trackData) {
+/*
+ * Converts the TrackData (blocks and checkpoints, to a single sequential
+ * array of bytes, and stores it in the Track;
+ */
+void TrackData_storeAsBinary(Track *track, TrackData *trackData) {
 
     TrackBinaryData *binaryTrack = (TrackBinaryData*) malloc(sizeof(TrackBinaryData));
 
-    // Calculate how large the data should be
+    // Calculate how allocated memory should should be
     size_t dataSize = (unsigned int) ((trackData->numBlocks+1) * SIZEOF_BLOCK + trackData->numCheckpoints * SIZEOF_CHECKPOINT);
 
     binaryTrack->data = malloc(dataSize);
@@ -281,8 +291,9 @@ TrackBinaryData* TrackData_toBinaryData(TrackData* trackData) {
 
     if (binaryTrack->data == NULL) {
         printf("ERROR: Couldn't allocate %d bytes when converting TrackData!\n", dataSize);
-        TrackBinaryData_free(binaryTrack);
-        return NULL;
+        free(binaryTrack->data);
+        free(binaryTrack);
+        return;
     }
 
     // Append each block
@@ -304,9 +315,13 @@ TrackBinaryData* TrackData_toBinaryData(TrackData* trackData) {
     if( binaryTrack->size != dataSize ){
         printf("ERROR: Resulting size (%d) does not equal allocated size (%d), when converting TrackData!\n",
                 binaryTrack->size, dataSize);
-        TrackBinaryData_free(binaryTrack);
-        return NULL;
+        free(binaryTrack->data);
+        free(binaryTrack);
+        return;
     }
 
-    return binaryTrack;
+    track->data = binaryTrack->data;
+    track->data_size = binaryTrack->size;
+
+    free(binaryTrack);
 }

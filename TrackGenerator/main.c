@@ -7,7 +7,10 @@
 #include "generation/trackdata.h"
 #include "generation/trackdata_test.h"
 
+
 int main() {
+
+
    /* Planet planet;
     strcpy(planet.name, "Test Planet");
 
@@ -17,59 +20,41 @@ int main() {
     printf("\n\nGenerated track");
     Track_print(track);*/
 
+    //TODO: Move the setup of the planet to a proper place
 
-    //TrackData_Test_random();
+    // Setup planet
+    Planet planet;
+    planet.color[0] = (char) 100;
+    planet.color[1] = (char) 200;
+    planet.color[2] = (char) 175;
+    strcpy(planet.name, "TestPlanet");
+    planet.curveFactor = 10;
+    planet.lengthFactor = 10;
+    planet.stretchFactor = 10;
+    planet.widthFactor = 10;
+    planet.widthNoise = 10;
 
-   //test_TrackData();
-    TrackData* trackData = TrackData_create();
 
+    Track* track = generateTrackFromSeed(&planet, NULL, 0);
+
+/*
+    track->id = 16;
+    printf("Size of id: %d\n", sizeof(track->id));
+    strcpy(track->name, "Planet ABC1234");
+*/
+
+/*    TrackData* trackData = TrackData_create();
     TrackData_setBlock(trackData, 0, 0, BLOCK_TYPE_SPACE);
-    TrackData_setBlock(trackData, 5, 5, BLOCK_TYPE_BORDER);
-    TrackData_setBlock(trackData, -100,-1000, BLOCK_TYPE_SPACE);
-    TrackData_setBlock(trackData, -99,-4999, BLOCK_TYPE_SPACE);
-    TrackData_setBlock(trackData, 20,230, BLOCK_TYPE_SPACE);
-    TrackData_setBlock(trackData, -1234,500, BLOCK_TYPE_SPACE);
-    TrackData_setBlock(trackData, 1000,200, BLOCK_TYPE_SPACE);
+    TrackData_setBlock(trackData, 10, 10, BLOCK_TYPE_SPACE);
+    TrackData_setBlock(trackData, 20, 20, BLOCK_TYPE_SPACE);
+    TrackData_setBlock(trackData, 40, 40, BLOCK_TYPE_SPACE);
 
+    TrackData_storeAsBinary(track, trackData);
 
-    TrackData_addCheckpoint(trackData, 100, 100);
-    TrackData_addCheckpoint(trackData, -1, -1);
-    TrackData_addCheckpoint(trackData, 0, 0);
+    TrackData_free(trackData);*/
 
-
-    TrackBinaryData* binaryTrack = TrackData_toBinaryData(trackData);
-    if( binaryTrack == NULL ) return 0;
-    void* ptr = binaryTrack->data;
-    size_t size = 0;
-    while(1){
-        int x = *((int*) (ptr+size));
-        size += sizeof(int);
-        int y = *((int*) (ptr+size));
-        size += sizeof(int);
-        char type = *((char*) (ptr+size));
-        size += sizeof(char);
-
-        printf("%d:\tx=%d, y=%d, type=%d\n", size-SIZEOF_BLOCK, x, y, type);
-
-        if( x == 0 && y == 0 && type == 0 ){
-            printf("Reached end block\n");
-            break;
-        }
-    };
-
-
-
-    while( size < binaryTrack->size ){
-        int x = *((int*) (ptr+size));
-        size += sizeof(int);
-        int y = *((int*) (ptr+size));
-        size += sizeof(int);
-        printf("%d:\tx=%d, y=%d\n", size-SIZEOF_BLOCK, x, y);
-    }
-
-    TrackBinaryData_free(binaryTrack);
-    TrackData_free(trackData);
-
+    Track_saveToFile(track, "C:\\Users\\malte\\VisualStudioProjects\\DeepFlight\\DeepFlight\\bin\\Windows\\x86\\Debug\\testtrack.dft");
+    Track_free(track);
 
     return 0;
 }
