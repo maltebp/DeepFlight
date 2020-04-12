@@ -8,6 +8,12 @@
 #include "../model/planet.h"
 #include "../model/track.h"
 
+
+#define START_END_NODE_OFFSET 8
+#define CHECKPOINT_NODE_STEPSIZE 35
+
+
+
 Track* generateTrackFromSeed(Planet *planet, TrackList *existingTracks, unsigned int seed);
 
 Track* generateTrack(Planet *planet, TrackList *existingTracks);

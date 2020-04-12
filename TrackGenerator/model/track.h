@@ -21,9 +21,11 @@ typedef struct Track {
     int64_t id;
     int64_t seed;
     Planet *planet;
-    int numCheckpoints;
-    double length;
     TrackImage *image;
+    int startingX, startingY;
+    double startDirection;
+    double length;
+    int numCheckpoints;
     size_t data_size;
     char *data;
 } Track;

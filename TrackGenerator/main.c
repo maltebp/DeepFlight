@@ -35,7 +35,7 @@ int main() {
     planet.widthNoise = 10;
 
 
-    Track* track = generateTrackFromSeed(&planet, NULL, 0);
+    Track* track = generateTrackFromSeed(&planet, NULL, 11);
 
 /*
     track->id = 16;
