@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 
+
 Chunk* TrackData_getChunk(TrackData* trackData, int x, int y, int createNew);
 
 
@@ -96,9 +97,12 @@ Block* TrackData_getBlock(TrackData* trackData, int x, int y, int createNew){
 void TrackData_setBlock(TrackData* trackData, int x, int y, char blockType){
     Block* block = TrackData_getBlock(trackData, x, y, 1);
 
-    if( block->type != blockType ){
-        if( blockType == 0 ) trackData->numBlocks--;
-        if( blockType != 0 ) trackData->numBlocks++;
+    // Update number of 'non-wall blocks'
+    if( block->type == BLOCK_TYPE_WALL && blockType != BLOCK_TYPE_WALL){
+        trackData->numBlocks++;
+    }
+    else if( block->type != BLOCK_TYPE_WALL && blockType == BLOCK_TYPE_WALL){
+        trackData->numBlocks--;
     }
 
     block->type = blockType;
@@ -258,9 +262,6 @@ void TrackBinaryData_appendBlock(TrackBinaryData* data, Block* block){
     char* charPtr = (char*) intPtr;
     *charPtr = block->type;
     charPtr++;
-
-/*    printf("Storing block: ");
-    Block_print(block);*/
 
     data->last = charPtr;
     data->size += SIZEOF_BLOCK;

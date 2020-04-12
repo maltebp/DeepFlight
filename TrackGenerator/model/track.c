@@ -31,10 +31,15 @@ void Track_print(Track *track){
 
 
 void Track_saveToFile(Track* track, const char* fileName){
+
+    printf("\nStoring track '%s' to file '%s'\n", track->name, fileName);
     FILE *file = fopen(fileName, "wb");
 
     // ID
     fwrite(&track->id, 8, 1, file);
+
+    // Seed
+    fwrite(&track->seed, 8, 1, file);
 
     // Name
     char* c = track->name;
@@ -45,8 +50,22 @@ void Track_saveToFile(Track* track, const char* fileName){
     fwrite(c, sizeof(char), 1, file); // Append null
 
 
-    // TODO: Add remaining Track data
+    // Planet id
+    fwrite(&track->planet->id, 8, 1, file);
 
+    // Planet name
+    c = track->planet->name;
+    while(*c != '\0'){
+        fwrite(c, sizeof(char), 1, file);
+        c++;
+    }
+    fwrite(c, sizeof(char), 1, file); // Append null
+
+    // Planet color
+    printf("Planet Colors: (%d, %d, %d)\n", track->planet->color[0], track->planet->color[1], track->planet->color[2]);
+    fwrite(&track->planet->color[0], sizeof(char), 1, file);
+    fwrite(&track->planet->color[1], sizeof(char), 1, file);
+    fwrite(&track->planet->color[2], sizeof(char), 1, file);
 
     // Starting position
     fwrite(&track->startingX, sizeof(int), 1, file);
@@ -55,6 +74,10 @@ void Track_saveToFile(Track* track, const char* fileName){
     // Starting direction
     fwrite(&track->startDirection, sizeof(double), 1, file);
 
+    // Number of checkpoints
+    fwrite(&track->numCheckpoints, sizeof(int), 1, file);
+
+    // Track (block) data
     if( track->data == NULL )
         printf("WARNING: Track data is NULL\n");
     else{
@@ -63,25 +86,6 @@ void Track_saveToFile(Track* track, const char* fileName){
 
     fclose(file);
 
-
-    /*// Seed
-    fwrite(&track->seed, sizeof(long), 1, file);
-
-    // Planet
-    fwrite(&track->id, sizeof(long), 1, file);
-
-    // Planet
-    Planet* planet = track->planet;
-    if( planet != NULL){
-        fwrite(, sizeof(long), 1, file);
-    }
-    fwrite(polanet, sizeof(long), 1, file);
-*/
-
-
-
-
-
-
+    printf("Storing Track: Done!\n");
 }
 

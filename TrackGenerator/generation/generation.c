@@ -252,7 +252,6 @@ Node** generateSidePaths(Track* track, Node* centerPath, NodePool* nodePool){
                 left = left->next;
             }
 
-
             // Update width
             double widthAdjustment = 2 + (rand()%4)/20.0;
             widthAdjustment *= track->planet->widthNoise/7.0;
@@ -390,9 +389,15 @@ void generateBlocks(Track *track, TrackData* trackData, Node** sidePaths, int* b
             for( int y=minY; y<maxY; y++){
                 if( isPointWithinTriangle(x,y,triangle1) || isPointWithinTriangle(x,y,triangle2) ) {
                     TrackData_setBlock(trackData, x, y, BLOCK_TYPE_SPACE);
-                    //TrackData_setBlock(trackData, x+1, y, BLOCK_TYPE_SPACE);
-                    //TrackData_setBlock(trackData, x, y+1, BLOCK_TYPE_SPACE);
-                    //printf("Adding block:\t(%d,%d)\n", x, y);
+
+                    // Update borders
+                    int borderX[] = {-1, 1, 0, 0};
+                    int borderY[] = {0, 0, -1, 1};
+                    for( int i=0; i<4; i++){
+                        Block* currentBlock = TrackData_getBlock(trackData, x+borderX[i], y+borderY[i], 0);
+                        if( currentBlock == NULL || currentBlock->type == BLOCK_TYPE_WALL )
+                            TrackData_setBlock(trackData, x+borderX[i], y+borderY[i], BLOCK_TYPE_BORDER);
+                    }
                 }
             }
         }

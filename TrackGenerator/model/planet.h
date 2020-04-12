@@ -5,10 +5,12 @@
 #ifndef TRACKGENERATOR_PLANET_H
 #define TRACKGENERATOR_PLANET_H
 
+#include <stdint.h>
+
 typedef struct Planet {
-    long id;
+    int64_t id;
     char name[100];
-    char color[3]; // rgba
+    unsigned char color[3]; // rgba
 
     // How long tracks are
     int lengthFactor;
@@ -26,6 +28,8 @@ typedef struct Planet {
     int widthNoise;
 
 } Planet;
+
+void Planet_print(Planet* this);
 
 
 #endif //TRACKGENERATOR_PLANET_H
