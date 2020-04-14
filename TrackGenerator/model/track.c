@@ -67,6 +67,9 @@ void Track_saveToFile(Track* track, const char* fileName){
     fwrite(&track->planet->color[1], sizeof(char), 1, file);
     fwrite(&track->planet->color[2], sizeof(char), 1, file);
 
+    // Length
+    fwrite(&track->length, sizeof(int), 1, file);
+
     // Starting position
     fwrite(&track->startingX, sizeof(int), 1, file);
     fwrite(&track->startingY, sizeof(int), 1, file);
@@ -74,8 +77,8 @@ void Track_saveToFile(Track* track, const char* fileName){
     // Starting direction
     fwrite(&track->startDirection, sizeof(double), 1, file);
 
-    // Number of checkpoints
-    fwrite(&track->numCheckpoints, sizeof(int), 1, file);
+    // Data size
+    fwrite(&track->data_size, sizeof(int), 1, file);
 
     // Track (block) data
     if( track->data == NULL )

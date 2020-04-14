@@ -24,7 +24,7 @@ typedef struct Track {
     TrackImage *image;
     int startingX, startingY;
     double startDirection;
-    double length;
+    int length;
     int numCheckpoints;
     size_t data_size;
     char *data;

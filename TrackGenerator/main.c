@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <time.h>
 
 #include "model/planet.h"
 #include "model/track.h"
@@ -17,24 +18,24 @@ void setupLocalPlanetStats(Planet *planets);
 
 int main(int argc, char** argv) {
 
-    printf("Starting TrackGenerator");
+    printf("Starting TrackGenerator\n");
 
-    if( argc > 2 ){
+    if( argc == 1 ){
+        // Start auto generation
+        printf("ERROR: Generation for database not setup yet!\n");
+        return -1;
+    }
+    else{
+        // Generate local track
         // Arg 1: Track target path
         // Arg 2: Local planet index
         int planetIndex = -1;
-        if( argc > 3 ){
+        if( argc >= 3 ){
             planetIndex = atoi(argv[2]);
         }
         // Generate Local Track
         return generateLocalTrack(argv[1], planetIndex);
-    }else{
-        // Start auto generation
-        printf("ERROR: Generation for database not setup yet!\n");
     }
-
-
-    return 0;
 }
 
 
@@ -60,9 +61,9 @@ int generateLocalTrack(char* targetFolder, int planetIndex){
 
     Planet localPlanets[4] = {
             {1, "Smar", {184, 53, 9}},
-            {2, "Lupto", {24, 146, 171}},
-            {3, "Aerth", {49, 102, 44}},
-            {4, "Turnsa", {186, 185, 141}}
+            {2, "Aerth", {49, 102, 44}},
+            {3, "Turnsa", {186, 185, 141}},
+            {4, "Lupto", {24, 146, 171}}
     };
     int numPlanets = sizeof(localPlanets) / sizeof(Planet);
     setupLocalPlanetStats(localPlanets);
@@ -70,6 +71,7 @@ int generateLocalTrack(char* targetFolder, int planetIndex){
     Planet *planet;
     if( planetIndex == -1 ){
         // Select random planet
+        srand(time(0));
         planet = &localPlanets[rand()%numPlanets];
     }else{
         // User specified planet
@@ -78,7 +80,7 @@ int generateLocalTrack(char* targetFolder, int planetIndex){
             printf("Local planet index is out of bounds!");
             return -1;
         }
-        planet = &localPlanets[numPlanets];
+        planet = &localPlanets[planetIndex];
     }
 
     printf("Planet: ");
@@ -121,11 +123,10 @@ void setupLocalPlanetStats(Planet *planets){
 
     // Smar (Mars)
     planet = &planets[0];
-    planet->lengthFactor    = 15;
-
-    planet->widthFactor     = 10;
-    planet->widthNoise      = 20;
-    planet->curveFactor     = 20;
+    planet->lengthFactor    = 11;
+    planet->widthFactor     = 11;
+    planet->widthNoise      = 15;
+    planet->curveFactor     = 16;
     planet ->stretchFactor  = 8;
 
     // Aerth (Earth)
@@ -138,17 +139,17 @@ void setupLocalPlanetStats(Planet *planets){
 
     // Turnsa (Saturn)
     planet = &planets[2];
-    planet->lengthFactor    = 25;
-    planet->widthFactor     = 20;
-    planet->widthNoise      = 10;
+    planet->lengthFactor    = 13;
+    planet->widthFactor     = 13;
+    planet->widthNoise      = 8;
     planet->curveFactor     = 8;
     planet ->stretchFactor  = 15;
 
     // Lupto (Pluto)
     planet = &planets[3];
-    planet->lengthFactor    = 15;
+    planet->lengthFactor    = 13;
     planet->widthFactor     = 12;
-    planet->widthNoise      = 2;
-    planet->curveFactor     = 20;
-    planet ->stretchFactor  = 20;
+    planet->widthNoise      = 1;
+    planet->curveFactor     = 12;
+    planet ->stretchFactor  = 12;
 }
