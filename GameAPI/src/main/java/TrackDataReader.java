@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.URL;
 
 /** JUST A CLASS FOR TESTING */
 public class TrackDataReader {
@@ -18,10 +19,14 @@ public class TrackDataReader {
         byte[] allBytes = null;
 
         try ( InputStream inputStream = classloader.getResourceAsStream(filename) ) {
-            String path = classloader.getResource(filename).getPath();
+            URL url = classloader.getResource(filename);
+            if( url == null )
+                throw new FileNotFoundException(String.format("Couldn't find file '%s' in resources.", filename));
+
+            String path = url.getPath();
             long fileSize = new File(path).length();
 
-            System.out.println("Loading Track Data");
+            System.out.println("\nLoading Track Data");
             System.out.println("File: " + path);
             System.out.println("Size: " + fileSize + " bytes");
 

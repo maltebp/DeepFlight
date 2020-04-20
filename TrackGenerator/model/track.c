@@ -24,7 +24,7 @@ void Track_free(Track* track){
 
 void Track_print(Track *track){
     printf(
-            "Track( id=%lld, name='%s', planet='%s', seed=%lld, length=%0.f, checkpoints=%d, startDir=%0.3f, data=%0.3fmb,  )",
+            "Track( id=%lld, name='%s', planet='%s', seed=%lld, length=%d, checkpoints=%d, startDir=%0.3f, data=%0.3fmb,  )",
             track->id, track->name, track->planet->name, track->seed, track->length, track->numCheckpoints, track->startDirection, track->data_size/1000000.0
     );
 }
@@ -35,7 +35,7 @@ void Track_saveToFile(Track* track, const char* fileName){
     printf("\nStoring track '%s' to file '%s'\n", track->name, fileName);
     FILE *file = fopen(fileName, "wb");
 
-    // ID
+   /* // ID
     fwrite(&track->id, 8, 1, file);
 
     // Seed
@@ -79,7 +79,7 @@ void Track_saveToFile(Track* track, const char* fileName){
 
     // Data size
     fwrite(&track->data_size, sizeof(int), 1, file);
-
+*/
     // Track (block) data
     if( track->data == NULL )
         printf("WARNING: Track data is NULL\n");

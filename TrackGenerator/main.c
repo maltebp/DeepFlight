@@ -18,6 +18,7 @@ void setupLocalPlanetStats(Planet *planets);
 
 int main(int argc, char** argv) {
 
+    setbuf(stdout, NULL);
     printf("Starting TrackGenerator\n");
 
     if( argc == 1 ){
@@ -37,6 +38,7 @@ int main(int argc, char** argv) {
         return generateLocalTrack(argv[1], planetIndex);
     }
 }
+
 
 
 /**

@@ -14,6 +14,7 @@
 #include "generation.h"
 #include "trackdata.h"
 
+
 // "Private" helper functions for generating a track
 Node** generateSidePaths(Track*, Node* centerPath, NodePool*);
 Node* generateCenterPath(Track *track, NodePool* nodePool);
@@ -165,6 +166,7 @@ void generateName(Track *track, TrackList *existingTracks){
  * return: Head node of the linked path
  */
 Node* generateCenterPath(Track *track, NodePool* nodePool){
+    printf("Generating center path\n");
     Planet *planet = track->planet;
 
     // Generate the track length
@@ -222,6 +224,7 @@ Node* generateCenterPath(Track *track, NodePool* nodePool){
 
 
 Node** generateSidePaths(Track* track, Node* centerPath, NodePool* nodePool){
+    printf("Generating side paths\n");
     Node** sidePaths = (Node**) malloc(sizeof(Node*)*2);
 
     Node* right = NULL;
@@ -297,6 +300,7 @@ Node** generateSidePaths(Track* track, Node* centerPath, NodePool* nodePool){
  * direction, by using the center path of generated Nodes.
  */
 void generateStartingPos(Track* track, Node* centerPath){
+    printf("Generating starting position\n");
     Node* startingNode = centerPath;
     for(int i=0; i<START_END_NODE_OFFSET; i++){
         startingNode = startingNode->next;
@@ -315,6 +319,7 @@ void generateStartingPos(Track* track, Node* centerPath){
  * Generate the checkpoints, using the center path of nodes.
  */
 void generateCheckpoints(TrackData *trackData, Node* centerPath, int centerPathLength){
+    printf("Generating checkpoints\n");
     int endNodeIndex = centerPathLength - START_END_NODE_OFFSET;
 
     int checkpointCountdown = START_END_NODE_OFFSET + CHECKPOINT_NODE_STEPSIZE;
@@ -354,6 +359,7 @@ int isPointWithinTriangle(int x, int y, Node** nodes){
 
 
 void generateBlocks(Track *track, TrackData* trackData, Node** sidePaths, int* blocksGenerated ){
+    printf("Generating blocks\n");
     Node* right = sidePaths[0];
     Node* left = sidePaths[1];
     Node* nodes[4];

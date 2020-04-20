@@ -13,12 +13,35 @@ public class Track {
 
     private String name;
 
-    private int length;
-
     private int planetId;
 
-    private int roundId;
+    private int length;
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPlanetId() {
+        return planetId;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    // Default constructor is required for JSON serialization
+    public Track(){ }
+
+    public Track(int id, String name, int planetId, int length) {
+        this.id = id;
+        this.name = name;
+        this.planetId = planetId;
+        this.length = length;
+    }
 
     public static Planet fromMongoObject(DBObject object) throws IOException {
         JSONObject jsonObject = new JSONObject(JSON.serialize(object));
