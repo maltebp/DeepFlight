@@ -31,7 +31,6 @@ Chunk* Chunk_create(int chunkX, int chunkY){
 
 
 
-
 /* coordinate: Raw world coordinate of the block
  * returns: The Raw world coordinate of the Chunk containing the block, which
  *          is the upper left corner of the block.
@@ -40,7 +39,6 @@ int toChunkCoordinate(int coordinate){
     if( coordinate < 0) return (((coordinate*-1-1)/-CHUNK_SIZE)-1) * CHUNK_SIZE;
     return (coordinate/CHUNK_SIZE)*CHUNK_SIZE;
 
-
     // -10   ->   -10*-1-1 = 9   ->  9/-10 = 0  ->  0-1 = -1
     // -5   ->   -10*-1-1 = 4   ->  4/-10 = 0  ->  0-1 = -1
     // -11   ->   -11*-1-1 = 10   ->  10/-10 = -1  ->  -1-1 = -2
@@ -48,9 +46,9 @@ int toChunkCoordinate(int coordinate){
     // -91   ->   -91*-1-1 = 90  -> 90/-10 = -9 -> -10
     // -99   ->   -99*-1-1 = 98 -> 98/-10  = -9 -> -10
 
-
     // 9/10 = 0 -> 0  = 0
 }
+
 
 /*
  * Converts the Block coordinate to the index within the Chunk.

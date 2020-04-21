@@ -3,8 +3,6 @@ import com.mongodb.*;
 import model.Planet;
 import model.Round;
 import model.Track;
-import org.bson.types.Binary;
-
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
@@ -33,28 +31,49 @@ public class DatabaseConnector {
         collection.insert(planet.toMongoObject());
     }
 
+
+    public Planet getPlanet(int planetId) {
+        DBCollection trackCollection = database.getCollection( Collection.PLANETS.toString() );
+
+        DBObject responseObject = trackCollection.findOne(new BasicDBObject("_id", planetId));
+
+        if( responseObject == null ) return null;
+
+        return Planet.fromMongoObject(responseObject);
+    }
+
+
+
     public List<Planet> getPlanets(){
         DBCollection collection = database.getCollection(Collection.PLANETS.toString());
 
         List<Planet> planets = new LinkedList<>();
         collection.find().forEach( (object) -> {
-            //TODO: Fix this try catch
-            try {
-                planets.add(Planet.fromMongoObject(object));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            planets.add(Planet.fromMongoObject(object));
         });
 
         return planets;
     }
 
 
-    //TODO: Remove for final version (used for testing only)
+
     public void addTrack(Track track){
         DBCollection collection = database.getCollection( Collection.TRACKS.toString());
         collection.insert(track.toMongoObject());
     }
+
+
+
+    public Track getTrack(int trackId) {
+        DBCollection trackCollection = database.getCollection( Collection.TRACKS.toString() );
+
+        DBObject responseObject = trackCollection.findOne(new BasicDBObject("_id", trackId));
+
+        if( responseObject == null ) return null;
+
+        return Track.fromMongoObject(responseObject);
+    }
+
 
 
 
@@ -81,7 +100,10 @@ public class DatabaseConnector {
 
         BasicDBObject result = (BasicDBObject) collection.findOne(query);
 
-        if( result == null) System.out.println("Result is null");
+        if( result == null){
+            System.out.println("Result is null");
+            return null;
+        }
         //byte[] bytes = result.getString("data").getBytes();
 
 
@@ -107,12 +129,7 @@ public class DatabaseConnector {
 
         List<Round> rounds = new LinkedList<>();
         collection.find().forEach( (object) -> {
-            //TODO: Fix this try catch (implement proper error handling)
-            try {
-                rounds.add(Round.fromMongoObject(object));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            rounds.add(Round.fromMongoObject(object));
         });
 
         return rounds;

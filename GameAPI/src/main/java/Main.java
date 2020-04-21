@@ -1,4 +1,3 @@
-import model.Round;
 
 import java.net.UnknownHostException;
 
@@ -9,9 +8,9 @@ public class Main {
 
         DatabaseConnector.enableTestMode();
 
-        DatabaseConnector db = new DatabaseConnector();
 
-        for(Round round : db.getRounds() ) System.out.println(round);
+        GameAPI gameAPI = new GameAPI();
+        gameAPI.start();
 
     }
 

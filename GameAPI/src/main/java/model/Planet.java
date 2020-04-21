@@ -1,16 +1,11 @@
 package model;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.annotations.SerializedName;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import org.json.JSONObject;
-
-import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -34,28 +29,22 @@ public class Planet {
             throw new IllegalArgumentException("Color array must be length 3");
     }
 
-
-
+    // Getters required for JSON serialization
     public int getId() {
         return id;
     }
-
     public String getName() {
         return name;
     }
-
     public int[] getColor() {
         return color;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public void setColor(int[] color) {
         this.color = color;
     }
@@ -73,11 +62,17 @@ public class Planet {
         return new JSONObject(new ObjectMapper().writeValueAsString(this));
     }
 
-    public static Planet fromMongoObject(DBObject object) throws IOException {
+    public static Planet fromMongoObject(DBObject object) {
         JSONObject jsonObject = new JSONObject(JSON.serialize(object));
         jsonObject.put("id", jsonObject.get("_id"));
         jsonObject.remove("_id");
-        return new ObjectMapper().readValue(jsonObject.toString(), Planet.class);
+
+        try{
+            return new ObjectMapper().readValue(jsonObject.toString(), Planet.class);
+        }catch(IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public DBObject toMongoObject(){

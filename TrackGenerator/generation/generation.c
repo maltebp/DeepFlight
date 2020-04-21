@@ -9,53 +9,17 @@
 #include <time.h>
 #include <math.h>
 
-#include "../model/planet.h"
 #include "../model/track.h"
 #include "generation.h"
 #include "trackdata.h"
 
 
 // "Private" helper functions for generating a track
-Node** generateSidePaths(Track*, Node* centerPath, NodePool*);
-Node* generateCenterPath(Track *track, NodePool* nodePool);
+Node* generateCenterPath(Track *track, GenParams*, NodePool* nodePool);
+Node** generateSidePaths(Track*, GenParams*, Node* centerPath, NodePool*);
 void generateBlocks(Track *track, TrackData*, Node** sidePaths, int* blocksGenerated);
 void generateStartingPos(Track* track, Node* centerPath);
-unsigned int generateSeed(TrackList* existingTracks);
-void generateName(Track *track, TrackList* existingTracks);
 void generateCheckpoints(TrackData*, Node* centerPath, int centerPathLength);
-
-
-/*
- * Generates a track from a random (time based) seed.
- */
-Track* generateTrack(Planet *planet, TrackList* existingTracks){
-    unsigned int seed = generateSeed(existingTracks);
-    return generateTrackFromSeed(planet, existingTracks, seed);
-}
-
-
-// Generate a seed, which isn't in use already
-unsigned int generateSeed(TrackList *existingTracks){
-    unsigned int seed;
-    int seedExists = 0;
-
-    srand(time(0));
-    do{
-        seed = rand();
-        if( existingTracks != NULL ) {
-            // Check if seed exists in list
-            Track **trackList = existingTracks->list;
-            for (int i = 0; i < existingTracks->size; i++) {
-                if (trackList[i]->seed == seed) {
-                    seedExists = 1;
-                    break;
-                }
-                trackList++;
-            }
-        }
-    }while(seedExists);
-    return seed;
-}
 
 
 
@@ -63,33 +27,28 @@ unsigned int generateSeed(TrackList *existingTracks){
  * Generates a Track from a specified seed.
  * The name is still randomly generated.
  */
-Track* generateTrackFromSeed(Planet *planet, TrackList* existingTracks, unsigned seed){
+Track* generateTrack(GenParams* genParams, unsigned int seed){
 
     printf("\nGenerating new track\n");
     clock_t startTime = clock();
 
-    Track *track = (Track*) calloc(1, sizeof(Track));
-    track->planet = planet;
-    track->seed = seed;
+    Track *track = Track_create();
 
     // Data structure used to hold information
     // when generating the binary data for the track
     // (checkpoints and blocks)
     TrackData* trackData = TrackData_create();
 
-    generateName(track, existingTracks);
-
     srand(seed);
 
     // Generate Node Paths
     NodePool* nodePool = NodePool_create(500);
-    Node* centerPath = generateCenterPath(track, nodePool);
+    Node* centerPath = generateCenterPath(track, genParams, nodePool);
     int centerPathLength = NodePool_totalUsed(nodePool);
-    Node** sidePaths = generateSidePaths(track, centerPath, nodePool);
+    Node** sidePaths = generateSidePaths(track, genParams, centerPath, nodePool);
 
     generateStartingPos(track, centerPath);
     generateCheckpoints(trackData, centerPath, centerPathLength);
-    track->numCheckpoints = trackData->numCheckpoints;
 
     int blocksGenerated = 0;
     generateBlocks(track, trackData, sidePaths, &blocksGenerated);
@@ -113,49 +72,6 @@ Track* generateTrackFromSeed(Planet *planet, TrackList* existingTracks, unsigned
     return track;
 }
 
-
-
-// Generates a name, which isn't in use for that planet
-void generateName(Track *track, TrackList *existingTracks){
-    printf("Generating name\n");
-    srand(time(0));
-
-    int nameExists = 0;
-    char trackName[10];
-    trackName[7] = (char) 0; // adding end of string
-
-    do{
-        // Add 4 letters
-        trackName[0] = (char) (65+rand()%25);
-        trackName[1] = (char) (65+rand()%25);
-        trackName[2] = (char) (65+rand()%25);
-        trackName[3] = (char) (65+rand()%25);
-
-        // add 3 numbers
-        trackName[4] = (char) (48+rand()%10);
-        trackName[5] = (char) (48+rand()%10);
-        trackName[6] = (char) (48+rand()%10);
-
-        // Check if name exists in list
-        if( existingTracks != NULL ){
-            Track** trackList = existingTracks->list;
-            for( int i=0; i<existingTracks->size; i++){
-                // If strcmp returns 0, they are identical
-                if( strcmp(trackName, trackList[i]->name) == 0 ){
-                    nameExists = 1;
-                    break;
-                }
-                trackList++;
-            }
-        }
-
-    }while(nameExists);
-    strcpy(track->name, trackName);
-}
-
-
-
-
 // PATH GENERATION ---------------------------------------------------------------------
 
 #define ANGLE_PER_NODE 0.025
@@ -165,16 +81,15 @@ void generateName(Track *track, TrackList *existingTracks){
  *
  * return: Head node of the linked path
  */
-Node* generateCenterPath(Track *track, NodePool* nodePool){
+Node* generateCenterPath(Track *track, GenParams* genParams, NodePool* nodePool){
     printf("Generating center path\n");
-    Planet *planet = track->planet;
 
     // Generate the track length
-    track->length = 1250 +  planet->lengthFactor*175   +  (rand()%70)*planet->lengthFactor;
+    int length = 1250 +  genParams->lengthFactor*175   +  (rand()%70)*genParams->lengthFactor;
 
     double direction = fmod(rand(), PI2);
     double angleFactor = 0;
-    double remainingLength = track->length;
+    double remainingLength = length;
     double remainingSegmentLength = -1;
     double stepSize = 0;
 
@@ -190,10 +105,10 @@ Node* generateCenterPath(Track *track, NodePool* nodePool){
         if(  remainingSegmentLength < 0 ) {
 
             // Length of this segment
-            remainingSegmentLength = 100 + (rand() %10)*planet->stretchFactor*2 + planet->stretchFactor*10;
+            remainingSegmentLength = 100 + (rand() %10)*genParams->stretchFactor*2 + genParams->stretchFactor*10;
 
             // How much to turn in this segment
-            double angle = M_PI * ((rand()%500)/5000.0) * planet->curveFactor/5 + planet->curveFactor/15.0;
+            double angle = M_PI * ((rand()%500)/5000.0) * genParams->curveFactor/5 + genParams->curveFactor/15.0;
             if( angle > PI2/2.0 ) angle = PI2*0.50;
 
             int nodesInSegment = (int) (angle / ANGLE_PER_NODE)+1;
@@ -223,15 +138,15 @@ Node* generateCenterPath(Track *track, NodePool* nodePool){
 
 
 
-Node** generateSidePaths(Track* track, Node* centerPath, NodePool* nodePool){
+Node** generateSidePaths(Track* track, GenParams* genParams, Node* centerPath, NodePool* nodePool){
     printf("Generating side paths\n");
     Node** sidePaths = (Node**) malloc(sizeof(Node*)*2);
 
     Node* right = NULL;
     Node* left = NULL;
 
-    double minWidth = 10 + track->planet->widthFactor*1.25;
-    double maxWidth = minWidth * (1 + sqrt(track->planet->widthNoise)/6);
+    double minWidth = 10 + genParams->widthFactor*1.25;
+    double maxWidth = minWidth * (1 + sqrt(genParams->widthNoise)/6);
     double width = maxWidth/1.5;
 
     Node* center = centerPath;
@@ -257,7 +172,7 @@ Node** generateSidePaths(Track* track, Node* centerPath, NodePool* nodePool){
 
             // Update width
             double widthAdjustment = 2 + (rand()%4)/20.0;
-            widthAdjustment *= track->planet->widthNoise/7.0;
+            widthAdjustment *= genParams->widthNoise/7.0;
             if( rand()%2 ) widthAdjustment *= -1;
 
             width += widthAdjustment;
@@ -273,7 +188,7 @@ Node** generateSidePaths(Track* track, Node* centerPath, NodePool* nodePool){
 
             // How much the center of the width calculation is offset from
             // the actual center node
-            double centerOffset = (rand()%100)/75.0 * sqrt(track->planet->widthNoise);
+            double centerOffset = (rand()%100)/75.0 * sqrt(genParams->widthNoise);
             if( rand()%2 ) centerOffset *= -1;
 
             // Calculate side nodes

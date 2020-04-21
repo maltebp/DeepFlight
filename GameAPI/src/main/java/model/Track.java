@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
@@ -43,11 +44,25 @@ public class Track {
         this.length = length;
     }
 
-    public static Planet fromMongoObject(DBObject object) throws IOException {
+
+
+
+    public JSONObject toJSON() throws JsonProcessingException {
+        return new JSONObject(new ObjectMapper().writeValueAsString(this));
+    }
+
+
+    public static Track fromMongoObject(DBObject object) {
         JSONObject jsonObject = new JSONObject(JSON.serialize(object));
         jsonObject.put("id", jsonObject.get("_id"));
         jsonObject.remove("_id");
-        return new ObjectMapper().readValue(jsonObject.toString(), Planet.class);
+
+        try{
+            return new ObjectMapper().readValue(jsonObject.toString(), Track.class);
+        }catch(IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public DBObject toMongoObject(){

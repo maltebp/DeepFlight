@@ -4,154 +4,112 @@
 #include <dirent.h>
 #include <time.h>
 
-#include "model/planet.h"
 #include "model/track.h"
 #include "generation/generation.h"
 #include "generation/trackdata.h"
 #include "generation/trackdata_test.h"
 
-#define TRACK_FILE_EXT ".dft"
+#define TRACK_FILE_EXT ".dftbd"
+#define ARG_COUNT 8
 
-int generateLocalTrack(char* targetFolder, int planetIndex);
-void setupLocalPlanetStats(Planet *planets);
 
+void createFullPath(char* directoryName, char* fileName, char* destination);
+void parseGenParameters(char** args, GenParams* params);
 
 int main(int argc, char** argv) {
 
+    // Activate instant printing
     setbuf(stdout, NULL);
-    printf("Starting TrackGenerator\n");
 
-    if( argc == 1 ){
-        // Start auto generation
-        printf("ERROR: Generation for database not setup yet!\n");
-        return -1;
-    }
-    else{
-        // Generate local track
-        // Arg 1: Track target path
-        // Arg 2: Local planet index
-        int planetIndex = -1;
-        if( argc >= 3 ){
-            planetIndex = atoi(argv[2]);
-        }
-        // Generate Local Track
-        return generateLocalTrack(argv[1], planetIndex);
-    }
-}
+    printf("Starting TrackGenerator!\n\n");
 
-
-
-/**
- * Generates a random Track using one of the local Planets,
- * and saves the track file in the specified target folder
- *
- * @param targetFolder   Complete path to folder in which to store the track
- * @param planetIndex   Index of the planet (ranges from -1 to 3, where -1 is random index)
- */
-int generateLocalTrack(char* targetFolder, int planetIndex){
-    printf("\nGenerating local track\n");
-    printf("\nTarget folder: '%s'\n", targetFolder);
-
-    // Check if target folder exists
-    DIR *dir = opendir(targetFolder);
-    if( !dir ){
-        printf("ERROR: Can't find or open the target folder\n");
-        return -1;
-    }
-    closedir(dir);
-
-
-    Planet localPlanets[4] = {
-            {1, "Smar", {184, 53, 9}},
-            {2, "Aerth", {49, 102, 44}},
-            {3, "Turnsa", {186, 185, 141}},
-            {4, "Lupto", {24, 146, 171}}
-    };
-    int numPlanets = sizeof(localPlanets) / sizeof(Planet);
-    setupLocalPlanetStats(localPlanets);
-
-    Planet *planet;
-    if( planetIndex == -1 ){
-        // Select random planet
-        srand(time(0));
-        planet = &localPlanets[rand()%numPlanets];
-    }else{
-        // User specified planet
-        // CHeck if planet index is alright
-        if( planetIndex > sizeof(localPlanets)/sizeof(Planet) ){
-            printf("Local planet index is out of bounds!");
-            return -1;
-        }
-        planet = &localPlanets[planetIndex];
+    // Decode Arguments
+    if( argc != (ARG_COUNT+1) ){
+        printf("ERROR: TrackGenerator takes exactly %d arguments but got %d. Correct format is: \n", ARG_COUNT, argc-1);
+        printf("'./TrackGenerator <destination folder> <filename> <seed> <length> <stretch> <curve> <width> <width noise>'");
+        exit(-1);
     }
 
-    printf("Planet: ");
-    Planet_print(planet);
+    char destinationPath[254] = {0};
+    unsigned int seed = 0;
+    GenParams genParams = {0};
 
-    Track* track = generateTrack(planet, NULL);
+    createFullPath(argv[1], argv[2], destinationPath);
 
-    // Create Full Path
-    char fullPath[200] = {0};
-    strcat(fullPath, targetFolder);
-
-    // Append backslash if necessary
-    char lastChar = *(fullPath+strlen(fullPath)-1);
-    if( lastChar != '\\' ){
-        strcat(fullPath, "\\");
+    seed = strtoul(argv[3], NULL, 10);
+    if(seed == 0){
+        printf("ERROR: %s is invalid value for seed\n", argv[3]);
+        exit(-1);
     }
 
-    strcat(fullPath, track->planet->name);
-    strcat(fullPath, "_");
-    strcat(fullPath, track->name);
-    strcat(fullPath, TRACK_FILE_EXT);
+    parseGenParameters(argv+4, &genParams);
 
-    printf("\nFinal path: '%s'\n", fullPath);
+    printf("Recieved arguments:\n");
+    printf("  Full Path: '%s'\n", destinationPath);
+    printf("  Seed: %d\n", seed);
+    printf("  Length factor: %d\n", genParams.lengthFactor);
+    printf("  Stretch factor: %d\n", genParams.stretchFactor);
+    printf("  Length factor: %d\n", genParams.curveFactor);
+    printf("  Width factor: %d\n", genParams.widthFactor);
+    printf("  Width noise: %d\n", genParams.widthNoise);
 
-    Track_saveToFile(track, fullPath);
+    // Generate Track
+    Track* track =  generateTrack(&genParams, seed);
+    Track_saveToFile(track, destinationPath);
     Track_free(track);
 
-    printf("\nGenerating local track: Success!");
+    printf("\nTrack Generator finished successfully!\n");
     return 0;
 }
 
 
+void createFullPath(char* directory, char* fileName, char* destination){
+    // Check if it's current directory
+    if( directory[0] != '.'){
+        // Append destination
+        strcat(destination, directory);
 
-/**
- * Setup the generation factors for
- * the 4 planets.
- */
-void setupLocalPlanetStats(Planet *planets){
-    Planet* planet;
+        // Append backslash if necessary
+        char lastChar = *(destination+strlen(destination)-1);
+        if( lastChar != '\\' ){
+            strcat(destination, "\\");
+        }
+    }
 
-    // Smar (Mars)
-    planet = &planets[0];
-    planet->lengthFactor    = 11;
-    planet->widthFactor     = 11;
-    planet->widthNoise      = 15;
-    planet->curveFactor     = 16;
-    planet ->stretchFactor  = 8;
+    // Append filename + extension
+    strcat(destination, fileName);
+    strcat(destination, TRACK_FILE_EXT);
+}
 
-    // Aerth (Earth)
-    planet = &planets[1];
-    planet->lengthFactor    = 10;
-    planet->widthFactor     = 10;
-    planet->widthNoise      = 10;
-    planet->curveFactor     = 10;
-    planet ->stretchFactor  = 10;
+void parseGenParameters(char** args, GenParams* params){
 
-    // Turnsa (Saturn)
-    planet = &planets[2];
-    planet->lengthFactor    = 13;
-    planet->widthFactor     = 13;
-    planet->widthNoise      = 8;
-    planet->curveFactor     = 8;
-    planet ->stretchFactor  = 15;
+    params->lengthFactor = strtol(args[0], NULL, 10);
+    if( !params->lengthFactor ){
+        printf("ERROR: '%s' is not valid value for length factor\n", args[0]);
+        exit(-1);
+    }
 
-    // Lupto (Pluto)
-    planet = &planets[3];
-    planet->lengthFactor    = 13;
-    planet->widthFactor     = 12;
-    planet->widthNoise      = 1;
-    planet->curveFactor     = 12;
-    planet ->stretchFactor  = 12;
+    params->stretchFactor = strtol(args[1], NULL, 10);
+    if( !params->stretchFactor ){
+        printf("ERROR: '%s' is not valid value for stretch factor\n", args[1]);
+        exit(-1);
+    }
+
+    params->curveFactor = strtol(args[2], NULL, 10);
+    if( !params->curveFactor ){
+        printf("ERROR: '%s' is not valid value for curve factor\n", args[2]);
+        exit(-1);
+    }
+
+    params->widthFactor = strtol(args[3], NULL, 10);
+    if( !params->widthFactor ){
+        printf("ERROR: '%s' is not valid value for width factor\n", args[3]);
+        exit(-1);
+    }
+
+    params->widthNoise = strtol(args[4], NULL, 10);
+    if( !params->widthNoise ){
+        printf("ERROR: '%s' is not valid value for width noise factor\n", args[4]);
+        exit(-1);
+    }
 }

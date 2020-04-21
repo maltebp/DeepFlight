@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
@@ -56,6 +57,11 @@ public class Round {
                 '}';
     }
 
+    public JSONObject toJSON() {
+        return new JSONObject(this);
+    }
+
+
     public DBObject toMongoObject(){
         JSONObject json = new JSONObject(this);
         json.put("_id", roundNumber);
@@ -64,11 +70,16 @@ public class Round {
     }
 
 
-    public static Round fromMongoObject(DBObject object) throws IOException {
+    public static Round fromMongoObject(DBObject object){
         JSONObject jsonObject = new JSONObject(JSON.serialize(object));
         jsonObject.put("roundNumber", jsonObject.get("_id"));
         jsonObject.remove("_id");
-        return new ObjectMapper().readValue(jsonObject.toString(), Round.class);
+        try {
+            return new ObjectMapper().readValue(jsonObject.toString(), Round.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
