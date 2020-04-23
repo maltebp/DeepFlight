@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 public class Authendicator {
 
 
-    public Bruger Authendication(String name, String password) throws RemoteException, NotBoundException, MalformedURLException {
+    public static Bruger Authendication(String name, String password) throws RemoteException, NotBoundException, MalformedURLException {
 
         Bruger bruger = JavabogAccess.login(name,password);
             return bruger;
