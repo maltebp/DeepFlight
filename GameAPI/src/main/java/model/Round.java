@@ -4,11 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
+import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.json.JsonWriterSettings;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Round {
 
@@ -62,20 +68,25 @@ public class Round {
     }
 
 
-    public DBObject toMongoObject(){
+    public Document toDocument(){
         JSONObject json = new JSONObject(this);
         json.put("_id", roundNumber);
         json.remove("roundNumber");
-        return (DBObject) JSON.parse(json.toString());
+        return Document.parse(json.toString());
     }
 
 
-    public static Round fromMongoObject(DBObject object){
-        JSONObject jsonObject = new JSONObject(JSON.serialize(object));
-        jsonObject.put("roundNumber", jsonObject.get("_id"));
-        jsonObject.remove("_id");
+    public static Round fromDocument(Document document){
+        JSONObject baseJson = new JSONObject(document.toJson());
+
+        JSONObject adjustedJson = new JSONObject();
+        adjustedJson.put("roundNumber", baseJson.getInt("_id"));
+        adjustedJson.put("trackIds", baseJson.get("trackIds"));
+        adjustedJson.put("startDate", document.getLong("startDate"));
+        adjustedJson.put("endDate", document.getLong("endDate"));
+
         try {
-            return new ObjectMapper().readValue(jsonObject.toString(), Round.class);
+            return new ObjectMapper().readValue(adjustedJson.toString(), Round.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
