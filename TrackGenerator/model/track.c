@@ -16,26 +16,23 @@ void Track_free(Track* track){
     if( track->data != NULL ){
         free(track->data);
     }
-
-    if( track->image != NULL ) {
-        free(track->image);
-    }
+    free(track);
 }
 
 void Track_print(Track *track){
     printf(
-            "Track( id=%lld, name='%s', planet='%s', seed=%lld, length=%0.f, checkpoints=%d, startDir=%0.3f, data=%0.3fmb,  )",
-            track->id, track->name, track->planet->name, track->seed, track->length, track->numCheckpoints, track->startDirection, track->data_size/1000000.0
+            "Track( startDir=%0.3f, data=%0.3fmb,  )",
+            track->startDirection, track->data_size/1000000.0
     );
 }
 
 
 void Track_saveToFile(Track* track, const char* fileName){
 
-    printf("\nStoring track '%s' to file '%s'\n", track->name, fileName);
+    printf("\nStoring Track to file '%s'\n", fileName);
     FILE *file = fopen(fileName, "wb");
 
-    // ID
+   /* // ID
     fwrite(&track->id, 8, 1, file);
 
     // Seed
@@ -70,15 +67,18 @@ void Track_saveToFile(Track* track, const char* fileName){
     // Length
     fwrite(&track->length, sizeof(int), 1, file);
 
+
+
+    // Data size
+    fwrite(&track->data_size, sizeof(int), 1, file);
+*/
+
     // Starting position
     fwrite(&track->startingX, sizeof(int), 1, file);
     fwrite(&track->startingY, sizeof(int), 1, file);
 
     // Starting direction
     fwrite(&track->startDirection, sizeof(double), 1, file);
-
-    // Data size
-    fwrite(&track->data_size, sizeof(int), 1, file);
 
     // Track (block) data
     if( track->data == NULL )

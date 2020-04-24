@@ -5,8 +5,8 @@
 #ifndef TRACKGENERATOR_GENERATOR_H
 #define TRACKGENERATOR_GENERATOR_H
 
-#include "../model/planet.h"
 #include "../model/track.h"
+#include "genparams.h"
 
 
 #define START_END_NODE_OFFSET 8
@@ -14,9 +14,7 @@
 
 
 
-Track* generateTrackFromSeed(Planet *planet, TrackList *existingTracks, unsigned int seed);
-
-Track* generateTrack(Planet *planet, TrackList *existingTracks);
+Track* generateTrack(GenParams*, unsigned int seed);
 
 
 
