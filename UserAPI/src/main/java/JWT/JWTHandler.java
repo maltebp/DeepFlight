@@ -28,7 +28,7 @@ public class JWTHandler {
      */
     static JWTGenerator<Bruger> generator = (user, alg) -> {
         JWTCreator.Builder token = JWT.create()
-                .withClaim("name", user.fornavn)
+                .withClaim("name", user.brugernavn)
                 .withClaim("password", user.adgangskode);
         return token.sign(alg);
     };

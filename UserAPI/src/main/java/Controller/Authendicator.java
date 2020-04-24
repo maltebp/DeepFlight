@@ -15,4 +15,24 @@ public class Authendicator {
         Bruger bruger = JavabogAccess.login(name,password);
             return bruger;
     }
+
+    public static Bruger AuthChangePassword(String username, String password, String newPassword)  {
+        System.out.println(username);
+        System.out.println(password);
+
+        try{
+
+            Bruger newUser = JavabogAccess.changePassword(username,password,newPassword);
+            if(newUser!=null) return newUser;
+
+        }catch (RemoteException | NotBoundException | MalformedURLException e){
+            e.getStackTrace();
+        }
+
+
+        return null;
+
+    }
+
+
 }
