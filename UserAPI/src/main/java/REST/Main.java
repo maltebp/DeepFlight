@@ -18,7 +18,7 @@ public class Main {
         Javalin app = Javalin.create(config -> {
             // ACCEPTS ALL CLIENTS: ONLY FOR TESTING
             config.enableCorsForAllOrigins();
-            // TODO: add client url for game and site, local and remote.
+            // TODO: add client url for game and site, local and remote. These urls can be read from the console.
             //config.enableCorsForOrigin(
             //        "http://localhost:3000/", // Web site local: OK
             //        "https://master.d3lj15etjpqs5m.amplifyapp.com/" // Web site remote
