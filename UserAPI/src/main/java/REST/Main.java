@@ -60,7 +60,7 @@ public class Main {
          */
         app.get("/loginRequest",ctx->{
             ctx.status(401);
-            ctx.result("Please provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
+            ctx.result("Pleases provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
         });
 /*
 #####################################################################################################################################
