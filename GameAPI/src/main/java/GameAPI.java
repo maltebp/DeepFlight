@@ -1,4 +1,5 @@
 import io.javalin.Javalin;
+import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Planet;
 import model.Round;
 import model.Track;
@@ -41,6 +42,24 @@ public class GameAPI {
 
 
     private void setupEndpoints(){
+
+        // Returns all planets
+        server.get("/planets", context -> {
+            DatabaseConnector db = new DatabaseConnector();
+
+            JSONArray planets = new JSONArray();
+            for( Planet planet : db.getPlanets() ){
+                planets.put(planet.toJSON());
+            }
+            JSONObject result = new JSONObject();
+            result.put("planets", planets);
+
+            context.result(result.toString());
+            context.contentType(ContentType.JSON);
+            context.status(200);
+
+            db.close();
+        });
 
         // Get user
         server.get("/round/current", context -> {
@@ -127,14 +146,21 @@ public class GameAPI {
 
 
 
-/*
+        server.get("", context -> {
+            context.status(200);
+            context.result("GameAPI is up and running!");
+        });
+
+
+
+
         // Get Track
         server.get("/track/:trackid", context -> {
             String trackId = context.pathParam("trackid");
 
 
 
-        });*/
+        });
 
     }
 
