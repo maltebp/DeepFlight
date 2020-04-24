@@ -1,6 +1,13 @@
-FROM openjdk:8-jre-alpine
+# FROM maven:3.3.9-jdk-8 as build
+FROM openjdk:8
 
-COPY target/Afgangsprojekt-1.0-SNAPSHOT-jar-with-dependencies.jar /Afgangsprojekt-1.0-SNAPSHOT-jar-with-dependencies.jar
+WORKDIR /usr/src/userapi
 
-CMD ["java","-jar", "Afgangsprojekt-1.0-SNAPSHOT-jar-with-dependencies.jar"]
+COPY UserAPI.jar .
+
+# RUN mvn install -Dskiptests
+
+CMD ["java", "-jar", "UserAPI.jar"]
+
+EXPOSE 7000
 

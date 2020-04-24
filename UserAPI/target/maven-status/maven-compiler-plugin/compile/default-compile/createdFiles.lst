@@ -1,0 +1,8 @@
+Controller\UserController.class
+Controller\Authendicator.class
+brugerautorisation\data\Bruger.class
+brugerautorisation\transport\rmi\Brugeradmin.class
+Controller\JavabogAccess.class
+JWT\JWTHandler.class
+REST\Main.class
+Controller\LoggedInRecord.class
