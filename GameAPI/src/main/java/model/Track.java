@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
+import org.bson.Document;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -52,8 +53,8 @@ public class Track {
     }
 
 
-    public static Track fromMongoObject(DBObject object) {
-        JSONObject jsonObject = new JSONObject(JSON.serialize(object));
+    public static Track fromDocument(Document document) {
+        JSONObject jsonObject = new JSONObject(document.toJson());
         jsonObject.put("id", jsonObject.get("_id"));
         jsonObject.remove("_id");
 
@@ -65,11 +66,11 @@ public class Track {
         }
     }
 
-    public DBObject toMongoObject(){
+    public Document toDocument(){
         JSONObject json = new JSONObject(this);
         json.put("_id", id);
         json.remove("id");
-        return (DBObject) JSON.parse(json.toString());
+        return Document.parse(json.toString());
     }
 
 

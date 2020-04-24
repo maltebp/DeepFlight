@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 
 /** JUST A CLASS FOR TESTING */
 public class TrackDataReader {
@@ -16,7 +17,8 @@ public class TrackDataReader {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
 
-        byte[] allBytes = null;
+        byte[] bytes = null;
+
 
         try ( InputStream inputStream = classloader.getResourceAsStream(filename) ) {
             URL url = classloader.getResource(filename);
@@ -24,23 +26,34 @@ public class TrackDataReader {
                 throw new FileNotFoundException(String.format("Couldn't find file '%s' in resources.", filename));
 
             String path = url.getPath();
+
             long fileSize = new File(path).length();
 
             System.out.println("\nLoading Track Data");
             System.out.println("File: " + path);
             System.out.println("Size: " + fileSize + " bytes");
 
-            allBytes = new byte[(int) fileSize];
 
-            int bytesRead = inputStream.read(allBytes);
-            System.out.println("Bytes read: " + bytesRead);
+            ArrayList<Byte> allBytes = new ArrayList<>();
+            int input = 0;
+            while( (input = inputStream.read()) != -1 ){
+                allBytes.add( (byte) input );
+            }
+
+            bytes = new byte[allBytes.size()];
+            int i = 0;
+            for( Byte b : allBytes ){
+                bytes[i++] = b;
+            }
+
+            System.out.println("Bytes read: " + allBytes.size());
 
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-        return allBytes;
 
+        return bytes;
     }
 
 

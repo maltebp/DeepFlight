@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
+import org.bson.Document;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Arrays;
@@ -80,6 +81,27 @@ public class Planet {
         json.put("_id", id);
         json.remove("id");
         return (DBObject) JSON.parse(json.toString());
+    }
+
+    public static Planet fromDocument(Document document) {
+        JSONObject jsonObject = new JSONObject(document.toJson());
+        jsonObject.put("id", jsonObject.get("_id"));
+        jsonObject.remove("_id");
+
+        try{
+            return new ObjectMapper().readValue(jsonObject.toString(), Planet.class);
+        }catch(IOException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public Document toDocument(){
+        JSONObject json = new JSONObject(this);
+        json.put("_id", id);
+        json.remove("id");
+        return Document.parse(json.toString());
     }
 
 }
