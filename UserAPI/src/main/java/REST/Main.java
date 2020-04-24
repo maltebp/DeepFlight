@@ -3,15 +3,11 @@ package REST;
 import Controller.Authendicator;
 import JWT.JWTHandler;
 import brugerautorisation.data.Bruger;
-
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.javalin.Javalin;
 import javalinjwt.JavalinJWT;
 import javalinjwt.examples.JWTResponse;
 
-import java.io.IOException;
 import java.util.Optional;
 
 public class Main {
@@ -19,7 +15,16 @@ public class Main {
 
     public static void main(String[] args) {
         //Initializing server
-        Javalin app = Javalin.create().start(7000);
+        Javalin app = Javalin.create(config -> {
+            // ACCEPTS ALL CLIENTS: ONLY FOR TESTING
+            config.enableCorsForAllOrigins();
+            // TODO: add client url for game and site, local and remote.
+            //config.enableCorsForOrigin(
+            //        "http://localhost:3000/", // Web site local: OK
+            //        "https://master.d3lj15etjpqs5m.amplifyapp.com/" // Web site remote
+            //);
+
+        }).start(7000);
 
 /*
 #############################################AUTHFILTER########################################################################################
@@ -75,11 +80,11 @@ public class Main {
             String name = ctx.formParam("name");
             String pwd = ctx.formParam("password");
 
-            System.out.println(name+",pwd "+pwd);
+            System.out.println("name: " + name + ", pwd " + pwd);
             Bruger user = Authendicator.Authendication(name,pwd);
             user.toString();
             if (user == null) {
-              ctx.result("Un authorized");
+                ctx.result("Unauthorized");
             }
             String token = JWTHandler.provider.generateToken(user);
             ctx.json(new JWTResponse(token));
