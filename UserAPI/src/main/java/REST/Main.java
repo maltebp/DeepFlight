@@ -4,6 +4,7 @@ import Controller.Authendicator;
 import JWT.JWTHandler;
 import brugerautorisation.data.Bruger;
 
+import brugerautorisation.data.UserPass;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,7 +36,7 @@ public class Main {
 
             Optional<DecodedJWT> decodedJWT = JavalinJWT.getTokenFromHeader(ctx)
                     .flatMap(JWTHandler.provider::validateToken);
-
+            System.out.println(source);
             if (!decodedJWT.isPresent()) {
                 System.out.println(source+": No token");
 
@@ -115,6 +116,13 @@ public class Main {
                 ctx.result("Missing param");
             }
         });
+        /*
+####################################################RESOLVE ENDPOINT#################################################################################
+ */
+
+
+
+
     }
 /*
 ####################################################HELPER FUNCTIONS#################################################################################

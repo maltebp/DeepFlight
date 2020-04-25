@@ -28,7 +28,7 @@ public class JWTHandler {
      */
     static JWTGenerator<Bruger> generator = (user, alg) -> {
         JWTCreator.Builder token = JWT.create()
-                .withClaim("name", user.brugernavn)
+                .withClaim("user", user.brugernavn)
                 .withClaim("password", user.adgangskode);
         return token.sign(alg);
     };
@@ -44,5 +44,9 @@ public class JWTHandler {
     The wrapper object is created
      */
     public static JWTProvider provider = new JWTProvider(algorithm, generator, verifier);
+
+
+
+
 
 }
