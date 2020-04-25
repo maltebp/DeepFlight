@@ -77,12 +77,12 @@ public class Main {
 
             System.out.println(name+",pwd "+pwd);
             Bruger user = Authendicator.Authendication(name,pwd);
-            user.toString();
             if (user == null) {
               ctx.result("Un authorized");
+            }else {
+                String token = JWTHandler.provider.generateToken(user);
+                ctx.json(new JWTResponse(token));
             }
-            String token = JWTHandler.provider.generateToken(user);
-            ctx.json(new JWTResponse(token));
         });
 
 
