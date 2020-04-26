@@ -9,10 +9,12 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javalin.Javalin;
+import io.javalin.http.Handler;
 import javalinjwt.JavalinJWT;
 import javalinjwt.examples.JWTResponse;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 public class Main {
@@ -30,24 +32,22 @@ public class Main {
         If there is a token in the header it will pass.
         Only if the endpoint "/login" is access the filter will return
         */
-        app.before("/game/*", ctx -> {
 
+
+        app.before("/jwt/*", ctx -> {
             String source = "Authfilter";
 
             Optional<DecodedJWT> decodedJWT = JavalinJWT.getTokenFromHeader(ctx)
                     .flatMap(JWTHandler.provider::validateToken);
             System.out.println(source);
             if (!decodedJWT.isPresent()) {
-                System.out.println(source+": No token");
+                System.out.println(source+": No/or altered token");
 
                 //Redirection to a responsemessage, providing with informaion on how to post a login request.
                 ctx.redirect("/loginRequest",302);
-                //ctx.status(401).result("Missing or invalid token");
-            }
-            else {
 
-                ctx.result("Hi " + decodedJWT.get().getClaim("name").asString());
             }
+            return;
         });
 
 
@@ -72,18 +72,23 @@ public class Main {
         response: token String.
          */
         app.post("/login", ctx -> {
-            System.out.println("Endpoint: login");
-            String name = ctx.formParam("name");
-            String pwd = ctx.formParam("password");
 
-            System.out.println(name+",pwd "+pwd);
-            Bruger user = Authendicator.Authendication(name,pwd);
-            if (user == null) {
-              ctx.result("Un authorized");
-            }else {
-                String token = JWTHandler.provider.generateToken(user);
-                ctx.json(new JWTResponse(token));
-            }
+          try {
+              System.out.println("Endpoint: login");
+              String name = ctx.formParam("name");
+              String pwd = ctx.formParam("password");
+
+              System.out.println(name + ",pwd " + pwd);
+              Bruger user = Authendicator.Authendication(name, pwd);
+              if (user == null) {
+                  ctx.result("Un authorized");
+              } else {
+                  String token = JWTHandler.provider.generateToken(user);
+                  ctx.json(new JWTResponse(token));
+              }
+          }catch (IllegalArgumentException e){
+              ctx.result("Could not fin user");
+          }
         });
 
 
@@ -91,14 +96,19 @@ public class Main {
         Endpoint for changing password
         */
 
-        app.post("/game/changeLogin", ctx->{
+        app.post("/jwt/changeLogin", ctx->{
             System.out.println("Endpoint: /login/changeLogin");
             try {
                 String pwd = ctx.formParam("new_password");
 
+                ObjectMapper mapper = new ObjectMapper();
+                Bruger bruger = mapper.readValue(unpactkToken(ctx,"user"), Bruger.class);
+                System.out.println(bruger.toString());
 
-                String username = unpactkToken(ctx, "name");
-                String password = unpactkToken(ctx, "password");
+
+                String username = bruger.brugernavn;
+                String password = ctx.formParam("password");
+                System.out.println(pwd+username+password); //For debugging
 
                 Bruger newUser = Authendicator.AuthChangePassword(username, password, pwd);
 
@@ -107,8 +117,7 @@ public class Main {
                     ctx.result("Internal server error");
                 }
 
-                String token = JWTHandler.provider.generateToken(newUser);
-                ctx.json(new JWTResponse(token));
+                ctx.result("Sucessfully changed password");
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -119,6 +128,12 @@ public class Main {
         /*
 ####################################################RESOLVE ENDPOINT#################################################################################
  */
+
+        //Get user info in exchange for JWT.
+        app.get("/jwt/exchangeUser", ctx->{
+
+            ctx.result(unpactkToken(ctx,"user"));
+        });
 
 
 

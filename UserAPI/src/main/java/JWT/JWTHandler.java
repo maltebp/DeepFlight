@@ -6,8 +6,11 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javalinjwt.JWTGenerator;
 import javalinjwt.JWTProvider;
+import jdk.nashorn.internal.parser.JSONParser;
 
 public class JWTHandler {
 
@@ -27,10 +30,22 @@ public class JWTHandler {
     For generating token
      */
     static JWTGenerator<Bruger> generator = (user, alg) -> {
+
+        //Remove password from userobject
+        user.adgangskode="";
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String jsonUser = mapper.writeValueAsString(user);
+
         JWTCreator.Builder token = JWT.create()
-                .withClaim("user", user.brugernavn)
-                .withClaim("password", user.adgangskode);
+                .withClaim("user", jsonUser);
         return token.sign(alg);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     };
 
     //3.
