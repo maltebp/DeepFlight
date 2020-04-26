@@ -45,9 +45,8 @@ public class Main {
 
                 //Redirection to a responsemessage, providing with informaion on how to post a login request.
                 ctx.redirect("/loginRequest",302);
-
             }
-            return;
+
         });
 
 
@@ -78,7 +77,7 @@ public class Main {
               String name = ctx.formParam("name");
               String pwd = ctx.formParam("password");
 
-              System.out.println(name + ",pwd " + pwd);
+              System.out.println(name + ",pwd " + pwd); //For debugging
               Bruger user = Authendicator.Authendication(name, pwd);
               if (user == null) {
                   ctx.result("Un authorized");
