@@ -137,6 +137,8 @@ public class GameAPI {
 
 
 
+            db.close();
+
             context.result(new ByteArrayInputStream(trackData));
             context.contentType("application");
             context.status(200);
