@@ -5,7 +5,7 @@ class Download extends Component {
   render() {
     return (
       <div>
-        <h2>DOWNLOAD THE GAME!</h2>
+        <h2>LOGIN TO DOWNLOAD THE GAME!</h2>
         <div className="boxwrapper">
         <div className="box">
         <Login/>
