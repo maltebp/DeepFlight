@@ -1,7 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="60c1c57d-7b55-42f5-944a-35f34cbc02d5" name="Default Changelist" comment="" />
+    <list default="true" id="60c1c57d-7b55-42f5-944a-35f34cbc02d5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__com_auth0_java_jwt_3_4_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_9_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_9_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_9_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__com_github_kmehrunes_javalin_jwt_v0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__commons_codec_commons_codec_1_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__io_javalin_javalin_3_8_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__javax_servlet_javax_servlet_api_3_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_apiguardian_apiguardian_api_1_0_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_client_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_http_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_io_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_security_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_server_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_servlet_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_util_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_webapp_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_jetty_xml_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_api_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_client_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_common_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_server_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_servlet_9_4_25_v20191220.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_jetbrains_annotations_13_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_stdlib_1_3_61.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_61.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_61.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_stdlib_jdk8_1_3_61.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_0_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_engine_5_0_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_junit_platform_junit_platform_commons_1_0_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_junit_platform_junit_platform_engine_1_0_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_opentest4j_opentest4j_1_0_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_28.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/libraries/Maven__org_slf4j_slf4j_simple_1_7_28.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UserAPI/Afgangsprojekt.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserAPI/Afgangsprojekt-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserAPI/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../UserAPI/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserAPI/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../UserAPI/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UserAPI/src/main/java/REST/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../UserAPI/src/main/java/REST/Main.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,7 +72,8 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.open.time.18" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -41,12 +90,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            </state>
+          </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/TEMPORARY">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
@@ -88,8 +141,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -155,14 +208,15 @@
       <updated>1585922168860</updated>
       <workItem from="1585922183958" duration="26000" />
       <workItem from="1585922466247" duration="335000" />
+      <workItem from="1587730629087" duration="708000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="361000" />
+    <option name="totallyTimeSpent" value="1069000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="878" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
@@ -172,6 +226,7 @@
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -201,11 +256,15 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/TEMPORARY">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
     </entry>
   </component>
   <component name="masterDetails">

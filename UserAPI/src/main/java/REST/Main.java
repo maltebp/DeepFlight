@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         //Initializing server
         Javalin app = Javalin.create(config -> {
-            // ACCEPTS ALL CLIENTS:
+            // ACCEPTS ALL CLIENTS: ONLY FOR TESTING
             config.enableCorsForAllOrigins();
             // TODO: add client url for game and site, local and remote. These urls can be read from the console.
             //config.enableCorsForOrigin(
@@ -60,7 +60,7 @@ public class Main {
          */
         app.get("/loginRequest",ctx->{
             ctx.status(401);
-            ctx.result("Please provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
+            ctx.result("Pleases provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
         });
 /*
 #####################################################################################################################################
@@ -84,7 +84,7 @@ public class Main {
             Bruger user = Authendicator.Authendication(name,pwd);
             user.toString();
             if (user == null) {
-              ctx.result("Un authorized");
+                ctx.result("Unauthorized");
             }
             String token = JWTHandler.provider.generateToken(user);
             ctx.json(new JWTResponse(token));
