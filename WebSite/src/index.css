@@ -55,7 +55,12 @@ ul.header li a {
 }
 
 .content h1, .content h2, .content h3, .box{
-  margin:1%; /*To reflect box margin*/
+  /*margin:1%; /*To reflect box margin*/
+  text-align: center;
+}
+
+.box{
+  margin:1%;
 }
 
 .boxwrapper{
