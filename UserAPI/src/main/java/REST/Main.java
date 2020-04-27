@@ -6,8 +6,6 @@ import brugerautorisation.data.Bruger;
 
 import brugerautorisation.data.UserPass;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import javalinjwt.JavalinJWT;
@@ -22,7 +20,16 @@ public class Main {
 
     public static void main(String[] args) {
         //Initializing server
-        Javalin app = Javalin.create().start(7000);
+        Javalin app = Javalin.create(config -> {
+            // ACCEPTS ALL CLIENTS: ONLY FOR TESTING
+            config.enableCorsForAllOrigins();
+            // TODO: add client url for game and site, local and remote. These urls can be read from the console.
+            //config.enableCorsForOrigin(
+            //        "http://localhost:3000/", // Web site local: OK
+            //        "https://master.d3lj15etjpqs5m.amplifyapp.com/" // Web site remote
+            //);
+
+        }).start(7000);
 
 /*
 #############################################AUTHFILTER########################################################################################
@@ -55,7 +62,7 @@ public class Main {
          */
         app.get("/loginRequest",ctx->{
             ctx.status(401);
-            ctx.result("Please provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
+            ctx.result("Pleases provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
         });
 /*
 #####################################################################################################################################

@@ -1,0 +1,110 @@
+@font-face {
+  font-family: 'Pixellari';
+  src: local('Pixellari'), url(./fonts/Pixellari.ttf) format('truetype');
+}
+
+a {
+  color:white;
+  text-decoration: underline overline;
+}
+
+
+body{
+  background-image: url("images/df.jpg");
+  background-color: #cccccc;
+  color: #fff;
+  font-family: 'Pixellari', 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+.header {
+  text-align: center;
+  font-size: 2em;
+}
+
+h1.header {
+  font-size: 6em;
+}
+
+ul.header li {
+  display:inline;
+  list-style-type: none;
+  margin:0;
+}
+
+ul.header {
+  text-align: center;
+  padding:0;
+}
+
+ul.header li a {
+  color:#fff;
+  font-weight: bold;
+  text-decoration: none;
+  padding:20px;
+  display:inline-block;
+  border-top:2px solid transparent;
+  border-bottom:2px solid transparent;
+}
+
+.active {
+  border-top:2px solid white !important;
+  border-bottom:2px solid white !important;
+}
+
+.content h1, .content h2, .content h3, .box{
+  margin:1%; /*To reflect box margin*/
+}
+
+.boxwrapper{
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  overflow: hidden;
+  font-family: monospace;
+}
+
+.whitebg{
+  background:white;
+  color:black;
+}
+
+.box{
+  display: table-cell;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/*Smaller screens*/
+@media only screen and (max-width: 600px) {
+  .box, .box3, ul.header li {
+    display: block;
+    width: 100%;
+  }
+}
+
+/*Bigger screens*/
+@media only screen and (min-width: 600px) {
+.boxwrapper{
+display:flex;
+}
+  .box, .boxwrapper {
+   flex:1;
+  }
+}
+
+
+/*Style the web form*/
+
+label, input{
+  display:block;
+  width:100%;
+  box-sizing: border-box;
+}
+
+  form {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 320px;
+  }
