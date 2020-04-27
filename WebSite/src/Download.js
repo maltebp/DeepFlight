@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 class Download extends Component {
   render() {
@@ -57,12 +58,17 @@ class Login extends Component {
       withCredentials: true})
 
       .then(response => {
+        // TODO remove these alerts and logs!
         console.log(response);
-        var result = JSON.stringify(response.statusText) + "\nTOKEN:\n" + JSON.stringify(response.data);
+        const token = response.data;
+        var decoded = jwt.decode(token.jwt);
+        console.log(decoded);
+        var result = JSON.stringify(response.statusText) + "\nJWT:\n" + JSON.stringify(decoded).replace(/\\/g, "");
         alert(result);
         //if (response.data.logged_in) {
           //this.props.handleSuccessfulAuth(response.data);
         //}
+        localStorage.setItem("dftoken", response.result);
       })
       .catch(error => {
         console.log("login error", error);
