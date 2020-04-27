@@ -46,17 +46,19 @@ class Login extends Component {
 
     axios({
       method: 'post',
-      url: 'http://maltebp.dk:7000/login', 
+      url: 'http://maltebp.dk:7000/login',
+      //url: 'http://localhost:7000/login',
       data: bodyFormData,
       headers: {
         'Content-Type': 'multipart/form-data',
         'Access-Control-Allow-Origin': 'http://maltebp.dk:7000/login'
+        //'Access-Control-Allow-Origin': 'http://localhost:7000'
       },
       withCredentials: true})
 
       .then(response => {
         console.log(response);
-        var result = JSON.stringify(response.statusText);
+        var result = JSON.stringify(response.statusText) + "\nTOKEN:\n" + JSON.stringify(response.data);
         alert(result);
         //if (response.data.logged_in) {
           //this.props.handleSuccessfulAuth(response.data);
