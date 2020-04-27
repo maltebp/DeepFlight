@@ -45,13 +45,13 @@ class Login extends Component {
     bodyFormData.append('password', password);
 
     axios({
-      method: 'post', 
-      url: 'maltebp.dk:7000/login', 
-      data: bodyFormData, 
+      method: 'post',
+      url: 'http://maltebp.dk:7000/login', 
+      data: bodyFormData,
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Origin': ' maltebp.dk:7000/login'
-      }, 
+        'Access-Control-Allow-Origin': 'http://maltebp.dk:7000/login'
+      },
       withCredentials: true})
 
       .then(response => {
