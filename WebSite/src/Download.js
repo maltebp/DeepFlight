@@ -84,7 +84,7 @@ class Login extends Component {
             type="text"
             name="username"
             placeholder="Username"
-            value={this.state.username}
+            defaultvalue={this.state.username}
             onChange={this.handleChange}
             required
           />
