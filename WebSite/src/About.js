@@ -6,15 +6,16 @@ class About extends Component {
   render() {
     return (
       <div>
-      <div className="boxwrapper">
-        <img src={Smar2} width="100%" alt="deep flight screenshot"/>
-      </div>
-      <div className="boxwrapper">
-        <div className="box, whitebg" style={{width: 100%;}}>
-        <h1>Deep Flight</h1>
-        <p>A classic cave flier with an infinite number of caves.</p>
-      </div>
-      </div>
+        <div className="boxwrapper">
+          <div className="box">
+            <img src={Smar2} width="100%" alt="deep flight screenshot" />
+            <div className="imageoverlay"><h1 >Deep Flight</h1>
+              <p>A classic cave flier with an infinite number of caves.</p>
+            </div>
+            <h2>Project</h2>
+              <p>This page and the backend is made by <b>gruppe 0, DTU software, Backendudvikling, may 2020</b>. </p>
+          </div>
+        </div>
 
       </div>
     );

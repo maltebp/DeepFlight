@@ -6,14 +6,37 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      universal: null,
-      lastRound: null
+      universal: 'Loading high scores...',
+      lastRound: 'Loading high scores...'
     }
-    axios({
-
-    })
   }
-  getHighScores
+
+  componentDidMount() {
+    const url = "http://maltebp.dk:10000/gameapi/planets";
+    axios({
+      method: 'get',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': url,
+        'Accept': 'application/json',
+        'Authorization': localStorage.getItem("dftoken")
+      },
+      withCredentials: true
+    })
+      .then(response => {
+        const scores = response.data.planets;
+        console.log(scores);
+        this.setState({
+          universal: scores[0].name + "\n" + scores[1].name  + "\n" + scores[2].name,
+          lastRound: scores[0].color + "\n" + scores[1].color  + "\n" + scores[2].color,
+        });  
+      })
+      .catch(error => {
+        console.log("axios download results error", error);
+      });
+  }
+
 
   render() {
     return (
@@ -24,43 +47,15 @@ class Home extends Component {
         </div>
         <div className="boxwrapper">
           <div className="box whitebg">
-            <p>Loading high scores...</p>
+    <p>{this.state.universal}</p>
           </div>
           <div className="box whitebg">
-            <p>Loading high scores...</p>
+    <p>{this.state.lastRound}</p>
           </div>
-        </div>
-        <div className="boxwrapper">
-          <p className="box">Your rank: </p>
-          <p className="box">Your rating: </p>
-          <p className="box">Your rank: </p>
-          <p className="box">Your rating: </p>
         </div>
       </div>
     );
   }
-}
-
-function getHighScores() {
-  axios({
-    method: 'post',
-    url: 'http://maltebp.dk:10000/getHighScores',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'http://maltebp.dk:10000/getHighScores',
-      'Accept': 'application/json',
-      'Authorization': localStorage.getItem("dftoken")
-    },
-    withCredentials: true
-  })
-    .then(response => {
-      
-      //this.handleState(res);
-    })
-    .catch(error => {
-      console.log("axios download results error", error);
-    });
-  //event.preventDefault();
 }
 
 export default Home;

@@ -58,7 +58,8 @@ class DownloadBox extends React.Component {
       <div className="box">
         <h2>Hello, user!</h2>
         <p>You are logged in and can download the game from here.</p>
-        <button className="downloadLink" onClick="DownloadGame">Download</button>
+        <p>Just a dummy file, no need to install it :-)</p>
+        <a className="buttonLink" href="http://mirrors.dotsrc.org/linuxmint-cd/stable/19.3/linuxmint-19.3-cinnamon-64bit.iso">Download Deep Flight</a>
         <p>Size: 8 MB</p>
       </div>
     );

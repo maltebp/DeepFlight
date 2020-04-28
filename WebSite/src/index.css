@@ -61,6 +61,7 @@ ul.header li a {
   display: -ms-flexbox;
   overflow: hidden;
   font-family: monospace;
+  margin-bottom: 20px;
 }
 
 .whitebg {
@@ -72,7 +73,6 @@ ul.header li a {
 .box {
   display: table-cell;
   box-sizing: border-box;
-  margin-bottom: 20px;
 }
 
 /*Smaller screens*/
@@ -111,7 +111,7 @@ form label, form input {
   font-size: 1.3em;
 }
 
-button, form button {
+button, form button, .buttonLink {
   color: black;
   width: 100%;
   background-color: #ffffff;
@@ -122,8 +122,26 @@ button, form button {
   font-family: 'Courier New', Courier, monospace;
 }
 
+.buttonLink{
+  display: inline-block;
+  text-align: center;
+  box-sizing: border-box;
+}
+
 form {
   text-align: center;
   margin: 0 auto;
   max-width: 320px;
+}
+
+.imageoverlay{
+  margin-top: -180px;
+  text-align: right;
+  padding:20px;
+  color: white;
+}
+
+.imageoverlay h1 {
+  font-family: 'Pixellari', monospace;
+  font-size:3em;
 }
