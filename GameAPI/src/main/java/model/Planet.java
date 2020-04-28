@@ -1,6 +1,7 @@
 package model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 
 public class Planet {
 
+    @JsonProperty("_id")
     private int id;
     private String name;
     private int[] color;
@@ -31,6 +33,7 @@ public class Planet {
     }
 
     // Getters required for JSON serialization
+    @JsonProperty("_id")
     public int getId() {
         return id;
     }
@@ -40,6 +43,8 @@ public class Planet {
     public int[] getColor() {
         return color;
     }
+
+    @JsonProperty("_id")
     public void setId(int id) {
         this.id = id;
     }

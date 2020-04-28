@@ -3,6 +3,7 @@ import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Planet;
 import model.Round;
 import model.Track;
+import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
@@ -42,6 +43,28 @@ public class GameAPI {
 
 
     private void setupEndpoints(){
+
+
+        server.get("planet/:id", context -> {
+            try{
+                int planetId = Integer.parseInt(context.pathParam("id"));
+
+                DatabaseConnector db = new DatabaseConnector();
+
+                Planet planet = db.getPlanetMongoJack(planetId);
+
+                db.close();
+
+                context.result(planet.toString());
+                context.status(HttpStatus.OK_200);
+            }catch(NumberFormatException e){
+                e.printStackTrace();
+                context.result("Id must be a number");
+                context.status(HttpStatus.BAD_REQUEST_400);
+            }
+
+
+        });
 
         // Returns all planets
         server.get("/planets", context -> {
