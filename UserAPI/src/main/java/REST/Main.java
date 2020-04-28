@@ -4,8 +4,8 @@ import Controller.Authendicator;
 import JWT.JWTHandler;
 import brugerautorisation.data.Bruger;
 
-import brugerautorisation.data.UserPass;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import javalinjwt.JavalinJWT;
@@ -87,12 +87,14 @@ public class Main {
               System.out.println(name + ",pwd " + pwd); //For debugging
               Bruger user = Authendicator.Authendication(name, pwd);
               if (user == null) {
-                  ctx.result("Un authorized");
+                  ctx.status(401);
+                  ctx.result("Unauthorized");
               } else {
                   String token = JWTHandler.provider.generateToken(user);
                   ctx.json(new JWTResponse(token));
               }
           }catch (IllegalArgumentException e){
+              ctx.status(401);
               ctx.result("Could not fin user");
           }
         });
