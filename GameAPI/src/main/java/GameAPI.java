@@ -1,8 +1,10 @@
 import io.javalin.Javalin;
+import io.javalin.core.util.Header;
 import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Planet;
 import model.Round;
 import model.Track;
+import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
@@ -147,13 +149,16 @@ public class GameAPI {
 
 
 
+        server.get("/user/login", context -> {
+            context.result( UserAPIConnector.authenticateUser(context.header(Header.AUTHORIZATION)) );
+            context.status(HttpStatus.SC_OK);
+        });
+
 
         server.get("", context -> {
             context.status(200);
             context.result("GameAPI is up and running!");
         });
-
-
 
 
         // Get Track
