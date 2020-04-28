@@ -55,7 +55,12 @@ ul.header li a {
 }
 
 .content h1, .content h2, .content h3, .box{
-  margin:1%; /*To reflect box margin*/
+  /*margin:1%; /*To reflect box margin*/
+  text-align: center;
+}
+
+.box{
+  margin:1%;
 }
 
 .boxwrapper{
@@ -74,6 +79,7 @@ ul.header li a {
   display: table-cell;
   padding: 20px;
   box-sizing: border-box;
+  margin-bottom:20px;
 }
 
 /*Smaller screens*/
@@ -97,10 +103,29 @@ display:flex;
 
 /*Style the web form*/
 
-label, input{
+form label, form input{
   display:block;
   width:100%;
   box-sizing: border-box;
+  color:white;
+  background-color: transparent;
+  text-align: center;
+  border: none;
+  border-bottom: 2px solid white;
+  padding: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.3em;
+}
+
+form button{
+  color:black;
+  width:100%;
+  background-color: #ffffff;
+  border:none;
+  padding:20px;
+  margin-top:10px;
+  margin-bottom:20px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
   form {
