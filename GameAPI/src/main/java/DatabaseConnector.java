@@ -1,15 +1,19 @@
 
+import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import javafx.application.Platform;
 import model.Planet;
 import model.Round;
 import model.Track;
 import org.bson.Document;
 import org.bson.types.Binary;
+import org.jongo.Jongo;
+import org.mongojack.JacksonMongoCollection;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -30,13 +34,11 @@ public class DatabaseConnector {
     private MongoClient client;
     private MongoDatabase database;
 
-
     public DatabaseConnector() throws UnknownHostException {
         String dbName = DB_NAME + (testMode ? "_test" : "");
 
         client = createClient();
         database = client.getDatabase(dbName);
-
     }
 
 
@@ -54,9 +56,15 @@ public class DatabaseConnector {
         if( responseObject == null ) return null;
 
         return Planet.fromDocument(responseObject);
+
     }
 
+    public Planet getPlanetMongoJack(int planetId) {
+        JacksonMongoCollection<Planet> collection = JacksonMongoCollection.builder()
+                .build(client, DB_NAME, Collection.PLANETS.toString(), Planet.class);
 
+        return collection.find(Filters.eq("_id",planetId)).first();
+    }
 
     public List<Planet> getPlanets(){
         MongoCollection<Document> collection = database.getCollection(Collection.PLANETS.toString());
