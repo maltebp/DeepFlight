@@ -1,5 +1,5 @@
+package database;
 
-import com.mongodb.Mongo;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -11,14 +11,11 @@ import model.Track;
 import org.bson.Document;
 import org.bson.types.Binary;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DatabaseConnector {
-
-    private static final String DB_SERVER_URL = "mongodb://localhost:27017";
 
     // TODO: Fix password in code
     private static final String DB_NAME = "gamedb";
@@ -31,13 +28,29 @@ public class DatabaseConnector {
     private MongoDatabase database;
 
 
-    public DatabaseConnector() throws UnknownHostException {
-        String dbName = DB_NAME + (testMode ? "_test" : "");
+    // Singleton logic --------------------------------------------------
+    private DatabaseConnector(){
+        client = MongoClients.create(String.format("mongodb+srv://%s:%s-cu0et.mongodb.net/test?retryWrites=true&w=majority", DB_USER, DB_PASSWORD));
 
-        client = createClient();
-        database = client.getDatabase(dbName);
+        if( testMode ){
+            client.getDatabase(DB_NAME + "_test").drop(); // Drops existing database
+            database = client.getDatabase(DB_NAME + "_test");
+            setupTestDatabase();
+        }else{
+            database = client.getDatabase(DB_NAME);
+        }
 
     }
+
+    private static DatabaseConnector instance;
+
+    public static DatabaseConnector getInstance() {
+        if( instance == null )
+            instance = new DatabaseConnector();
+        return instance;
+    }
+    // ------------------------------------------------------------------
+
 
 
     public void addPlanet(Planet planet){
@@ -165,11 +178,6 @@ public class DatabaseConnector {
     }
 
 
-    private static MongoClient createClient(){
-        return MongoClients.create("mongodb+srv://game:deepflightisawesome@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority");
-    }
-
-
 
 
     // -----------------------------------------------------------------------------------------------
@@ -177,20 +185,16 @@ public class DatabaseConnector {
 
 
     /**
-     * Enables test mode for future DatabaseConnector objects, such that they will
+     * Enables test mode for future database.DatabaseConnector objects, such that they will
      * use a temporary test database.
      * The test database name is DB_NAME+_test, and it's recreated when this method
      * is called. */
-    public static void enableTestMode() throws UnknownHostException {
+    public static void enableTestMode() {
         testMode = true;
-        MongoClient client = createClient();
-        client.getDatabase(DB_NAME + "_test").drop();
-        client.close();
-        setupTestDatabase();
     }
 
     /** Adds test data to test database */
-    private static void setupTestDatabase() throws UnknownHostException {
+    private static void setupTestDatabase() {
         DatabaseConnector db = new DatabaseConnector();
         db.addPlanet(new Planet(1, "Smar", new int[]{123,150,111}));
         db.addPlanet(new Planet(2, "Turnsa", new int[]{200,100,50}));
@@ -199,7 +203,7 @@ public class DatabaseConnector {
 
         db.addTrack(new Track(1, "ABCD123", 1, 1000));
         db.addTrack(new Track(2, "ASDJ685", 2, 3000));
-        db.addTrack(new Track(3, "PIDF564", 3, 2000));
+        db.addTrack(new Track(3, "PIDF564", 3, 2000))   ;
         db.addTrack(new Track(4, "OKGJ884", 4, 1500));
 
         db.addTrackBlockData( 1, TrackDataReader.getTrackData("smar.dftbd") );

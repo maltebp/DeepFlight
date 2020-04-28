@@ -1,12 +1,15 @@
+package server;
+
+import database.DatabaseConnector;
 import io.javalin.Javalin;
 import io.javalin.core.util.Header;
 import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Planet;
-import model.Round;
-import model.Track;
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import server.services.UserService;
+
 import java.io.ByteArrayInputStream;
 
 
@@ -28,6 +31,7 @@ public class GameAPI {
             config.contextPath = URL_ROOT;
             config.enableCorsForAllOrigins();
         });
+
         server.start(PORT);
 
         setupEndpoints();
@@ -45,9 +49,16 @@ public class GameAPI {
 
     private void setupEndpoints(){
 
+
+        server.before(context -> {
+            System.out.printf(  "\n%s     \t%s" +
+                                "\nBody: '%s'\n",
+                    context.method(), context.url(), context.body());
+        });
+
         // Returns all planets
         server.get("/planets", context -> {
-            DatabaseConnector db = new DatabaseConnector();
+            DatabaseConnector db = DatabaseConnector.getInstance();
 
             JSONArray planets = new JSONArray();
             for( Planet planet : db.getPlanets() ){
@@ -63,62 +74,14 @@ public class GameAPI {
             db.close();
         });
 
-        // Get user
-        server.get("/round/current", context -> {
-            DatabaseConnector db = new DatabaseConnector();
 
-            // Find the current round (using start and end time
-            long currentTime = System.currentTimeMillis();
-            Round current = null;
-            for(Round round : db.getRounds() ){
-                if( round.getStartDate() <= currentTime && round.getEndDate() > currentTime ){
-                    if( current != null );
-                        // TODO: Implement error: two rounds are current!
-                    current = round;
-                }
-            }
 
-            if( current == null )
-                throw new NullPointerException("Couldn't find current round");
-                // TODO: Implement error: No round is running!
-
-            // Fetch track information
-            JSONObject response = current.toJSON();
-
-            JSONArray jsonTracks = new JSONArray();
-            for( int trackId : current.getTrackIds() ){
-                Track track = db.getTrack(trackId);
-                if( track == null )
-                    // TODO: Implement proper error response
-                    throw new NullPointerException(String.format("Couldn't find Track with ID=%d in the database", trackId));
-
-                Planet planet = db.getPlanet(track.getPlanetId());
-                if( planet == null )
-                    // TODO: Implement proper error response
-                    throw new NullPointerException(String.format("Couldn't find Planet with ID=%d in the database", track.getPlanetId()));
-
-                JSONObject jsonTrack = track.toJSON();
-                jsonTrack.remove("planetId");
-                jsonTrack.put("planet", planet.toJSON());
-                System.out.println("Created Track JSON: " + jsonTrack);
-
-                jsonTracks.put(jsonTrack);
-            }
-
-            response.remove("trackIds");
-            response.put("tracks", jsonTracks);
-
-            db.close();
-
-            context.result(response.toString());
-            context.status(200);
-        });
 
 
 
         server.get("/track/:trackid/blockdata", context -> {
 
-            DatabaseConnector db = new DatabaseConnector();
+            DatabaseConnector db = DatabaseConnector.getInstance();
 
             int trackId;
             try{
@@ -149,15 +112,12 @@ public class GameAPI {
 
 
 
-        server.get("/user/login", context -> {
-            context.result( UserAPIConnector.authenticateUser(context.header(Header.AUTHORIZATION)) );
-            context.status(HttpStatus.SC_OK);
-        });
+
 
 
         server.get("", context -> {
             context.status(200);
-            context.result("GameAPI is up and running!");
+            context.result("server.GameAPI is up and running!");
         });
 
 
@@ -165,10 +125,10 @@ public class GameAPI {
         server.get("/track/:trackid", context -> {
             String trackId = context.pathParam("trackid");
 
-
-
         });
 
+
+        new UserService(server);
     }
 
 
