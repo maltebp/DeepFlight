@@ -17,14 +17,11 @@ public class UserController {
 
 
     public void userLogIn(String username, String password) throws RemoteException, NotBoundException, MalformedURLException {
-       try { //Verifying the user
+        //Verifying the user
            auth.Authendication(username, password);
 
 
 
-       }catch (RemoteException | NotBoundException | MalformedURLException e){
-           System.out.println("Some thing went wrong, at javabog server. Maby the user does not exist");
-       }
     }
 
 

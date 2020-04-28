@@ -2,6 +2,7 @@
 
 # This is a real deployment build
 # Served with the program "serve"
+# instead of docker
 
 sudo npm run build
 
