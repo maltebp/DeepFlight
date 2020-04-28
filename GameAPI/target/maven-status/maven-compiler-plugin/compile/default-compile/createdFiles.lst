@@ -1,9 +1,0 @@
-DatabaseConnector.class
-model\Track.class
-Main.class
-model\Planet.class
-TrackDataReader.class
-DatabaseConnector$Collection.class
-model\Round.class
-GameAPI.class
-UserAuthenticator.class
