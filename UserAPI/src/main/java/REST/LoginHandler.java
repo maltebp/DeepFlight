@@ -24,7 +24,7 @@ public class LoginHandler {
             Bruger user = Authendicator.Authendication(name, pwd);
 
 
-           // A null user will be thrown from Autheddication as an IkkegalArgumentException
+           // A null user will be thrown from Autheddication as an IllegalArgumentException
             if (user != null) {
                 String token = JWTHandler.provider.generateToken(user);
                 ctx.json(new JWTResponse(token));
