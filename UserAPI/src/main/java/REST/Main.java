@@ -10,7 +10,6 @@ import brugerautorisation.data.Bruger;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.javalin.Javalin;
 import javalinjwt.JavalinJWT;
 
@@ -21,7 +20,16 @@ public class Main {
 
     public static void main(String[] args) {
         //Initializing server
-        Javalin app = Javalin.create().start(7000);
+        Javalin app = Javalin.create(config -> {
+            // ACCEPTS ALL CLIENTS: ONLY FOR TESTING
+            config.enableCorsForAllOrigins();
+            // TODO: add client url for game and site, local and remote. These urls can be read from the console.
+            //config.enableCorsForOrigin(
+            //        "http://localhost:3000/", // Web site local: OK
+            //        "https://master.d3lj15etjpqs5m.amplifyapp.com/" // Web site remote
+            //);
+
+        }).start(7000);
 
 /*
 #############################################AUTHFILTER########################################################################################
@@ -34,7 +42,6 @@ public class Main {
 
 
         app.before("/jwt/*", ctx -> {
-
             String source = "Authfilter";
 
             Optional<DecodedJWT> decodedJWT = JavalinJWT.getTokenFromHeader(ctx)

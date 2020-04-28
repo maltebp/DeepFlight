@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javalinjwt.JWTGenerator;
 import javalinjwt.JWTProvider;
-import jdk.nashorn.internal.parser.JSONParser;
 
 public class JWTHandler {
 
