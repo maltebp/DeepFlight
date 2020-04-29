@@ -2,6 +2,8 @@
 
 from source import database
 
+#Hej Andreas
+
 
 print("Starting Universe Update")
 
