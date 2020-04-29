@@ -11,7 +11,9 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+
 public class RoundService {
+
 
     public RoundService(Javalin server) {
 
@@ -75,14 +77,6 @@ public class RoundService {
         }
 
 
-
-    }
-
-    public void getPreviousRound(Context context){
-
-    }
-
-    public void getRoundFromId(Context context){
 
     }
 
