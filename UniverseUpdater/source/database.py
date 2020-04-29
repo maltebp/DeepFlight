@@ -1,4 +1,5 @@
 import pymongo
+
 from source.track import Track
 
 # Settings
