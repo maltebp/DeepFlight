@@ -2,9 +2,6 @@
 
 from source import database
 
-#Hej Andreas
-
-
 print("Starting Universe Update")
 
 planets = database.get_planets()
