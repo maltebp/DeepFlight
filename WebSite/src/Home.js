@@ -6,8 +6,20 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      universal: 'Loading high scores...',
-      lastRound: 'Loading high scores...'
+      universal: [
+        'Loading high scores...',
+        null,
+        null,
+        null,
+        null,
+      ],
+      lastRound: [
+        null,
+        null,
+        null,
+        null,
+        null,
+      ]
     }
   }
 
@@ -28,9 +40,9 @@ class Home extends Component {
         const scores = response.data.planets;
         console.log(scores);
         this.setState({
-          universal: scores[0].name + "\n" + scores[1].name  + "\n" + scores[2].name,
-          lastRound: scores[0].color + "\n" + scores[1].color  + "\n" + scores[2].color,
-        });  
+          universal: [scores[0].name, scores[1].name, scores[2].name, scores[3].name],
+          lastRound: [scores[0].color, scores[1].color, scores[2].color, scores[3].color]
+        });
       })
       .catch(error => {
         console.log("axios download results error", error);
@@ -47,10 +59,24 @@ class Home extends Component {
         </div>
         <div className="boxwrapper">
           <div className="box whitebg">
-    <p>{this.state.universal}</p>
+            <table>
+              <tbody>
+              <tr><td>{this.state.universal[0]}</td><td>{this.state.lastRound[0]}</td></tr>
+              <tr><td>{this.state.universal[1]}</td><td>{this.state.lastRound[1]}</td></tr>
+              <tr><td>{this.state.universal[2]}</td><td>{this.state.lastRound[2]}</td></tr>
+              <tr><td>{this.state.universal[3]}</td><td>{this.state.lastRound[3]}</td></tr>
+            </tbody>
+            </table>
           </div>
           <div className="box whitebg">
-    <p>{this.state.lastRound}</p>
+            <table>
+              <tbody>
+              <tr><td>{this.state.universal[0]}</td><td>{this.state.lastRound[0]}</td></tr>
+              <tr><td>{this.state.universal[1]}</td><td>{this.state.lastRound[1]}</td></tr>
+              <tr><td>{this.state.universal[2]}</td><td>{this.state.lastRound[2]}</td></tr>
+              <tr><td>{this.state.universal[3]}</td><td>{this.state.lastRound[3]}</td></tr>
+            </tbody>
+            </table>
           </div>
         </div>
       </div>

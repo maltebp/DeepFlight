@@ -20,7 +20,7 @@ class Download extends Component {
   render() {
     return (
       <div>
-        <div className="boxwrapper">
+        <div className="boxwrapper longread">
           <FilterDownload token={this.state.token} handleState={this.handleState.bind(this)}/>
           <div className="box whitebg">
             <h2>Installation</h2>

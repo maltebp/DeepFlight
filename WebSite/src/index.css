@@ -64,6 +64,10 @@ ul.header li a {
   margin-bottom: 20px;
 }
 
+.longread {
+  padding-bottom: 60px;
+}
+
 .whitebg {
   background: white;
   padding: 20px;
@@ -135,7 +139,7 @@ form {
 }
 
 .imageoverlay{
-  margin-top: -180px;
+  margin-top: -200px;
   text-align: right;
   padding:20px;
   color: white;
@@ -144,4 +148,14 @@ form {
 .imageoverlay h1 {
   font-family: 'Pixellari', monospace;
   font-size:3em;
+}
+
+.imageoverlay p {
+  font-size: 2em;
+}
+
+table {
+  width:100%;
+  font-family: 'Pixellari';
+  font-size:1.2em;
 }
