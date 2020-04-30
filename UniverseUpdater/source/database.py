@@ -1,4 +1,5 @@
 import pymongo
+import bson
 from source.track import Track
 
 # Settings
@@ -14,6 +15,7 @@ _db_name = "gamedb"
 # Establish connection
 client = pymongo.MongoClient(f"mongodb+srv://{_db_user}:{_db_password}@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority")
 db = client["gamedb" + ("_test" if _use_test_database else "")]
+print(db.list_collection_names())
 
 
 def get_planets():
@@ -21,6 +23,13 @@ def get_planets():
 
 
 def add_track(track):
+    obj = {
+        "id" : track.id,
+    "name" : track.name,
+    "planetId" : track.planetId,
+    "data" : bson.Binary(track.data)
+    }
+    db["tracks"].insert_one(obj).inserted_id
     print("Saving track")
 
 
@@ -35,3 +44,4 @@ def get_tracks():
         tracks.append(track)
 
     return tracks
+

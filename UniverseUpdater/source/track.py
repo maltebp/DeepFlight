@@ -10,3 +10,7 @@ class Track:
 
     def __str__(self):
         return f"Track( id={self.id}, name='{self.name}', planetId={self.planetId} )"
+
+
+    def setData(self,data):
+        self.data = data
