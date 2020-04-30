@@ -18,14 +18,28 @@ _db_name = "game"
 # Establish connection
 client = pymongo.MongoClient(f"mongodb+srv://{_db_user}:{_db_password}@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority")
 db = client["gamedb" + ("_test" if _use_test_database else "")]
+
 print(f"Collections: {db.list_collection_names()}")
+
 
 
 def get_planets():
     return db["planets"].find()
 
 
+
+
 def add_track(track):
+
+    obj = {
+        "id" : track.id,
+    "name" : track.name,
+    "planetId" : track.planetId,
+    "data" : bson.Binary(track.data)
+    }
+    db["tracks"].insert_one(obj).inserted_id
+    print("Saving track")
+
     db_track = {"name": track.name, "planetId": track.planetId}
 
     # Return value of insert is the _id generated
@@ -35,6 +49,7 @@ def add_track(track):
     if track.data is not None:
         print("Track data is not None")
         db["trackdata"].insert_one({"_id": _id, "data": bson.Binary(track.data)})
+
 
 
 def get_track_data():
@@ -52,3 +67,4 @@ def get_tracks():
         tracks.append(track)
 
     return tracks
+

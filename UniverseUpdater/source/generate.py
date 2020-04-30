@@ -1,4 +1,16 @@
 
+
+import binascii
+import subprocess
+from source.track import Track
+
+from source import database
+
+#Execute TrackGeneration.c and creating a Track
+#subprocess.call(["TrackGenerator.exe", ".", "testtrack","123", "10", "10", "10", "10", "10"])
+
+
+
 import string
 import random
 import subprocess
@@ -97,6 +109,7 @@ def generateUniqueTrackName(existingTracks):
     return name
 
 
+
 # Generates a Track name in the format
 #   AAAA-000
 def generateTrackName():
@@ -107,7 +120,6 @@ def generateTrackName():
     for x in range(3):
         name += str(random.randint(0, 9))
     return name
-
 
 
 track = generateTrack(Planet(10, "Test Planet", [100,150,120], 10, 10, 10, 10, 10), [] )
