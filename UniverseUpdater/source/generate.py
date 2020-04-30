@@ -1,20 +1,7 @@
 
-
-import binascii
-import subprocess
-from source.track import Track
-
-from source import database
-
-#Execute TrackGeneration.c and creating a Track
-#subprocess.call(["TrackGenerator.exe", ".", "testtrack","123", "10", "10", "10", "10", "10"])
-
-
-
 import string
 import random
 import subprocess
-import time
 
 from source.planet import Planet
 from source.track import Track
@@ -25,24 +12,6 @@ __TRACK_GENERATOR_PATH = "../TrackGenerator.exe"
 __TRACK_FILE_NAME = "generatedtrack"
 __TRACK_FILE_EXT = ".dftbd"
 
-#
-# import subprocess
-# argList = ["testtrack","123", "10", "10", "10", "10", "10"]
-# #Execute TrackGeneration.c and creating a Track
-# subprocess.call(["TrackGenerator.exe", ".", "testtrack","123", "10", "10", "10", "10", "10"])
-#
-#
-# #Open the created track file ex. testtrack.exe
-# f=open("testtrack.dftbd","rb")
-# num=bytearray(f.read())
-# print (num)
-# f.close()
-# with open("testtrack.dftbd", mode='rb') as file: # b is important -> binary
-#     fileContent = file.read()
-# #Printing the length of the track (in byts)
-# print(len(num))
-#
-#
 
 # Generate a Track from the generation factors of a Planet,
 # and a list of existing tracks (for unique generation)
@@ -122,5 +91,5 @@ def generateTrackName():
     return name
 
 
-track = generateTrack(Planet(10, "Test Planet", [100,150,120], 10, 10, 10, 10, 10), [] )
-print(f"Generated Track: {track}")
+# track = generateTrack(Planet(10, "Test Planet", [100,150,120], 10, 10, 10, 10, 10), [] )
+# print(f"Generated Track: {track}")
