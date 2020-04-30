@@ -1,7 +1,7 @@
 
 
 from source import database
-from source.track import Track
+from source.model.track import Track
 
 print("Starting Universe Update")
 

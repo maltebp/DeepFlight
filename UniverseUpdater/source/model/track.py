@@ -1,12 +1,16 @@
 ##The track object/DTO
 class Track:
 
-    def __init__(self, id, name, planet_id, data=None, seed=None):
+
+    #
+    # times: Dictionary of username and their track times in milliseconds
+    def __init__(self, id, name, planet_id, data=None, seed=None, times=None):
         self.id = id
         self.name = name
         self.planetId = planet_id
         self.data = data
         self.seed = seed
+        self.times = times
 
 
     def __str__(self):

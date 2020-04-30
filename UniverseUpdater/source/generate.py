@@ -3,8 +3,7 @@ import string
 import random
 import subprocess
 
-from source.planet import Planet
-from source.track import Track
+from source.model.track import Track
 
 
 
