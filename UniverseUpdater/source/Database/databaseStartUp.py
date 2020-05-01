@@ -1,4 +1,5 @@
 import bson
+import json
 
 # This method is only used if collections "tracts" or "trackdata" does not exist.
 # It is not possible to insert with transactions if a collection does not exist
@@ -48,7 +49,7 @@ def add_single_round(db):
         print('Adding single round')
         db_round = {
             "_id": 1,
-            "trackIds": [1,2,3,4],
+            "trackId": [1,2,3,4],
             "roundNumber": "1",
             "startDate": 1588079852194,
             "endDate":1588166252194,

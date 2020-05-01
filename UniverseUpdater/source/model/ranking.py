@@ -10,6 +10,7 @@ class Ranking:
             self.user_id = user_id
 
 
-        def __str__(self):
 
+        def __str__(self):
+            return f"rankings( user_id={self.user_id}, rating='{self.rating}', rank={self.rank})"
 

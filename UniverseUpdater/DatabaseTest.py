@@ -22,6 +22,8 @@ def test_addAndReturnTrack():
 
 def test_addRound():
     print("Running test: test_addRound()")
+
+    #Creating round object
     startDate = int(round(time.time() * 1000))
     endDate = int(round(time.time() * 1000)+100000)
 
@@ -33,9 +35,35 @@ def test_addRound():
     rankings.append(ranking1)
     rankings.append(ranking2)
     testRound = Round(trackIds,2,startDate,endDate,rankings)
+    print("Original round object"+testRound.__str__())
+    print(testRound)
+    #Add round to database
     add_roundObject(testRound)
+    returnRound = get_roundsObjectList()
+    for i in returnRound:
+        print("Return rounds: " + i.__str__())
     removeRound(testRound)
 
-test_addRound()
+def test_add_planet():
+    testPlanet = Planet("Mars","blue",10,10,20,100,66)
+    add_planetsToDB(testPlanet)
+    print("Original planet: "+testPlanet.__str__())
+    for i in get_planetObjectList():
+        print("Return planet: "+i.__str__())
+    removePlanetFromDB(testPlanet)
+
+
+def test_add_User():
+    testUser = User("Per",20,303)
+    add_UserToDB(testUser)
+    print("Original user: "+testUser.__str__())
+    userList = get_UserObjectList()
+    for user in userList:
+        print("Return user: "+user.__str__())
+    removePlanetFromDB(testUser)
+
+test_add_User()
+#test_add_planet()
+#test_addRound()
 #test_addAndReturnTrack()
 
