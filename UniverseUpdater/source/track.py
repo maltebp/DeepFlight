@@ -1,16 +1,15 @@
 ##The track object/DTO
 class Track:
 
-    def __init__(self, id, name, planet_id):
+    def __init__(self, id, length, name, planet_id,):
         self.id = id
+        self.length = length
         self.name = name
         self.planetId = planet_id
-        self.data = None
+
 
 
     def __str__(self):
-        return f"Track( id={self.id}, name='{self.name}', planetId={self.planetId} )"
+        return f"Track( id={self.id},length='{self.length}', name='{self.name}', planetId={self.planetId} )"
 
 
-    def setData(self,data):
-        self.data = data
