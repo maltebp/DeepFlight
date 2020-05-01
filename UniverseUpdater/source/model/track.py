@@ -4,8 +4,8 @@ class Track:
 
     #
     # times: Dictionary of username and their track times in milliseconds
-    def __init__(self, id, name, planetId, seed=None, times=None, data=None, ):
-        self._id = id
+    def __init__(self, name, planetId, seed=None, times=None, data=None, ):
+        self._id = None
         self.name = name
         self.planetId =  planetId
         self.data = data
@@ -21,3 +21,7 @@ class Track:
 
     def setData(self,data):
         self.data = data
+
+
+    def setId(self,id):
+        self._id=id

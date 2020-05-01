@@ -1,5 +1,6 @@
 import pymongo
 import bson
+from source.databaseStartUp import *
 from pymongo import ReadPreference, WriteConcern
 from pymongo.read_concern import ReadConcern
 from source.model.track import Track
@@ -11,21 +12,32 @@ _db_password = "deepflightisawesome"
 _db_name = "game"
 
 #Collections
+df_collections = []
 _db_users = 'user'
 _db_planets = 'planets'
 _db_tracks = 'tracks'
 _db_rounds = 'allrounds'
 _db_current_round = 'courrentround'
 _db_trackdata ="trackdata"
-
+df_collections.append(_db_users)
+df_collections.append(_db_planets)
+df_collections.append(_db_tracks)
+df_collections.append(_db_rounds)
+df_collections.append(_db_current_round)
+df_collections.append(_db_trackdata)
+sorted(df_collections)
 
 # ----------------------------------------------------------------------------------
 # Setup database connection
 # Establish connection
-client = pymongo.MongoClient(f"mongodb+srv://{_db_user}:{_db_password}@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority0&authSource=admin")
+client = pymongo.MongoClient(f"mongodb+srv://{_db_user}:{_db_password}@deepflight-cu0et.mongodb.net/test?retryWrites=true&authSource=admin")
 db = client["gamedb" + ("_test" if _use_test_database else "")]
-majority0 = WriteConcern("majority", wtimeout=1000)
-print(f"Collections: {db.list_collection_names()}")
+collections =  sorted(db.collection_names())
+
+#Creates a collection and insert default values in the collections if collection is missing
+if _use_test_database:
+    startUp(db,df_collections,collections)
+
 
 
 
@@ -59,47 +71,44 @@ def get_current_round():
 def get_single_trackdata(id):
     return db[_db_trackdata].find_one({"_id":id})
 
-
-
-
-
-
-
-
-
-
 ##################ADD DATA TO COLLECTIONS###########################################
+
+
 ##Adding track with transaction.
 #If an error accures the transaction will be aborted.
 def add_track(track):
+    try:
+        db_track = {
+            "_id": track._id,
+            "name": track.name,
+            "planetId": track.planetId,
+            "seed":track.seed,
+            "times":track.times,
+        }
+        #Using the same id from track
+        db_trackdata = {
+            "_id":track._id,
+            "trackdata":bson.Binary(track.data)
+        }
+        with client.start_session() as session:
+            with session.start_transaction():
+                db[_db_tracks].insert_one(db_track, session=session)
+                db[_db_trackdata].insert_one(db_trackdata, session=session)
+        return 1
 
-    db_track = {
-        "_id": track._id,
-        "name": track.name,
-        "planetId": track.planetId,
-        "seed":track.seed,
-        "times":track.times,
-    }
-    #Using the same id from track
-    db_trackdata = {
-        "_id":track._id,
-        "trackdata":bson.Binary(track.data)
-    }
-    with client.start_session() as session:
-        with session.start_transaction():
-            db[_db_tracks].insert_one(db_track, majority0, session=session)
-            db[_db_trackdata].insert_one(db_trackdata, session=session)
+    except:
+        return 0
+
+
+###################################REMOVE FROMDATABASE############################################
+
+def removeTrack_andTrackdata(track):
+    print("TrackId to remove :"+str(track._id))
+    db[_db_tracks].remove({"_id":track._id})
+    db[_db_trackdata].remove({"_id":track._id})
 
 
 
-    # Convert to Track objects
-   # tracks = []
-    #for db_track in data:
-     #   print("a")
-      #  track = Track(db_track["_id"], db_track["name"], db_track["planetId"] )
-       # tracks.append(track)
-
-    #return tracks
 
 
 

@@ -1,5 +1,5 @@
 from source.DatabaseController import *
-from source.databaseDAO import *
+
 import json
 import bson
 
@@ -9,15 +9,17 @@ print (num)
 f.close()
 
 
-testTrack = Track(2,"Padborg_test",999,"11","33min",num)
-print("Original track: "+testTrack.__str__())
-returnTrackList = get_tracksObjectsList()
-for i in returnTrackList:
-    print("Return track: "+i.__str__())
-##add_track(testTrack)
+def test_addAndReturnTrack():
+    print("Running test: test_addAndReturnTrack()")
+    testTrack = Track("Padborg_test", 999, "11", "33min", num)
+    add_TrackObject(testTrack)
+    print("Original track: " + testTrack.__str__())
+    returnTrackList = get_tracksObjectsList()
+    for i in returnTrackList:
+        print("Return track: " + i.__str__())
+    ##Cleaningup and removing testTrack and trackdata
+    removeTrack_andTrackdata(testTrack)
 
 
-
-
-
+test_addAndReturnTrack()
 
