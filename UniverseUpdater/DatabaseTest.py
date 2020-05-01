@@ -17,7 +17,7 @@ add_track(testTrack.__dict__,num)
 get_trackdata()
 
 for x in get_tracks():
-    print(x)
+    print(get_trackdata(x))
 
 for x in get_trackdata():
     print(x)

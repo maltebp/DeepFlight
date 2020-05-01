@@ -2,7 +2,6 @@ import pymongo
 import bson
 from pymongo import ReadPreference, WriteConcern
 from pymongo.read_concern import ReadConcern
-
 from source.model.track import Track
 
 # Settings
@@ -11,7 +10,12 @@ _db_user = "universeupdater"
 _db_password = "deepflightisawesome"
 _db_name = "game"
 
-
+#Collections
+_db_users = 'user'
+_db_planets = 'planets'
+_db_tracks = 'tracks'
+_db_rounds = 'allrounds'
+_db_current_round = 'courrentround'
 
 
 # ----------------------------------------------------------------------------------
@@ -38,9 +42,13 @@ def get_reunds():
     # return a list with all rounds
     return db["rounds"].find()
 
-def get_trackdata():
+def get_trackdata(_Id):
     # return a list with all trackdata
-    return db["trackdata"].find()
+    return db["trackdata"].find_one({'_Id':_Id})
+
+
+
+
 
 
 
