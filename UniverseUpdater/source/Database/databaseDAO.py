@@ -164,10 +164,8 @@ def addUser(user):
 #Remove a track from tracks collection
 def removeTrack_andTrackdata(track):
     print("TrackId to remove :"+str(track._id))
-    with client.start_session() as session:
-        with session.start_transaction():
-            db[_db_tracks].remove({"_id":track._id},session=session)
-            db[_db_trackdata].remove({"_id":track._id},session=session)
+    db[_db_tracks].remove({"_id":track._id})
+    db[_db_trackdata].remove({"_id":track._id})
 
 #Remove a round from collection rounds.
 def removeRound(round):

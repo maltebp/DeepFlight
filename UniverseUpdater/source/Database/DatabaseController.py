@@ -23,9 +23,9 @@ def get_tracksObjectsList():
 #Adds a track to the database
 #Returns the id for the track on success
 def add_TrackObject(track):
-    newId = int(get_tracks().count())
+    newId = int(get_tracks().count())+1
     #Adding one to get at new id
-    track._id=newId+1
+    track.setId(newId)
     success = add_track(track)
     if success is 0:
         print("Failed to add track")

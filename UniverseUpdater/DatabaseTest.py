@@ -10,8 +10,8 @@ f.close()
 
 def test_addAndReturnTrack():
     print("Running test: test_addAndReturnTrack()")
-    testTrack = Track("Padborg_test", 999, "11", "33min", num)
-    add_TrackObject(testTrack)
+    testTrack = Track("Flensborg_test", 888, "11", "33min", num)
+    testTrack.setId(add_TrackObject(testTrack))
     print("Original track: " + testTrack.__str__())
     returnTrackList = get_tracksObjectsList()
     for i in returnTrackList:
@@ -38,7 +38,7 @@ def test_addRound():
     print("Original round object"+testRound.__str__())
     print(testRound)
     #Add round to database
-    add_roundObject(testRound)
+    testRound.setId(add_roundObject(testRound))
     returnRound = get_roundsObjectList()
     for i in returnRound:
         print("Return rounds: " + i.__str__())
@@ -46,7 +46,7 @@ def test_addRound():
 
 def test_add_planet():
     testPlanet = Planet("Mars","blue",10,10,20,100,66)
-    add_planetsToDB(testPlanet)
+    testPlanet.setId(add_planetsToDB(testPlanet))
     print("Original planet: "+testPlanet.__str__())
     for i in get_planetObjectList():
         print("Return planet: "+i.__str__())
@@ -55,15 +55,15 @@ def test_add_planet():
 
 def test_add_User():
     testUser = User("Per",20,303)
-    add_UserToDB(testUser)
+    testUser.setId(add_UserToDB(testUser))
     print("Original user: "+testUser.__str__())
     userList = get_UserObjectList()
     for user in userList:
         print("Return user: "+user.__str__())
     removePlanetFromDB(testUser)
 
-test_add_User()
+#test_add_User()
 #test_add_planet()
 #test_addRound()
-#test_addAndReturnTrack()
+test_addAndReturnTrack()
 
