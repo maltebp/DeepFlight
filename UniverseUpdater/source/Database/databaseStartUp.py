@@ -12,8 +12,6 @@ def startUp(db,df_collections,collections):
                 if j == 'tracks' or j=='trackdata':
                     add_single_track(db)
 
-
-
 def add_single_track(db):
     try:
         print('Adding single track')

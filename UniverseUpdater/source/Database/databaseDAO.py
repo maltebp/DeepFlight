@@ -1,9 +1,5 @@
 import pymongo
-import bson
-from source.databaseStartUp import *
-from pymongo import ReadPreference, WriteConcern
-from pymongo.read_concern import ReadConcern
-from source.model.track import Track
+from source.Database.databaseStartUp import *
 
 # Settings
 _use_test_database = True

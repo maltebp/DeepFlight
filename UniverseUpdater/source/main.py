@@ -1,6 +1,4 @@
-
-
-from source import databaseDAO
+from source.Database import databaseDAO
 from source.model.track import Track
 
 print("Starting Universe Update")

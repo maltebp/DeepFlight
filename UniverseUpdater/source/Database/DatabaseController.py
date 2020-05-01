@@ -1,4 +1,5 @@
-from source.databaseDAO import *
+from source.Database.databaseDAO import *
+from source.model.track import *
 
 
 def get_tracksObjectsList():
