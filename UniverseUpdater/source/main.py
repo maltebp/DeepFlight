@@ -1,21 +1,21 @@
 
 
-from source import database
+from source import databaseDAO
 from source.model.track import Track
 
 print("Starting Universe Update")
 
-planets = database.get_planets()
+planets = databaseDAO.get_planets()
 
-database.get_track_data()
+databaseDAO.get_track_data()
 
 print(*planets, sep="\n")
 
 track = Track(None, "My Planet", 1)
 track.data = "Hello World!".encode()
 print(track.data)
-database.add_track(track)
+databaseDAO.add_track(track)
 
 
-tracks = database.get_tracks()
+tracks = databaseDAO.get_tracks()
 print(*tracks, sep="\n")

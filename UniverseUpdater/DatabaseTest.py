@@ -1,5 +1,5 @@
-from source.track import Track
-from source.database import *
+from source.DatabaseController import *
+from source.databaseDAO import *
 import json
 import bson
 
@@ -8,17 +8,16 @@ num=bytearray(f.read())
 print (num)
 f.close()
 
-testTrack = Track(99,10000,"Padborg_test",999)
 
-x=json.dumps(testTrack.__dict__)
-get_tracks_data()
-print(x)
-add_track(testTrack.__dict__,num)
-get_trackdata()
+testTrack = Track(2,"Padborg_test",999,"11","33min",num)
+print("Original track: "+testTrack.__str__())
+returnTrackList = get_tracksObjectsList()
+for i in returnTrackList:
+    print("Return track: "+i.__str__())
+##add_track(testTrack)
 
-for x in get_tracks():
-    print(get_trackdata(x))
 
-for x in get_trackdata():
-    print(x)
+
+
+
 
