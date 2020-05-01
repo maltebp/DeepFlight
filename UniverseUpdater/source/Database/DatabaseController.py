@@ -1,5 +1,7 @@
 from source.Database.databaseDAO import *
 from source.model.track import *
+from source.model.round import *
+from source.model.ranking import *
 
 
 def get_tracksObjectsList():
@@ -24,7 +26,31 @@ def add_TrackObject(track):
         print("Track is added to database")
 
 
-#
+
+def add_roundObject(round):
+    newId = int(get_rounds_DAO().count())
+    round.setId(newId)
+    success = addRound(round)
+    if success is 0:
+        print("Failed to add round")
+    else:
+        print("Track is added to database")
+
+
+def get_rounds():
+    rounds = get_rounds_DAO()
+    roundObjectList = []
+    for round in rounds:
+        print(round)
+        rankings = []
+        for rank in round['rankings']:
+            print(rank)
+            rankObjekt = Ranking(int(rank["user_id"]),int(rank['rating']),int(rank["rank"]))
+            print(rank)
+            rankings.append(rankObjekt)
+        roundObjekt = Round(round["trackIds"],round["roundNumber"],round["startDate"],round["endDate"],rankings)
+        roundObjekt.setId(int(round["_id"]))
+    roundObjectList.append(round)
 
 
 def printDocuments(documents):

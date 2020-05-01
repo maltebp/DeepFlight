@@ -1,5 +1,6 @@
 from source.Database.DatabaseController import *
 from source.model.track import *
+import time
 
 f=open("testtrack.dftbd", "rb")
 num=bytearray(f.read())
@@ -19,5 +20,22 @@ def test_addAndReturnTrack():
     removeTrack_andTrackdata(testTrack)
 
 
-test_addAndReturnTrack()
+def test_addRound():
+    print("Running test: test_addRound()")
+    startDate = int(round(time.time() * 1000))
+    endDate = int(round(time.time() * 1000)+100000)
+
+    trackIds=[1,2,3,4]
+
+    rankings=[]
+    ranking1 = Ranking(1,66,55)
+    ranking2 = Ranking(2, 44, 33)
+    rankings.append(ranking1)
+    rankings.append(ranking2)
+    testRound = Round(trackIds,2,startDate,endDate,rankings)
+    add_roundObject(testRound)
+    removeRound(testRound)
+
+test_addRound()
+#test_addAndReturnTrack()
 

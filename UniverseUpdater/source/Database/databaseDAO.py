@@ -1,5 +1,6 @@
 import pymongo
 from source.Database.databaseStartUp import *
+import json
 
 # Settings
 _use_test_database = True
@@ -12,14 +13,12 @@ df_collections = []
 _db_users = 'user'
 _db_planets = 'planets'
 _db_tracks = 'tracks'
-_db_rounds = 'allrounds'
-_db_current_round = 'courrentround'
+_db_rounds = 'rounds'
 _db_trackdata ="trackdata"
 df_collections.append(_db_users)
 df_collections.append(_db_planets)
 df_collections.append(_db_tracks)
 df_collections.append(_db_rounds)
-df_collections.append(_db_current_round)
 df_collections.append(_db_trackdata)
 sorted(df_collections)
 
@@ -48,7 +47,7 @@ def get_tracks():
     # return a list with all tracks
     return db[_db_tracks].find()
 
-def get_rounds():
+def get_rounds_DAO():
     # return a list with all rounds
     return db[_db_rounds].find()
 
@@ -96,12 +95,37 @@ def add_track(track):
         return 0
 
 
+def addRound(round):
+    try:
+        print('Adding round')
+        db_round = {
+            "_id": round._id,
+            "trackIds": round.trackIds,
+            "roundNumber": round.roundNumber,
+            "startDate": round.startDate,
+            "endDate": round.endDate,
+            "rankings": round.rankings,
+        }
+        db[_db_rounds].insert_one(json.dumps(round.__dict__))
+        return 1
+    except:
+        return 0
+
+
+
+
 ###################################REMOVE FROMDATABASE############################################
 
 def removeTrack_andTrackdata(track):
     print("TrackId to remove :"+str(track._id))
     db[_db_tracks].remove({"_id":track._id})
     db[_db_trackdata].remove({"_id":track._id})
+
+
+def removeRound(round):
+    print("roundId to remove :" + str(round._id))
+    db[_db_rounds].remove({"_id":round._id})
+
 
 
 
