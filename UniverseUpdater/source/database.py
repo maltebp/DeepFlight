@@ -3,7 +3,7 @@ import bson
 from pymongo import ReadPreference, WriteConcern
 from pymongo.read_concern import ReadConcern
 
-from source.track import Track
+from source.model.track import Track
 
 # Settings
 _use_test_database = True

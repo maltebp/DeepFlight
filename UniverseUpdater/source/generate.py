@@ -1,22 +1,9 @@
 
-
-import binascii
-import subprocess
-from source.track import Track
-
-from source import database
-
-#Execute TrackGeneration.c and creating a Track
-#subprocess.call(["TrackGenerator.exe", ".", "testtrack","123", "10", "10", "10", "10", "10"])
-
-
-
 import string
 import random
 import subprocess
-import time
 
-from source.planet import Planet
+from source.model.track import Track
 
 
 
@@ -24,32 +11,18 @@ __TRACK_GENERATOR_PATH = "../TrackGenerator.exe"
 __TRACK_FILE_NAME = "generatedtrack"
 __TRACK_FILE_EXT = ".dftbd"
 
-#
-# import subprocess
-# argList = ["testtrack","123", "10", "10", "10", "10", "10"]
-# #Execute TrackGeneration.c and creating a Track
-# subprocess.call(["TrackGenerator.exe", ".", "testtrack","123", "10", "10", "10", "10", "10"])
-#
-#
-# #Open the created track file ex. testtrack.exe
-# f=open("testtrack.dftbd","rb")
-# num=bytearray(f.read())
-# print (num)
-# f.close()
-# with open("testtrack.dftbd", mode='rb') as file: # b is important -> binary
-#     fileContent = file.read()
-# #Printing the length of the track (in byts)
-# print(len(num))
-#
-#
 
+# Generate a Track from the generation factors of a Planet,
+# and a list of existing tracks (for unique generation)
 def generateTrack(planet, existingTracks):
 
+    # Generate a cool name
     name = generateUniqueTrackName(existingTracks)
+    print(f"Generated Name {name}")
 
     # Using current milliseconds as seed
-    seed = int(round(time.time() * 1000))
-    print(str(seed))
+    seed = generateUniqueSeed(existingTracks)
+    print(f"Generated Seed: {seed}")
 
     # Start the Track generator
     subprocess.call([
@@ -66,11 +39,24 @@ def generateTrack(planet, existingTracks):
     # Open the created track file
     file = open(__TRACK_FILE_NAME + __TRACK_FILE_EXT, "rb")
     data = bytearray(file.read())
+    file.close()
 
-    print(f"Read {len(data)} bytes")
+    return Track(0, name, planet.id, data, seed)
 
 
+# Generates a random seed which fits in 4 bytes (required by TrackGenerator.exe)
+def generateUniqueSeed(existingTracks):
+    seed = 0
+    seedExists = True
+    while seedExists:
+        # Generate random seed which fits in 4 bytes
+        seed = random.randint(0, 2147483646)
+        seedExists = False
+        for track in existingTracks:
+            if track.seed == seed:
+                seedExists = True
 
+    return seed
 
 
 
@@ -88,6 +74,7 @@ def generateUniqueTrackName(existingTracks):
         for track in existingTracks:
             if (track.name == name):
                 nameExists = True
+    return name
 
 
 
@@ -103,40 +90,5 @@ def generateTrackName():
     return name
 
 
-#Open the created track file ex. testtrack.exe
-f=open("../testtrack.dftbd", "rb")
-num=bytearray(f.read())
-print (num)
-f.close()
-with open("../testtrack.dftbd", mode='rb') as file: # b is important -> binary
-   fileContent = file.read()
-#Printing the length of the track (in byts)
-print(len(num))
-
-
-
-
-trackObject = Track(48534895,2,999);
-trackObject.setData(num)
-#trackObject.setData(num)
-database.add_track(trackObject)
-
-trackList = database.get_tracks()
-
-for track in trackList:
-      print(track.__str__())
-
-
-
-
-
-
-#binary_field = num
-#print(binascii.hexlify(binary_field))
-
-
-
-print(f'Hey my name is {name}.')
-
-generateTrack(Planet(10, "Test Planet", [100,150,120], 10, 10, 10, 10, 10), [] )
-
+# track = generateTrack(Planet(10, "Test Planet", [100,150,120], 10, 10, 10, 10, 10), [] )
+# print(f"Generated Track: {track}")
