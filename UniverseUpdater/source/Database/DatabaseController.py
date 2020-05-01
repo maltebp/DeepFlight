@@ -23,6 +23,7 @@ def get_tracksObjectsList():
 #Adds a track to the database
 #Returns the id for the track on success
 def add_TrackObject(track):
+    #TODO: Fix id setting.
     newId = int(get_tracks().count())+1
     #Adding one to get at new id
     track.setId(newId)
