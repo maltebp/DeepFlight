@@ -81,8 +81,8 @@ def rankUniversal(rounds, users):
 
     # Add all users with a rating of 0
     for user in users:
-        userRating[user.username] = 0
-        userRoundCount[user.username] = 0
+        userRating[user._id] = 0
+        userRoundCount[user._id] = 0
 
     # Sum the ratings of the given rounds for each user
     for round in rounds:

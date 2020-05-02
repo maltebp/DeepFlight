@@ -24,23 +24,26 @@ def generateTrack(planet, existingTracks):
     print(f"Generated Seed: {seed}")
 
     # Start the Track generator
-    subprocess.call([
-        __TRACK_GENERATOR_PATH, ".",
-        __TRACK_FILE_NAME,
-        str(seed),
-        str(planet.lengthFactor),
-        str(planet.stretchFactor),
-        str(planet.curveFactor),
-        str(planet.widthFactor),
-        str(planet.widthNoiseFactor)
-    ])
+    subprocess.call(
+        [
+            __TRACK_GENERATOR_PATH, ".",
+            __TRACK_FILE_NAME,
+            str(seed),
+            str(planet.lengthFactor),
+            str(planet.stretchFactor),
+            str(planet.curveFactor),
+            str(planet.widthFactor),
+            str(planet.widthNoiseFactor)
+        ],
+        stdout=subprocess.DEVNULL # Removes stdout from process (TrackGenerator.exe)
+    )
 
     # Open the created track file
     file = open(__TRACK_FILE_NAME + __TRACK_FILE_EXT, "rb")
     data = bytearray(file.read())
     file.close()
 
-    return Track(0, name, planet.id, data, seed)
+    return Track(name, planet._id, seed=seed,  data=data, )
 
 
 # Generates a random seed which fits in 4 bytes (required by TrackGenerator.exe)

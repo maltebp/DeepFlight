@@ -4,6 +4,7 @@ from source.model.track import *
 from source.model.round import *
 from source.model.ranking import *
 
+
 #Returns a list of all tracks in the database
 from source.model.user import User
 
@@ -13,7 +14,8 @@ def get_tracksObjectsList():
     # Convert to Track objects
     tracks = []
     for trackDocument in trackDocuments:
-        track = Track(trackDocument["name"], trackDocument["planetId"],trackDocument["seed"],trackDocument["times"],get_single_trackdata(int(trackDocument["_id"]))["trackdata"])
+        print(trackDocument)
+        track = Track(trackDocument["name"], trackDocument["planetId"],trackDocument["seed"],trackDocument["times"],get_single_trackdata(int(trackDocument["_id"]))["data"])
         track.setId(int(trackDocument["_id"]))
         tracks.append(track)
     #Returning track object list
@@ -57,19 +59,32 @@ def get_roundsObjectList():
     roundObjectList = []
     #Creating Roundobjects from datatabase
     for round in rounds:
-        rankings = []
-        #Fetching ranks from database and creating rankingobjects
-        for rank in round['rankings']:
-            user_id = int(rank["user_id"])
-            rating = int(rank["rating"])
-            rank = int(rank["rank"])
-            rankObjekt = Ranking(user_id,rating,rank)
-            rankings.append(rankObjekt)
-        roundObjekt = Round(round["trackId"],round["roundNumber"],round["startDate"],round["endDate"],rankings)
+
+        roundObjekt = Round(round["roundNumber"], round["trackIds"], round["startDate"],round["endDate"])
+        if "rankings" in round:
+            roundObjekt.rankings = round["rankings"]
+        #
+        # if round.rankings["rankings"] is not None:
+        #     rankings = []
+        #     # Fetching ranks from database and creating rankingobjects
+        #     for rank in round['rankings']:
+        #         user_id = int(rank["user_id"])
+        #         rating = int(rank["rating"])
+        #         rank = int(rank["rank"])
+        #         rankObjekt = Ranking(user_id, rating, rank)
+        #         rankings.append(rankObjekt)
+
         roundObjekt.setId(int(round["_id"]))
-        roundObjectList.append(round)
+        roundObjectList.append(roundObjekt)
     #Returning a list of round objects
     return roundObjectList
+
+
+# Update round in databse with the id of given round object
+# to the information within the object
+def update_round(round):
+    # TODO: Update round in database
+    pass
 
 
 #Add planets

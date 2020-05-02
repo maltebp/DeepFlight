@@ -69,57 +69,61 @@ def get_single_trackdata(id):
 #Add a track/trackdata Json object to database
 #This is access to database
 def add_track(track):
-    try:
-        db_track = {
-            "_id": track._id,
-            "name": track.name,
-            "planetId": track.planetId,
-            "seed":track.seed,
-            "times":track.times,
-        }
-        #Using the same id from track
-        db_trackdata = {
-            "_id":track._id,
-            "trackdata":bson.Binary(track.data)
-        }
-        with client.start_session() as session:
-            with session.start_transaction():
-                db[_db_tracks].insert_one(db_track, session=session)
-                db[_db_trackdata].insert_one(db_trackdata, session=session)
-        return 1
-
-    except:
-        return 0
+    # try:
+    db_track = {
+        "_id": track._id,
+        "name": track.name,
+        "planetId": track.planetId,
+        "seed":track.seed,
+        "times":track.times,
+    }
+    #Using the same id from track
+    db_trackdata = {
+        "_id" : track._id,
+        "data" : bson.Binary(track.data)
+    }
+    with client.start_session() as session:
+        with session.start_transaction():
+            db[_db_tracks].insert_one(db_track, session=session)
+            db[_db_trackdata].insert_one(db_trackdata, session=session)
+    return 1
+    #
+    # except Exception as err:
+    #     print(err)
+    #     return 0
 
 #Add a round Json object to database
 #This is access to database
 def addRound(round):
-    try:
-        #Converting rankingObjects to a JsonArray
-        ranksString = []
-        for rank in round.rankings:
-            db_rank = {
-                "user_id": rank.user_id,
-                "rating": rank.rating,
-                "rank": rank.rank,
-            }
-            ranksString.append(db_rank)
-        print(ranksString)
-        #Converting roundobject to dictionart(json object)
+    #try:
+        # Converting roundobject to dictionary (json object)
         db_round = {
             "_id": round._id,
-            "trackId": round.trackIds,
             "roundNumber": round.roundNumber,
+            "trackIds" : round.trackIds,
             "startDate": round.startDate,
-            "endDate": round.endDate,
-            "rankings": ranksString,
+            "endDate": round.endDate
         }
+
+        #Converting rankingObjects to a JsonArray
+        if round.rankings is not None:
+            rankings = []
+            for rank in round.rankings:
+                db_rank = {
+                    "userId": rank.user_id,
+                    "rating": rank.rating
+                }
+                rankings.append(db_rank)
+            print(rankings)
+            db_round["rankings"] = round.rankings
+
         #Adding jsonobject to database
         db[_db_rounds].insert_one(db_round)
         print('round added to database')
         return 1
-    except:
-        return 0
+    # except Exception as err:
+    #     print(err)
+    #     return 0
 
 #Add a planet to Planet collection
 #Return 1 on success and 0 on failure
@@ -138,7 +142,8 @@ def addPlanet(planet):
         }
         db[_db_planets].insert_one(db_planet)
         return 1
-    except:
+    except Exception as err:
+        print(err)
         return 0
 
 #Add a user to User collection
@@ -153,7 +158,8 @@ def addUser(user):
         }
         db[_db_users].insert_one(db_user)
         return 1
-    except:
+    except Exception as err:
+        print(err)
         return 0
 
 
