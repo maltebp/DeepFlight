@@ -1,9 +1,6 @@
 import pymongo
-import bson
-from source.databaseStartUp import *
-from pymongo import ReadPreference, WriteConcern
-from pymongo.read_concern import ReadConcern
-from source.model.track import Track
+from source.Database.databaseStartUp import *
+import json
 
 # Settings
 _use_test_database = True
@@ -16,14 +13,12 @@ df_collections = []
 _db_users = 'user'
 _db_planets = 'planets'
 _db_tracks = 'tracks'
-_db_rounds = 'allrounds'
-_db_current_round = 'courrentround'
+_db_rounds = 'rounds'
 _db_trackdata ="trackdata"
 df_collections.append(_db_users)
 df_collections.append(_db_planets)
 df_collections.append(_db_tracks)
 df_collections.append(_db_rounds)
-df_collections.append(_db_current_round)
 df_collections.append(_db_trackdata)
 sorted(df_collections)
 
@@ -45,14 +40,13 @@ if _use_test_database:
 
 def get_planets():
     #return a list with all planets
-    print(db[_db_planets].find())
     return db[_db_planets].find()
 
 def get_tracks():
     # return a list with all tracks
     return db[_db_tracks].find()
 
-def get_rounds():
+def get_rounds_DAO():
     # return a list with all rounds
     return db[_db_rounds].find()
 
@@ -64,10 +58,6 @@ def get_users():
     # return a list with all users
     return db[_db_users].find()
 
-def get_current_round():
-    # return a list of all tracks in the current round
-    return db[_db_current_round].find()
-
 def get_single_trackdata(id):
     return db[_db_trackdata].find_one({"_id":id})
 
@@ -76,6 +66,8 @@ def get_single_trackdata(id):
 
 ##Adding track with transaction.
 #If an error accures the transaction will be aborted.
+#Add a track/trackdata Json object to database
+#This is access to database
 def add_track(track):
     try:
         db_track = {
@@ -99,13 +91,96 @@ def add_track(track):
     except:
         return 0
 
+#Add a round Json object to database
+#This is access to database
+def addRound(round):
+    try:
+        #Converting rankingObjects to a JsonArray
+        ranksString = []
+        for rank in round.rankings:
+            db_rank = {
+                "user_id": rank.user_id,
+                "rating": rank.rating,
+                "rank": rank.rank,
+            }
+            ranksString.append(db_rank)
+        print(ranksString)
+        #Converting roundobject to dictionart(json object)
+        db_round = {
+            "_id": round._id,
+            "trackId": round.trackIds,
+            "roundNumber": round.roundNumber,
+            "startDate": round.startDate,
+            "endDate": round.endDate,
+            "rankings": ranksString,
+        }
+        #Adding jsonobject to database
+        db[_db_rounds].insert_one(db_round)
+        print('round added to database')
+        return 1
+    except:
+        return 0
+
+#Add a planet to Planet collection
+#Return 1 on success and 0 on failure
+def addPlanet(planet):
+    try:
+    # Converting planetobject to dictionart(json object)
+        db_planet = {
+            "_id" : planet._id,
+            "name" : planet.name,
+            "color": planet.color,
+            "lengthFactor": planet.lengthFactor,
+            "curveFactor": planet.curveFactor,
+            "stretchFactor": planet.stretchFactor,
+            "widthFactor": planet.widthFactor,
+            "widthNoiseFactor": planet.widthNoiseFactor,
+        }
+        db[_db_planets].insert_one(db_planet)
+        return 1
+    except:
+        return 0
+
+#Add a user to User collection
+#Return 1 on success and 0 on failure
+def addUser(user):
+    try:
+        db_user = {
+            "_id" : user._id,
+        "username" : user.username,
+        "rank" : user.rank,
+        "rating" : user.rating,
+        }
+        db[_db_users].insert_one(db_user)
+        return 1
+    except:
+        return 0
+
+
+
 
 ###################################REMOVE FROMDATABASE############################################
 
+#Remove a track from tracks collection
 def removeTrack_andTrackdata(track):
     print("TrackId to remove :"+str(track._id))
     db[_db_tracks].remove({"_id":track._id})
     db[_db_trackdata].remove({"_id":track._id})
+
+#Remove a round from collection rounds.
+def removeRound(round):
+    print("roundId to remove :" + str(round._id))
+    db[_db_rounds].remove({"_id":round._id})
+
+def removePlanetFromDB(planet):
+    print("planetId to remove :" + str(planet._id))
+    db[_db_planets].remove({"_id": planet._id})
+
+
+# Remove a user from collection rounds.
+def removeUserFormUserCollection(user):
+    print("UserId to remove :" + str(user._id))
+    db[_db_planets].remove({"_id": user._id})
 
 
 

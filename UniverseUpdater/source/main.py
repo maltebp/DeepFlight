@@ -8,6 +8,7 @@ from source.model.round import Round
 _UPDATE_FREQUENCY = 60 # seconds
 _ROUND_LENGTH = 1440 # Minutes
 
+
 # Number of rounds to base the universal ranking upon
 _UNIVERSAL_RANKING_ROUND_COUNT  = 4
 
