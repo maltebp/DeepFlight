@@ -6,7 +6,6 @@ import subprocess
 from source.model.track import Track
 
 
-
 __TRACK_GENERATOR_PATH = "../TrackGenerator.exe"
 __TRACK_FILE_NAME = "generatedtrack"
 __TRACK_FILE_EXT = ".dftbd"
@@ -17,11 +16,11 @@ __TRACK_FILE_EXT = ".dftbd"
 def generateTrack(planet, existingTracks):
 
     # Generate a cool name
-    name = generateUniqueTrackName(existingTracks)
+    name = _generateUniqueTrackName(existingTracks)
     print(f"Generated Name {name}")
 
     # Using current milliseconds as seed
-    seed = generateUniqueSeed(existingTracks)
+    seed = _generateUniqueSeed(existingTracks)
     print(f"Generated Seed: {seed}")
 
     # Start the Track generator
@@ -45,7 +44,7 @@ def generateTrack(planet, existingTracks):
 
 
 # Generates a random seed which fits in 4 bytes (required by TrackGenerator.exe)
-def generateUniqueSeed(existingTracks):
+def _generateUniqueSeed(existingTracks):
     seed = 0
     seedExists = True
     while seedExists:
@@ -62,13 +61,13 @@ def generateUniqueSeed(existingTracks):
 
 # Generates a Track name which is not in use
 # among the given existing tracks
-def generateUniqueTrackName(existingTracks):
+def _generateUniqueTrackName(existingTracks):
     name = ""
     nameExists = True
 
     # Generate name
     while nameExists:
-        name = generateTrackName()
+        name = _generateTrackName()
         nameExists = False
 
         for track in existingTracks:
@@ -80,7 +79,7 @@ def generateUniqueTrackName(existingTracks):
 
 # Generates a Track name in the format
 #   AAAA-000
-def generateTrackName():
+def _generateTrackName():
     name = ""
     for x in range(4):
         name += random.choice(string.ascii_uppercase)
