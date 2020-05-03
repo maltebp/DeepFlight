@@ -1,8 +1,7 @@
 import pymongo
-import json
+import bson
 
 # Settings
-_use_test_database = True
 _db_user = "universeupdater"
 _db_password = "deepflightisawesome"
 _db_name = "game"
@@ -24,20 +23,39 @@ df_collections.append(_db_trackdata)
 # Setup database connection
 # Establish connection
 client = pymongo.MongoClient(f"mongodb+srv://{_db_user}:{_db_password}@deepflight-cu0et.mongodb.net/test?retryWrites=true&authSource=admin")
-db = client["gamedb" + ("_test" if _use_test_database else "")]
-collections = db.collection_names()
+db = None
+
+
+def initializeDatabase(testMode=False, clearDatabase=False):
+    print("\nInitializing Database")
+    print(f"\tTest mode: {testMode}")
+    print(f"\tClear database: {clearDatabase}")
+
+    db_name = "gamedb" + ("_test" if testMode else "")
+    global db
+    db = client[db_name]
+    print(f"\tDatabase name: {db_name}")
+
+    print("Setting up collections:")
+    collections = db.collection_names()
+    for df_collection in df_collections:
+        print(f"\t'{df_collection}': ", end="")
+        if not df_collection in collections:
+            db.create_collection(df_collection)
+            print("Created")
+        elif clearDatabase:
+            db.drop_collection(df_collection)
+            db.create_collection(df_collection)
+            print("Cleared")
+        else:
+            print("Exists")
+    print("Database initialized!")
+
+
 
 # Initializes the database, by ensuring collections exists
 # This is required since collections cannot be created during mutli-doc transactions
-print("\nInitializing database collections...")
-for df_collection in df_collections:
-    print(f"\t'{df_collection}': ", end="")
-    if not df_collection in collections:
-        db.create_collection(df_collection)
-        print("Created")
-    else:
-        print("Exists")
-print("Done!")
+
 
 
 #####################GET COLLECTION DATA########################################
@@ -63,7 +81,7 @@ def get_users():
     return db[_db_users].find()
 
 def get_single_trackdata(id):
-    return db[_db_trackdata].find_one({"_id":id})
+    return db[_db_trackdata].find_one({"_id": bson.ObjectId(id)})
 
 ##################ADD DATA TO COLLECTIONS###########################################
 
@@ -89,7 +107,7 @@ def add_track(track):
                 "data": bson.Binary(track.data)
             }
             db[_db_trackdata].insert_one(db_trackdata, session=session)
-            return trackId
+            return str(trackId)
 
 
 #Add a round Json object to database
@@ -105,37 +123,27 @@ def addRound(round):
 
     # Converting rankingObjects to a JsonArray
     if round.rankings is not None:
-        ranksString = []
-        for rank in round.rankings:
-            db_rank = {
-                "user_id": rank.user_id,
-                "rating": rank.rating,
-                "rank": rank.rank,
-            }
-            ranksString.append(db_rank)
         db_round["rankings"] = round.rankings
 
     # Adding jsonobject to database
-    return db[_db_rounds].insert_one(db_round).inserted_id
+    roundId = db[_db_rounds].insert_one(db_round).inserted_id
+    return str(roundId)
 
 
 def update_round_DAO(round):
-    #Creating list of rankings
-    ranksString = []
-    for rank in round.rankings:
-        db_rank = {
-            "user_id": rank.user_id,
-            "rating": rank.rating,
-            "rank": rank.rank,
-        }
-        ranksString.append(db_rank)
-    myquery = {"_id": round._id}
-    newvalues = {"$set": {"trackIdS": round.trackIds,
+    # Creating list of rankings
+    myquery = {"_id": bson.ObjectId(round._id) }
+
+    newValues = {
+        "trackIds": round.trackIds,
         "roundNumber": round.roundNumber,
         "startDate": round.startDate,
         "endDate": round.endDate,
-        "rankings": ranksString}}
-    db[_db_rounds].update_one(myquery, newvalues)
+    }
+    if round.rankings is not None:
+        newValues["rankings"] = round.rankings
+
+    db[_db_rounds].update_one(myquery, {"$set": newValues})
     return round
 
 
@@ -152,7 +160,7 @@ def addPlanet(planet):
         "widthFactor": planet.widthFactor,
         "widthNoiseFactor": planet.widthNoiseFactor,
     }
-    return db[_db_planets].insert_one(db_planet).inserted_id
+    return str(db[_db_planets].insert_one(db_planet).inserted_id)
 
 
 
@@ -165,13 +173,13 @@ def addUser(user):
         "rank": user.rank,
         "rating": user.rating,
     }
-    return db[_db_users].insert_one(db_user).inserted_id
+    return str(db[_db_users].insert_one(db_user).inserted_id)
 
 
 
 def updateUserDAO(user):
-    myquery = {"_id": user._id}
-    newvalues = {"$set": {"rank": user.rank, "rating":user.rating}}
+    myquery = {"_id": bson.ObjectId(user._id) }
+    newvalues = {"$set": {"rank": user.rank, "rating": user.rating}}
     db[_db_users].update_one(myquery, newvalues)
     return user
 

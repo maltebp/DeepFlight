@@ -72,57 +72,61 @@ def _rankTrack(track):
 #
 # Calculate the Universal Rating for each of the given users
 # based upon the given rounds
+#
+# Returns: List of objects with userid being first index, and rating being second
 def rankUniversal(rounds, users):
     # number of rounds user has participating in
     userRoundCount = {}
-    userRating = {}
+    userRatings = {}
 
     # Add all users with a rating of 0
     for user in users:
-        userRating[user._id] = 0
-        userRoundCount[user._id] = 0
+        userRatings[str(user._id)] = 0
+        userRoundCount[str(user._id)] = 0
 
     # Sum the ratings of the given rounds for each user
     for round in rounds:
         if round.rankings is None:
             raise ValueError(f"Round {round.Number} has not been ranked yet")
         for username, rating in round.rankings.items():
-            if username in userRating: # Just an extra sanity check
-                userRating[username] += rating
+            if username in userRatings: # Just an extra sanity check
+                userRatings[username] += rating
                 userRoundCount[username] += 1
 
     # Average the ratings for each user
-    for username, rating in userRating.items():
+    for username, rating in userRatings.items():
         roundCount = userRoundCount[username]
 
         # This reduces the penalty for not playing a round at all
         # I.e. if a user has only played 2 out of 4 rounds, his
         # total rating is divided by 2+(4-2)*0.5=3 instead of 4
         adjustedRoundCount = roundCount + (len(rounds)-roundCount)*0.5
-        userRating[username] = rating / adjustedRoundCount
+        userRatings[username] = rating / adjustedRoundCount
 
-    return userRating
+    # Sort ratings
+    sortedRatings = sorted(userRatings.items(), key=lambda userRating: userRating[1], reverse=True)
+    return sortedRatings
 
 
 
 
 
-# --------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # Just some test data
-
+#
 #
 # testTracks = [
-#     Track("test track", 1, times={ "Erlend" : 10, "Malte" : 4, "Andreas" : 1, "Rasmus" : 2} ),
-#     Track("test track", 1, times={ "Erlend" : 2, "Andreas" : 4, "Rasmus" : 1} ),
-#     Track("test track", 1, times={ "Erlend" : 2, "Malte" : 2, "Rasmus" : 1} ),
-#     Track("test track", 1, times={ "Erlend" : 2, "Malte" : 2, "Rasmus" : 1} )
+#     Track("test track", 1, times={ 1 : 10, 2 : 4, 3 : 1, 3 : 2} ),
+#     Track("test track", 1, times={ 1 : 2, 3 : 4, 3 : 1} ),
+#     Track("test track", 1, times={ 1 : 2, 2 : 2, 3 : 1} ),
+#     Track("test track", 1, times={ 1 : 2, 2 : 2, 3 : 1} )
 # ]
 #
 # rounds= [
-#     Round(1, None, 1, 0, 0),
-#     Round(2, None, 1, 0, 0),
-#     Round(3, None, 1, 0, 0),
-#     Round(4, None, 1, 0, 0)
+#     Round(1, 1, 0, 0),
+#     Round(2, 1, 0, 0),
+#     Round(3, 1, 0, 0),
+#     Round(4, 1, 0, 0)
 # ]
 # rankRound(rounds[0], testTracks)
 # rankRound(rounds[1], testTracks)
@@ -130,10 +134,10 @@ def rankUniversal(rounds, users):
 # rankRound(rounds[3], testTracks)
 #
 # users = [
-#      User(0, "Erlend"),
-#      User(0, "Malte"),
-#      User(0, "Rasmus"),
-#      User(0, "Andreas")
+#      User("Erlend",  id=1),
+#      User("Malte",   id=2),
+#      User("Rasmus",  id=3),
+#      User("Andreas", id=4)
 # ]
 #
 #

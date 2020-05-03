@@ -3,14 +3,16 @@ from source.model.track import *
 import time
 
 f=open("testtrack.dftbd", "rb")
-num=bytearray(f.read())
-print (num)
+track=bytearray(f.read())
+print (track)
 f.close()
+
+initializeDatabase(testMode=True, clearDatabase=True)
 
 
 def test_addAndReturnTrack():
     print("\n\nRunning test: test_addAndReturnTrack()\n\n")
-    testTrack = Track("Flensborg_test", 888, "11", "33min", num)
+    testTrack = Track("Flensborg_test", 888, "11", "33min", track)
     testTrack = add_TrackObject(testTrack)
     print("Original track: " + testTrack.__str__())
     returnTrackList = get_tracksObjectsList()

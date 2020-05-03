@@ -2,11 +2,14 @@
 import string
 import random
 import subprocess
+import os
+import inspect
+
 
 from source.model.track import Track
 
 
-__TRACK_GENERATOR_PATH = "../TrackGenerator.exe"
+__TRACK_GENERATOR_PATH = os.path.dirname(__file__) + "\TrackGenerator.exe"
 __TRACK_FILE_NAME = "generatedtrack"
 __TRACK_FILE_EXT = ".dftbd"
 

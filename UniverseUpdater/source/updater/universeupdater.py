@@ -1,17 +1,17 @@
 
 import time
 import timeit # Used to measure run time
-from source import ranker
-from source import generate
+from source.updater import ranker, generate
 from source.model.round import Round
+from source.model.user import User
 from source.Database import databasecontroller
 from source.model.planet import *
 
-_UPDATE_FREQUENCY = 25 # seconds
-_ROUND_LENGTH = 1 # Minutes
+_UPDATE_FREQUENCY = 30 # seconds
+_ROUND_LENGTH = 1440 # Minutes
 
 # Number of rounds to base the universal ranking upon
-_UNIVERSAL_RANKING_ROUND_COUNT  = 4
+_UNIVERSAL_RANKING_ROUND_COUNT  = 3
 
 
 def updateUniverse():
@@ -125,7 +125,7 @@ def createRound(startTime):
 # Updates the ranking of all the unranked rounds, and updates
 # the Universal Ranking
 def updateRankings(rankedRounds, unrankedRounds, allTracks):
-    print("Ranking rounds..")
+    print("\nRanking rounds..")
     for unrankedRound in unrankedRounds:
         print(f"\tRound {unrankedRound.roundNumber}.. ", end="")
         roundTracks = []
@@ -146,18 +146,47 @@ def updateRankings(rankedRounds, unrankedRounds, allTracks):
     sortedRankedRounds = sorted(rankedRounds, key=lambda r: r.endDate, reverse=True)
     currentUniversalRounds = sortedRankedRounds[0:_UNIVERSAL_RANKING_ROUND_COUNT]
 
-    # Perform the ranking
-    # TODO: Get users
-    users = []
-    universalRanking = ranker.rankUniversal(currentUniversalRounds, users)
-    # TODO: Update user with new ranking in database
-    print("Updated Universal Ranking")
+    # Get users and convert to dictionary (for faster acces)
+    print("\nRanking Universe")
+    userList = databasecontroller.get_UserObjectList()
+
+    universalRankings = ranker.rankUniversal(currentUniversalRounds, userList)
+
+    # Converts userlist to dictionary for ease of access
+    users = {}
+    for user in userList:
+        users[user._id] = user
+
+    rank = 0
+    for userId, rating in universalRankings:
+        rank += 1
+        users[userId].rank = rank
+        users[userId].rating = rating
+
+    print("Storing in rankings in database:")
+    for user in users.values():
+        # TODO: Make user updating atomic!
+        print(f"\t{user.username}: #{user.rank} ({user.rating})... ", end="")
+        databasecontroller.updateUser(user)
+        print("Updated!")
+
+    print("Universe ranked!")
 
 
 
 # Start the updater
-print("\nSTARTING UNIVERSE UPDATER!")
-while True:
-    updateUniverse()
-    print(f"\nUpdating again in {_UPDATE_FREQUENCY} seconds")
-    time.sleep(_UPDATE_FREQUENCY)
+def startUpdater():
+    print("\nSTARTING UNIVERSE UPDATER!")
+
+    # TODO: Remove test flag, when ready
+    databasecontroller.initializeDatabase(testMode=True, clearDatabase=True)
+
+    while True:
+        updateUniverse()
+        print(f"\nUpdating again in {_UPDATE_FREQUENCY} seconds")
+        time.sleep(_UPDATE_FREQUENCY)
+
+
+# Start the updater if this script is run as a program
+if __name__ == '__main__':
+    startUpdater()

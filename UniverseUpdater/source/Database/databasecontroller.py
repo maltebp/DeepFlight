@@ -4,7 +4,6 @@ from source.model.track import *
 from source.model.round import *
 from source.model.ranking import *
 
-
 #Returns a list of all tracks in the database
 from source.model.user import User
 
@@ -14,8 +13,14 @@ def get_tracksObjectsList():
     # Convert to Track objects
     tracks = []
     for trackDocument in trackDocuments:
-        track = Track(trackDocument["name"], trackDocument["planetId"], trackDocument["seed"], trackDocument["times"], get_single_trackdata(trackDocument["_id"])["data"])
-        track.setId(trackDocument["_id"])
+        track = Track(
+            trackDocument["name"],
+            trackDocument["planetId"],
+            trackDocument["seed"],
+            trackDocument["times"],
+            get_single_trackdata(str(trackDocument["_id"]))["data"]
+        )
+        track.setId(str(trackDocument["_id"]))
         tracks.append(track)
     #Returning track object list
     return tracks
@@ -42,13 +47,13 @@ def get_roundsObjectList():
     rounds = get_rounds_DAO()
     roundObjectList = []
     #Creating Roundobjects from datatabase
-    for round in rounds:
+    for roundDocument in rounds:
 
-        roundObjekt = Round(round["roundNumber"], round["trackIds"], round["startDate"],round["endDate"])
-        if "rankings" in round:
-            roundObjekt.rankings = round["rankings"]
+        roundObjekt = Round(roundDocument["roundNumber"], roundDocument["trackIds"], roundDocument["startDate"],roundDocument["endDate"])
+        if "rankings" in roundDocument:
+            roundObjekt.rankings = roundDocument["rankings"]
 
-        roundObjekt.setId(round["_id"])
+        roundObjekt.setId(str(roundDocument["_id"]))
         roundObjectList.append(roundObjekt)
     #Returning a list of round objects
     return roundObjectList
@@ -72,7 +77,7 @@ def get_planetObjectList():
         planets = []
         for planet in planetDocuments:
             planetObject = Planet(planet["name"], planet["color"], planet["lengthFactor"], planet["curveFactor"], planet["stretchFactor"], planet["widthFactor"], planet["widthNoiseFactor"])
-            planetObject.setId(planet["_id"])
+            planetObject.setId(str(planet["_id"]))
             planets.append(planetObject)
         # Returning track object list
         return planets
@@ -94,8 +99,9 @@ def get_UserObjectList():
     # Convert to Track objects
     users = []
     for user in userDocuments:
-        userObject = User(user["username"], user["rank"], user["rating"])
-        userObject.setId(user["_id"])
+        userObject = User(user["username"], id=str(user["_id"]))
+        if "rank" in user: userObject.rank = user["rank"]
+        if "rating" in user: userObject.rating = user["rating"]
         users.append(userObject)
     # Returning track object list
     return users

@@ -9,7 +9,7 @@ class Track:
         self.planetId =  planetId
         self.data = data
         self.seed = seed
-        self.times = times
+        self.times = times if times is not None else {}
 
 
     def __str__(self):
