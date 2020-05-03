@@ -39,16 +39,10 @@ def add_TrackObject(track):
 #Add a round object to database
 #Returns the id for the round on success
 def add_roundObject(round):
-    newId = int(get_rounds_DAO().count())+1
+    newId = addRound(round)
+    print('Adding new round. Round id: ' + str(newId))
     round.setId(newId)
-    print('Adding new round. Round id: '+str(newId))
-    success = addRound(round)
-    if success is 0:
-        print("Failed to add round")
-        return 0
-    else:
-        print("Round is added to database")
-        return newId
+    return round
 
 
 #Returns a list of all rounds in the database
@@ -66,7 +60,7 @@ def get_roundsObjectList():
             rankObjekt = Ranking(user_id,rating,rank)
             rankings.append(rankObjekt)
         roundObjekt = Round(round["trackId"],round["roundNumber"],round["startDate"],round["endDate"],rankings)
-        roundObjekt.setId(int(round["_id"]))
+        roundObjekt.setId(round["_id"])
         roundObjectList.append(round)
     #Returning a list of round objects
     return roundObjectList
@@ -80,16 +74,10 @@ def update_round(round):
 #Add planets
 #Returns the id for the planet on success
 def add_planetsToDB(planet):
-    newId = int(get_planets().count()) + 1
+    newId = addPlanet(planet)
     planet.setId(newId)
     print('Adding new planet. Planet id: ' + str(newId))
-    success = addPlanet(planet)
-    if success is 0:
-        print("Failed to add planet")
-        return 0
-    else:
-        print("Planet is added to database")
-        return newId
+    return planet
 
 
 def get_planetObjectList():

@@ -38,7 +38,7 @@ def test_addRound():
     print("Original round object"+testRound.__str__())
     print(testRound)
     #Add round to database
-    testRound.setId(add_roundObject(testRound))
+    testRound = add_roundObject(testRound)
     returnRound = get_roundsObjectList()
     for i in returnRound:
         print("Return rounds: " + i.__str__())
@@ -67,7 +67,7 @@ def test_update_round():
     testRound = Round(trackIds, 2, startDate, endDate, rankings)
 
     # Add round to database
-    testRound.setId(add_roundObject(testRound))
+    testRound=add_roundObject(testRound)
     print("Original round object" + testRound.__str__())
 
     testRound.trackId = [9,9,9,9]
@@ -86,7 +86,7 @@ def test_update_round():
 def test_add_planet():
     print("\n\ntest_add_planet()\n\n")
     testPlanet = Planet("Mars","blue",10,10,20,100,66)
-    testPlanet.setId(add_planetsToDB(testPlanet))
+    testPlanet=add_planetsToDB(testPlanet)
     print("Original planet: "+testPlanet.__str__())
     for i in get_planetObjectList():
         print("Return planet: "+i.__str__())

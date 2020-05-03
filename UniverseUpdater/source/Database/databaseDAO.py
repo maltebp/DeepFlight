@@ -103,7 +103,6 @@ def addRound(round):
     print(ranksString)
     # Converting roundobject to dictionart(json object)
     db_round = {
-        "_id": round._id,
         "trackId": round.trackId,
         "roundNumber": round.roundNumber,
         "startDate": round.startDate,
@@ -111,8 +110,8 @@ def addRound(round):
         "rankings": ranksString,
     }
     # Adding jsonobject to database
-    db[_db_rounds].insert_one(db_round)
-    print('round added to database')
+    return db[_db_rounds].insert_one(db_round).inserted_id
+
 
 def update_round_DAO(round):
     #Creating list of rankings
@@ -140,7 +139,6 @@ def update_round_DAO(round):
 def addPlanet(planet):
     # Converting planetobject to dictionart(json object)
     db_planet = {
-        "_id": planet._id,
         "name": planet.name,
         "color": planet.color,
         "lengthFactor": planet.lengthFactor,
@@ -149,7 +147,7 @@ def addPlanet(planet):
         "widthFactor": planet.widthFactor,
         "widthNoiseFactor": planet.widthNoiseFactor,
     }
-    db[_db_planets].insert_one(db_planet)
+    return db[_db_planets].insert_one(db_planet).inserted_id
 
 
 
