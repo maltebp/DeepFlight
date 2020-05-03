@@ -14,8 +14,7 @@ def get_tracksObjectsList():
     # Convert to Track objects
     tracks = []
     for trackDocument in trackDocuments:
-        print(trackDocument)
-        track = Track(trackDocument["name"], trackDocument["planetId"],trackDocument["seed"],trackDocument["times"],get_single_trackdata(int(trackDocument["_id"]))["data"])
+        track = Track(trackDocument["name"], trackDocument["planetId"], trackDocument["seed"], trackDocument["times"], get_single_trackdata(int(trackDocument["_id"]))["data"])
         track.setId(int(trackDocument["_id"]))
         tracks.append(track)
     #Returning track object list

@@ -15,13 +15,9 @@ __TRACK_FILE_EXT = ".dftbd"
 # and a list of existing tracks (for unique generation)
 def generateTrack(planet, existingTracks):
 
-    # Generate a cool name
+    # Generate a cool name and random seed
     name = _generateUniqueTrackName(existingTracks)
-    print(f"Generated Name {name}")
-
-    # Using current milliseconds as seed
     seed = _generateUniqueSeed(existingTracks)
-    print(f"Generated Seed: {seed}")
 
     # Start the Track generator
     subprocess.call(
@@ -43,7 +39,7 @@ def generateTrack(planet, existingTracks):
     data = bytearray(file.read())
     file.close()
 
-    return Track(name, planet._id, seed=seed,  data=data, )
+    return Track(name, planet._id, seed=seed,  data=data)
 
 
 # Generates a random seed which fits in 4 bytes (required by TrackGenerator.exe)
@@ -61,7 +57,6 @@ def _generateUniqueSeed(existingTracks):
     return seed
 
 
-
 # Generates a Track name which is not in use
 # among the given existing tracks
 def _generateUniqueTrackName(existingTracks):
@@ -77,7 +72,6 @@ def _generateUniqueTrackName(existingTracks):
             if (track.name == name):
                 nameExists = True
     return name
-
 
 
 # Generates a Track name in the format

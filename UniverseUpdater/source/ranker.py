@@ -46,27 +46,25 @@ def rankRound(round, tracks):
                 ratings[user] = rating
 
     round.rankings = ratings
-
-    print(ratings)
-
     return round
 
 
 # Ranks a specific track
 def _rankTrack(track):
-    times = track.times
-    numTimes = len(times)
-
-    # Sorts the times
-    sortedTimes = sorted(times.items(), key=lambda x: x[1])
-
-    # Calculate track rating for each user
     trackRatings = {}
-    trackRank = 1
-    for user, time in sortedTimes:
-        # Round rating to 3 decimal places
-        trackRatings[user] = (1 - (trackRank-1)/(numTimes)) * 2.5
-        trackRank += 1
+    times = track.times
+    if not times is None:
+        numTimes = len(times)
+
+        # Sorts the times
+        sortedTimes = sorted(times.items(), key=lambda x: x[1])
+
+        # Calculate track rating for each user
+        trackRank = 1
+        for user, time in sortedTimes:
+            # Round rating to 3 decimal places
+            trackRatings[user] = (1 - (trackRank-1)/(numTimes)) * 2.5
+            trackRank += 1
 
     return trackRatings
 

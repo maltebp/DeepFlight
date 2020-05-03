@@ -152,9 +152,9 @@ def addUser(user):
     try:
         db_user = {
             "_id" : user._id,
-        "username" : user.username,
-        "rank" : user.rank,
-        "rating" : user.rating,
+            "username" : user.username,
+            "rank" : user.rank,
+            "rating" : user.rating,
         }
         db[_db_users].insert_one(db_user)
         return 1

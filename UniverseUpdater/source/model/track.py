@@ -3,7 +3,7 @@ class Track:
 
     #
     # times: Dictionary of username and their track times in milliseconds
-    def __init__(self, name, planetId, seed=None, times=None, data=None, ):
+    def __init__(self, name, planetId, seed=None, times=None, data=None ):
         self._id = None
         self.name = name
         self.planetId =  planetId
