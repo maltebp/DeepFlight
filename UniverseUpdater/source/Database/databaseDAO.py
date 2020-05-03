@@ -158,12 +158,11 @@ def addPlanet(planet):
 #Return 1 on success and 0 on failure
 def addUser(user):
     db_user = {
-        "_id": user._id,
         "username": user.username,
         "rank": user.rank,
         "rating": user.rating,
     }
-    db[_db_users].insert_one(db_user)
+    return db[_db_users].insert_one(db_user).inserted_id
 
 
 

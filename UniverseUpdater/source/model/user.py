@@ -13,4 +13,4 @@ class User:
 
 
     def __str__(self):
-        return f"Track( id={self._id}, username='{self.username}', rank={self.rank}, rating={self.rating})"
+        return f"Track( id={str(self._id)}, username='{self.username}', rank={self.rank}, rating={self.rating})"

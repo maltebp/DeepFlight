@@ -96,7 +96,7 @@ def test_add_planet():
 def test_add_User():
     print("\n\ntest_add_User()\n\n")
     testUser = User("Per",20,303)
-    testUser.setId(add_UserToDB(testUser))
+    testUser=add_UserToDB(testUser)
     print("Original user: "+testUser.__str__())
     userList = get_UserObjectList()
     for user in userList:
@@ -107,12 +107,12 @@ def test_add_User():
 def test_update_user():
     print("\n\ntest_update_user()\n\n")
     testUser = User("Per",20,303)
-    testUser.setId(add_UserToDB(testUser))
+    testUser=add_UserToDB(testUser)
     print("Original user: " + testUser.__str__())
     testUser.rank= 1
     testUser.rating=1
     updatedUser = updateUser(testUser)
-    print("Updated user: " + updatedUser.__str__())
+    print("Updated user: " + str(updatedUser.__str__()))
     userList = get_UserObjectList()
     for user in userList:
         print("Return user: "+user.__str__())

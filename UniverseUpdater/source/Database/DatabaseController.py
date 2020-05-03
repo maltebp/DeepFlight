@@ -105,18 +105,13 @@ def get_planetObjectList():
 
 
 #Add users
-#Returns the id for the user on success
+#Returns the user opject with the userid set
 def add_UserToDB(user):
-    newId = int(get_planets().count()) + 1
-    user.setId(newId)
-    print('Adding new user. User id: ' + str(newId))
-    success = addUser(user)
-    if success is 0:
-        print("Failed to add planet")
-        return 0
-    else:
-        print("Planet is added to database")
-        return newId
+    userId = addUser(user)
+    print('New User added to database. User id: ' + str(userId))
+    user.setId(userId)
+    return user
+
 
 
 #Returns a list of all users in the database
