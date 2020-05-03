@@ -59,7 +59,7 @@ def get_roundsObjectList():
     for round in rounds:
         rankings = []
         #Fetching ranks from database and creating rankingobjects
-        for rank in round['rankings']:
+        for rank in round["rankings"]:
             user_id = int(rank["user_id"])
             rating = int(rank["rating"])
             rank = int(rank["rank"])
@@ -70,6 +70,11 @@ def get_roundsObjectList():
         roundObjectList.append(round)
     #Returning a list of round objects
     return roundObjectList
+
+def update_round(round):
+    round = update_round_DAO(round)
+    return round
+
 
 
 #Add planets
@@ -126,7 +131,10 @@ def get_UserObjectList():
     # Returning track object list
     return users
 
-
+#Updates an existing user with new user informations
+def updateUser(user):
+    user = updateUserDAO(user)
+    return user
 
 def printDocuments(documents):
     for i in documents:

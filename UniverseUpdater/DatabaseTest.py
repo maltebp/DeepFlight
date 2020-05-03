@@ -44,6 +44,45 @@ def test_addRound():
         print("Return rounds: " + i.__str__())
     removeRound(testRound)
 
+#Test update a round.
+#Creates an existing round = testRound.
+#Make modifications on testRound
+#update te round
+#Print results
+#removing the round.
+def test_update_round():
+    print("test_update_round()")
+
+    # Creating round object
+    startDate = int(round(time.time() * 1000))
+    endDate = int(round(time.time() * 1000) + 100000)
+
+    trackIds = [1, 2, 3, 4]
+    #Set rankings
+    rankings = []
+    ranking1 = Ranking(1, 66, 55)
+    ranking2 = Ranking(2, 44, 33)
+    rankings.append(ranking1)
+    rankings.append(ranking2)
+    testRound = Round(trackIds, 2, startDate, endDate, rankings)
+
+    # Add round to database
+    testRound.setId(add_roundObject(testRound))
+    print("Original round object" + testRound.__str__())
+
+    testRound.trackId = [9,9,9,9]
+    testRound.rankings[0]=Ranking(9, 9, 9)
+    updatedRound = update_round(testRound)
+    print("Updated round object" + updatedRound.__str__())
+
+    returnRound = get_roundsObjectList()
+    for i in returnRound:
+        print("Return rounds: " + i.__str__())
+    removeRound(testRound)
+
+
+
+
 def test_add_planet():
     testPlanet = Planet("Mars","blue",10,10,20,100,66)
     testPlanet.setId(add_planetsToDB(testPlanet))
@@ -60,10 +99,26 @@ def test_add_User():
     userList = get_UserObjectList()
     for user in userList:
         print("Return user: "+user.__str__())
-    removePlanetFromDB(testUser)
+    removeUserFormUserCollection(testUser)
+
+
+def test_update_user():
+    testUser = User("Per",20,303)
+    testUser.setId(add_UserToDB(testUser))
+    print("Original user: " + testUser.__str__())
+    testUser.rank= 1
+    testUser.rating=1
+    updatedUser = updateUser(testUser)
+    print("Updated user: " + updatedUser.__str__())
+    userList = get_UserObjectList()
+    for user in userList:
+        print("Return user: "+user.__str__())
+    removeUserFormUserCollection(testUser)
 
 #test_add_User()
 #test_add_planet()
 #test_addRound()
-test_addAndReturnTrack()
+#test_addAndReturnTrack()
+#test_update_user()
+test_update_round()
 

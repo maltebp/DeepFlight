@@ -69,94 +69,109 @@ def get_single_trackdata(id):
 #Add a track/trackdata Json object to database
 #This is access to database
 def add_track(track):
-    try:
-        db_track = {
-            "_id": track._id,
-            "name": track.name,
-            "planetId": track.planetId,
-            "seed":track.seed,
-            "times":track.times,
-        }
-        #Using the same id from track
-        db_trackdata = {
-            "_id":track._id,
-            "trackdata":bson.Binary(track.data)
-        }
-        with client.start_session() as session:
-            with session.start_transaction():
-                db[_db_tracks].insert_one(db_track, session=session)
-                db[_db_trackdata].insert_one(db_trackdata, session=session)
-        return 1
+    db_track = {
+        "_id": track._id,
+        "name": track.name,
+        "planetId": track.planetId,
+        "seed": track.seed,
+        "times": track.times,
+    }
+    # Using the same id from track
+    db_trackdata = {
+        "_id": track._id,
+        "trackdata": bson.Binary(track.data)
+    }
+    with client.start_session() as session:
+        with session.start_transaction():
+            db[_db_tracks].insert_one(db_track, session=session)
+            db[_db_trackdata].insert_one(db_trackdata, session=session)
 
-    except:
-        return 0
+
 
 #Add a round Json object to database
 #This is access to database
 def addRound(round):
-    try:
-        #Converting rankingObjects to a JsonArray
-        ranksString = []
-        for rank in round.rankings:
-            db_rank = {
-                "user_id": rank.user_id,
-                "rating": rank.rating,
-                "rank": rank.rank,
-            }
-            ranksString.append(db_rank)
-        print(ranksString)
-        #Converting roundobject to dictionart(json object)
-        db_round = {
-            "_id": round._id,
-            "trackId": round.trackId,
-            "roundNumber": round.roundNumber,
-            "startDate": round.startDate,
-            "endDate": round.endDate,
-            "rankings": ranksString,
+    # Converting rankingObjects to a JsonArray
+    ranksString = []
+    for rank in round.rankings:
+        db_rank = {
+            "user_id": rank.user_id,
+            "rating": rank.rating,
+            "rank": rank.rank,
         }
-        #Adding jsonobject to database
-        db[_db_rounds].insert_one(db_round)
-        print('round added to database')
-        return 1
-    except:
-        return 0
+        ranksString.append(db_rank)
+    print(ranksString)
+    # Converting roundobject to dictionart(json object)
+    db_round = {
+        "_id": round._id,
+        "trackId": round.trackId,
+        "roundNumber": round.roundNumber,
+        "startDate": round.startDate,
+        "endDate": round.endDate,
+        "rankings": ranksString,
+    }
+    # Adding jsonobject to database
+    db[_db_rounds].insert_one(db_round)
+    print('round added to database')
+
+def update_round_DAO(round):
+    #Creating list of rankings
+    ranksString = []
+    for rank in round.rankings:
+        db_rank = {
+            "user_id": rank.user_id,
+            "rating": rank.rating,
+            "rank": rank.rank,
+        }
+        ranksString.append(db_rank)
+
+    myquery = {"_id": round._id}
+    newvalues = {"$set": {"trackId": round.trackId,
+        "roundNumber": round.roundNumber,
+        "startDate": round.startDate,
+        "endDate": round.endDate,
+        "rankings": ranksString,}}
+    db[_db_rounds].update_one(myquery, newvalues)
+    return round
+
 
 #Add a planet to Planet collection
 #Return 1 on success and 0 on failure
 def addPlanet(planet):
-    try:
     # Converting planetobject to dictionart(json object)
-        db_planet = {
-            "_id" : planet._id,
-            "name" : planet.name,
-            "color": planet.color,
-            "lengthFactor": planet.lengthFactor,
-            "curveFactor": planet.curveFactor,
-            "stretchFactor": planet.stretchFactor,
-            "widthFactor": planet.widthFactor,
-            "widthNoiseFactor": planet.widthNoiseFactor,
-        }
-        db[_db_planets].insert_one(db_planet)
-        return 1
-    except:
-        return 0
+    db_planet = {
+        "_id": planet._id,
+        "name": planet.name,
+        "color": planet.color,
+        "lengthFactor": planet.lengthFactor,
+        "curveFactor": planet.curveFactor,
+        "stretchFactor": planet.stretchFactor,
+        "widthFactor": planet.widthFactor,
+        "widthNoiseFactor": planet.widthNoiseFactor,
+    }
+    db[_db_planets].insert_one(db_planet)
+
+
+
 
 #Add a user to User collection
 #Return 1 on success and 0 on failure
 def addUser(user):
-    try:
-        db_user = {
-            "_id" : user._id,
-        "username" : user.username,
-        "rank" : user.rank,
-        "rating" : user.rating,
-        }
-        db[_db_users].insert_one(db_user)
-        return 1
-    except:
-        return 0
+    db_user = {
+        "_id": user._id,
+        "username": user.username,
+        "rank": user.rank,
+        "rating": user.rating,
+    }
+    db[_db_users].insert_one(db_user)
 
 
+
+def updateUserDAO(user):
+    myquery = {"_id": user._id}
+    newvalues = {"$set": {"rank": user.rank, "rating":user.rating}}
+    db[_db_users].update_one(myquery, newvalues)
+    return user
 
 
 ###################################REMOVE FROMDATABASE############################################
