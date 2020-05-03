@@ -1,5 +1,4 @@
 import pymongo
-from source.Database.databaseStartUp import *
 import json
 
 # Settings
@@ -10,7 +9,7 @@ _db_name = "game"
 
 #Collections
 df_collections = []
-_db_users = 'user'
+_db_users = 'users'
 _db_planets = 'planets'
 _db_tracks = 'tracks'
 _db_rounds = 'rounds'
@@ -20,20 +19,25 @@ df_collections.append(_db_planets)
 df_collections.append(_db_tracks)
 df_collections.append(_db_rounds)
 df_collections.append(_db_trackdata)
-sorted(df_collections)
 
 # ----------------------------------------------------------------------------------
 # Setup database connection
 # Establish connection
 client = pymongo.MongoClient(f"mongodb+srv://{_db_user}:{_db_password}@deepflight-cu0et.mongodb.net/test?retryWrites=true&authSource=admin")
 db = client["gamedb" + ("_test" if _use_test_database else "")]
-collections =  sorted(db.collection_names())
+collections = db.collection_names()
 
-#Creates a collection and insert default values in the collections if collection is missing
-if _use_test_database:
-    startUp(db,df_collections,collections)
-
-
+# Initializes the database, by ensuring collections exists
+# This is required since collections cannot be created during mutli-doc transactions
+print("\nInitializing database collections...")
+for df_collection in df_collections:
+    print(f"\t'{df_collection}': ", end="")
+    if not df_collection in collections:
+        db.create_collection(df_collection)
+        print("Created")
+    else:
+        print("Exists")
+print("Done!")
 
 
 #####################GET COLLECTION DATA########################################
@@ -109,7 +113,6 @@ def addRound(round):
                 "rank": rank.rank,
             }
             ranksString.append(db_rank)
-        print(ranksString)
         db_round["rankings"] = round.rankings
 
     # Adding jsonobject to database
@@ -126,13 +129,12 @@ def update_round_DAO(round):
             "rank": rank.rank,
         }
         ranksString.append(db_rank)
-
     myquery = {"_id": round._id}
-    newvalues = {"$set": {"trackId": round.trackId,
+    newvalues = {"$set": {"trackIdS": round.trackIds,
         "roundNumber": round.roundNumber,
         "startDate": round.startDate,
         "endDate": round.endDate,
-        "rankings": ranksString,}}
+        "rankings": ranksString}}
     db[_db_rounds].update_one(myquery, newvalues)
     return round
 
@@ -196,8 +198,6 @@ def removePlanetFromDB(planet):
 def removeUserFormUserCollection(user):
     print("UserId to remove :" + str(user._id))
     db[_db_planets].remove({"_id": user._id})
-
-
 
 
 

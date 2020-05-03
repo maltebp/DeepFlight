@@ -4,11 +4,11 @@ import timeit # Used to measure run time
 from source import ranker
 from source import generate
 from source.model.round import Round
-from source.Database import DatabaseController
+from source.Database import databasecontroller
 from source.model.planet import *
 
 _UPDATE_FREQUENCY = 25 # seconds
-_ROUND_LENGTH = 10 # Minutes
+_ROUND_LENGTH = 1 # Minutes
 
 # Number of rounds to base the universal ranking upon
 _UNIVERSAL_RANKING_ROUND_COUNT  = 4
@@ -19,7 +19,7 @@ def updateUniverse():
     print("\nUpdating Universe...")
     startTime = timeit.default_timer()
 
-    rounds = DatabaseController.get_roundsObjectList()
+    rounds = databasecontroller.get_roundsObjectList()
 
     currentRound = None
     unrankedRounds = []
@@ -68,7 +68,7 @@ def updateUniverse():
     if len(unrankedRounds) > 0:
         print("\nUpdating rankings")
         # Unranked rounds, so we rank them (also updates universe rankings)
-        allTracks = DatabaseController.get_tracksObjectsList()
+        allTracks = databasecontroller.get_tracksObjectsList()
         updateRankings(rankedRounds, unrankedRounds, allTracks)
         print("Finished updating rankings")
 
@@ -81,12 +81,12 @@ def updateUniverse():
 def createRound(startTime):
 
     # Get (or create) planets in database
-    planets = DatabaseController.get_planetObjectList()
+    planets = databasecontroller.get_planetObjectList()
     if len(planets) is 0:
         print(f"No planets exists, creating defaults")
         for planet in default_planets:
-            DatabaseController.add_planetsToDB(planet)
-        planets = DatabaseController.get_planetObjectList()
+            databasecontroller.add_planetsToDB(planet)
+        planets = databasecontroller.get_planetObjectList()
     if len(planets) < 4:
         print(f"WARNING: Only {len(planets)} planets exists in database - this situation is NOT handled!")
 
@@ -95,7 +95,7 @@ def createRound(startTime):
 
     # Generate Track from each planet
     print("Generating Tracks...")
-    existingTracks = DatabaseController.get_tracksObjectsList()
+    existingTracks = databasecontroller.get_tracksObjectsList()
     for planet in planets:
         existingPlanetTracks = []
         for track in existingTracks:
@@ -108,15 +108,15 @@ def createRound(startTime):
     # Save tracks in database
     print("Storing Tracks in database")
     for track in tracks:
-        DatabaseController.add_TrackObject(track)
+        databasecontroller.add_TrackObject(track)
         trackIds.append(track._id)
 
     # Figure out the next round number
-    roundNumber = len(DatabaseController.get_roundsObjectList()) + 1
+    roundNumber = len(databasecontroller.get_roundsObjectList()) + 1
 
     print("Storing Round in database")
     round =  Round(roundNumber, trackIds,  startTime, startTime + _ROUND_LENGTH*60000)
-    DatabaseController.add_roundObject(round)
+    databasecontroller.add_roundObject(round)
 
     return round
 
@@ -127,7 +127,7 @@ def createRound(startTime):
 def updateRankings(rankedRounds, unrankedRounds, allTracks):
     print("Ranking rounds..")
     for unrankedRound in unrankedRounds:
-        print(f"\tRound {unrankedRound.roundNumber}... ", end="")
+        print(f"\tRound {unrankedRound.roundNumber}.. ", end="")
         roundTracks = []
 
         for track in allTracks:
@@ -137,9 +137,10 @@ def updateRankings(rankedRounds, unrankedRounds, allTracks):
         ranker.rankRound(unrankedRound, roundTracks)
         rankedRounds.append(unrankedRound)
 
-        print(f"Ranked {len(unrankedRound.rankings)} users")
+        print(f"Ranked {len(unrankedRound.rankings)} users.. ", end="")
+        databasecontroller.update_round(unrankedRound)
+        print("Updated in database")
 
-        # TODO: Update round ranking in database
 
     # Sort the ranked rounds (last end date to first end date)
     sortedRankedRounds = sorted(rankedRounds, key=lambda r: r.endDate, reverse=True)
@@ -156,8 +157,7 @@ def updateRankings(rankedRounds, unrankedRounds, allTracks):
 
 # Start the updater
 print("\nSTARTING UNIVERSE UPDATER!")
-updateUniverse()
 while True:
-    time.sleep(_UPDATE_FREQUENCY)
     updateUniverse()
     print(f"\nUpdating again in {_UPDATE_FREQUENCY} seconds")
+    time.sleep(_UPDATE_FREQUENCY)
