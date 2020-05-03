@@ -70,22 +70,22 @@ def get_single_trackdata(id):
 #This is access to database
 def add_track(track):
     db_track = {
-        "_id": track._id,
         "name": track.name,
         "planetId": track.planetId,
         "seed": track.seed,
         "times": track.times,
     }
-    # Using the same id from track
-    db_trackdata = {
-        "_id": track._id,
-        "trackdata": bson.Binary(track.data)
-    }
+
     with client.start_session() as session:
         with session.start_transaction():
-            db[_db_tracks].insert_one(db_track, session=session)
+            trackId = db[_db_tracks].insert_one(db_track, session=session).inserted_id
+            # Using the same id from track
+            db_trackdata = {
+                "_id": trackId,
+                "trackdata": bson.Binary(track.data)
+            }
             db[_db_trackdata].insert_one(db_trackdata, session=session)
-
+            return trackId
 
 
 #Add a round Json object to database

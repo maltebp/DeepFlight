@@ -7,37 +7,31 @@ from source.model.ranking import *
 #Returns a list of all tracks in the database
 from source.model.user import User
 
-
+#Returns a list of track objects
 def get_tracksObjectsList():
     trackDocuments = get_tracks()
     # Convert to Track objects
     tracks = []
     for trackDocument in trackDocuments:
-        track = Track(trackDocument["name"], trackDocument["planetId"],trackDocument["seed"],trackDocument["times"],get_single_trackdata(int(trackDocument["_id"]))["trackdata"])
-        track.setId(int(trackDocument["_id"]))
+        track = Track(trackDocument["name"], trackDocument["planetId"],trackDocument["seed"],trackDocument["times"],get_single_trackdata(trackDocument["_id"])["trackdata"])
+        track.setId(trackDocument["_id"])
         tracks.append(track)
     #Returning track object list
     return tracks
 
 
 #Adds a track to the database
-#Returns the id for the track on success
+#Returns the track object with _id from mongoDB
 def add_TrackObject(track):
     #TODO: Fix id setting.
     newId = int(get_tracks().count())+1
     #Adding one to get at new id
-    track.setId(newId)
-    success = add_track(track)
-    if success is 0:
-        print("Failed to add track")
-        return 0
-    else:
-        print("Track is added to database")
-        return newId
+    track.setId(add_track(track))
+    return track
 
 
 #Add a round object to database
-#Returns the id for the round on success
+#Returns the round object with _id from mongoDB
 def add_roundObject(round):
     newId = addRound(round)
     print('Adding new round. Round id: ' + str(newId))
@@ -45,7 +39,7 @@ def add_roundObject(round):
     return round
 
 
-#Returns a list of all rounds in the database
+#Returns a list of all roundsObjects in the database
 def get_roundsObjectList():
     rounds = get_rounds_DAO()
     roundObjectList = []
@@ -65,6 +59,7 @@ def get_roundsObjectList():
     #Returning a list of round objects
     return roundObjectList
 
+#Returns the updated round object
 def update_round(round):
     round = update_round_DAO(round)
     return round
@@ -72,14 +67,14 @@ def update_round(round):
 
 
 #Add planets
-#Returns the id for the planet on success
+#Returns the Planet object with _id from mongoDB
 def add_planetsToDB(planet):
     newId = addPlanet(planet)
     planet.setId(newId)
     print('Adding new planet. Planet id: ' + str(newId))
     return planet
 
-
+#Returns a list of all planetObjects in the database
 def get_planetObjectList():
         planetDocuments = get_planets()
         # Convert to Track objects
@@ -102,7 +97,7 @@ def add_UserToDB(user):
 
 
 
-#Returns a list of all users in the database
+#Returns a list of all users objects in the database
 def get_UserObjectList():
     userDocuments = get_users()
     # Convert to Track objects
@@ -115,6 +110,7 @@ def get_UserObjectList():
     return users
 
 #Updates an existing user with new user informations
+#Returns the updated userobject
 def updateUser(user):
     user = updateUserDAO(user)
     return user

@@ -11,7 +11,7 @@ f.close()
 def test_addAndReturnTrack():
     print("\n\nRunning test: test_addAndReturnTrack()\n\n")
     testTrack = Track("Flensborg_test", 888, "11", "33min", num)
-    testTrack.setId(add_TrackObject(testTrack))
+    testTrack = add_TrackObject(testTrack)
     print("Original track: " + testTrack.__str__())
     returnTrackList = get_tracksObjectsList()
     for i in returnTrackList:
