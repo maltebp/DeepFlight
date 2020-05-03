@@ -82,7 +82,7 @@ def add_track(track):
             # Using the same id from track
             db_trackdata = {
                 "_id": trackId,
-                "trackdata": bson.Binary(track.data)
+                "data": bson.Binary(track.data)
             }
             db[_db_trackdata].insert_one(db_trackdata, session=session)
             return trackId

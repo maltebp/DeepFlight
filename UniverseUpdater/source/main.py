@@ -108,8 +108,8 @@ def createRound(startTime):
     # Save tracks in database
     print("Storing Tracks in database")
     for track in tracks:
-        trackId = DatabaseController.add_TrackObject(track)
-        trackIds.append(trackId)
+        DatabaseController.add_TrackObject(track)
+        trackIds.append(track._id)
 
     # Figure out the next round number
     roundNumber = len(DatabaseController.get_roundsObjectList()) + 1

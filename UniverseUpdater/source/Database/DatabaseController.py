@@ -25,7 +25,6 @@ def get_tracksObjectsList():
 #Returns the track object with _id from mongoDB
 def add_TrackObject(track):
     #TODO: Fix id setting.
-    newId = int(get_tracks().count())+1
     #Adding one to get at new id
     track.setId(add_track(track))
     return track
@@ -50,16 +49,6 @@ def get_roundsObjectList():
         roundObjekt = Round(round["roundNumber"], round["trackIds"], round["startDate"],round["endDate"])
         if "rankings" in round:
             roundObjekt.rankings = round["rankings"]
-        #
-        # if round.rankings["rankings"] is not None:
-        #     rankings = []
-        #     # Fetching ranks from database and creating rankingobjects
-        #     for rank in round['rankings']:
-        #         user_id = int(rank["user_id"])
-        #         rating = int(rank["rating"])
-        #         rank = int(rank["rank"])
-        #         rankObjekt = Ranking(user_id, rating, rank)
-        #         rankings.append(rankObjekt)
 
         roundObjekt.setId(round["_id"])
         roundObjectList.append(roundObjekt)
