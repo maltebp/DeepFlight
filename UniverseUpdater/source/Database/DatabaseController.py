@@ -8,51 +8,39 @@ from source.model.ranking import *
 #Returns a list of all tracks in the database
 from source.model.user import User
 
-
+#Returns a list of track objects
 def get_tracksObjectsList():
     trackDocuments = get_tracks()
     # Convert to Track objects
     tracks = []
     for trackDocument in trackDocuments:
         track = Track(trackDocument["name"], trackDocument["planetId"], trackDocument["seed"], trackDocument["times"], get_single_trackdata(int(trackDocument["_id"]))["data"])
-        track.setId(int(trackDocument["_id"]))
+        track.setId(trackDocument["_id"])
         tracks.append(track)
     #Returning track object list
     return tracks
 
 
 #Adds a track to the database
-#Returns the id for the track on success
+#Returns the track object with _id from mongoDB
 def add_TrackObject(track):
     #TODO: Fix id setting.
     newId = int(get_tracks().count())+1
     #Adding one to get at new id
-    track.setId(newId)
-    success = add_track(track)
-    if success is 0:
-        print("Failed to add track")
-        return 0
-    else:
-        print("Track is added to database")
-        return newId
+    track.setId(add_track(track))
+    return track
 
 
 #Add a round object to database
-#Returns the id for the round on success
+#Returns the round object with _id from mongoDB
 def add_roundObject(round):
-    newId = int(get_rounds_DAO().count())+1
+    newId = addRound(round)
+    print('Adding new round. Round id: ' + str(newId))
     round.setId(newId)
-    print('Adding new round. Round id: '+str(newId))
-    success = addRound(round)
-    if success is 0:
-        print("Failed to add round")
-        return 0
-    else:
-        print("Round is added to database")
-        return newId
+    return round
 
 
-#Returns a list of all rounds in the database
+#Returns a list of all roundsObjects in the database
 def get_roundsObjectList():
     rounds = get_rounds_DAO()
     roundObjectList = []
@@ -73,10 +61,16 @@ def get_roundsObjectList():
         #         rankObjekt = Ranking(user_id, rating, rank)
         #         rankings.append(rankObjekt)
 
-        roundObjekt.setId(int(round["_id"]))
+        roundObjekt.setId(round["_id"])
         roundObjectList.append(roundObjekt)
     #Returning a list of round objects
     return roundObjectList
+
+#Returns the updated round object
+def update_round(round):
+    round = update_round_DAO(round)
+    return round
+
 
 
 # Update round in databse with the id of given round object
@@ -87,20 +81,14 @@ def update_round(round):
 
 
 #Add planets
-#Returns the id for the planet on success
+#Returns the Planet object with _id from mongoDB
 def add_planetsToDB(planet):
-    newId = int(get_planets().count()) + 1
+    newId = addPlanet(planet)
     planet.setId(newId)
     print('Adding new planet. Planet id: ' + str(newId))
-    success = addPlanet(planet)
-    if success is 0:
-        print("Failed to add planet")
-        return 0
-    else:
-        print("Planet is added to database")
-        return newId
+    return planet
 
-
+#Returns a list of all planetObjects in the database
 def get_planetObjectList():
         planetDocuments = get_planets()
         # Convert to Track objects
@@ -114,21 +102,16 @@ def get_planetObjectList():
 
 
 #Add users
-#Returns the id for the user on success
+#Returns the user opject with the userid set
 def add_UserToDB(user):
-    newId = int(get_planets().count()) + 1
-    user.setId(newId)
-    print('Adding new user. User id: ' + str(newId))
-    success = addUser(user)
-    if success is 0:
-        print("Failed to add planet")
-        return 0
-    else:
-        print("Planet is added to database")
-        return newId
+    userId = addUser(user)
+    print('New User added to database. User id: ' + str(userId))
+    user.setId(userId)
+    return user
 
 
-#Returns a list of all users in the database
+
+#Returns a list of all users objects in the database
 def get_UserObjectList():
     userDocuments = get_users()
     # Convert to Track objects
@@ -140,7 +123,11 @@ def get_UserObjectList():
     # Returning track object list
     return users
 
-
+#Updates an existing user with new user informations
+#Returns the updated userobject
+def updateUser(user):
+    user = updateUserDAO(user)
+    return user
 
 def printDocuments(documents):
     for i in documents:
