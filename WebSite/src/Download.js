@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import Login from './Login';
+import jwt from 'jsonwebtoken';
 
 class Download extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       token: localStorage.getItem("dftoken"),
     }
   }
 
-  handleState(){
+  handleState() {
     this.setState({
       token: localStorage.getItem("dftoken"),
     })
@@ -21,7 +22,7 @@ class Download extends Component {
     return (
       <div>
         <div className="boxwrapper longread">
-          <FilterDownload token={this.state.token} handleState={this.handleState.bind(this)}/>
+          <FilterDownload token={this.state.token} handleState={this.handleState.bind(this)} />
           <div className="box whitebg">
             <h2>Installation</h2>
             <h3>Windows</h3>
@@ -40,10 +41,15 @@ class Download extends Component {
 // Show the login menu of the user has no token
 // Show download text box if logged in
 function FilterDownload(props) {
-  console.log("Token in FilterDownload: " + JSON.stringify(props.token));
-  if (props.token == 'undefined' || props.token == null) {
-    return (<Login handleState={props.handleState}/>);
+  const token = props.token;
+  console.log("Token in FilterDownload: " + JSON.stringify(token));
+  if (token === 'undefined'
+    || token === null) {
+    return (<Login handleState={props.handleState} />); // Pass method to handle state as props
+  //} else if (new Date() > jwt.decode(token)){
+    //return (<Login handleState={props.handleState} />); // Pass method to handle state as props
   } else {
+    alert(token);
     // Try to login automatically first // TODO: Show 'token expired' if old token
     return (<DownloadBox />)
   }
