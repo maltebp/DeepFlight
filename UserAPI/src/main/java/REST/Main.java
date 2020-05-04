@@ -26,7 +26,7 @@ public class Main {
             // TODO: add client url for game and site, local and remote. These urls can be read from the console.
             //config.enableCorsForOrigin(
             //        "http://localhost:3000/", // Web site local: OK
-            //        "https://master.d3lj15etjpqs5m.amplifyapp.com/" // Web site remote
+            //        "http://maltebp.dk/" // Web site remote
             //);
 
         }).start(7000);

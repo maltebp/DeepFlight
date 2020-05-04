@@ -1,29 +1,28 @@
 import React, { Component } from "react";
-import axios from 'axios';
+import Login from './Login';
 import jwt from 'jsonwebtoken';
 
 class Download extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       token: localStorage.getItem("dftoken"),
     }
   }
 
-  handleState(){
+  handleState() {
     this.setState({
       token: localStorage.getItem("dftoken"),
     })
-    console.log("Handlin' state");
-    console.log("Token in Parent: " + JSON.stringify(this.state.token))
+    //console.log("Handlin' state");
+    //console.log("Token in Parent: " + JSON.stringify(this.state.token))
   }
 
   render() {
     return (
       <div>
-        <h2>LOGIN TO DOWNLOAD THE GAME!</h2>
-        <div className="boxwrapper">
-          <FilterDownload token={this.state.token} handleState={this.handleState.bind(this)}/>
+        <div className="boxwrapper longread">
+          <FilterDownload token={this.state.token} handleState={this.handleState.bind(this)} />
           <div className="box whitebg">
             <h2>Installation</h2>
             <h3>Windows</h3>
@@ -42,11 +41,15 @@ class Download extends Component {
 // Show the login menu of the user has no token
 // Show download text box if logged in
 function FilterDownload(props) {
-  console.log("Token in FilterDownload: " + JSON.stringify(props.token));
-  if (props.token == 'undefined' || props.token == null) {
-    return (<Login handleState={props.handleState}/>);
+  const token = props.token;
+  const today = new Date();
+  //console.log("Token in FilterDownload: " + JSON.stringify(token));
+  if (token === 'undefined'
+    || token === null) {
+    return (<Login handleState={props.handleState} message="Login to download game"/>); // Pass method to handle state as props
+  } else if (today > new Date(jwt.decode(token).exp * 1000)){ // jwt deals in seconds, so * 1000
+    return (<Login handleState={props.handleState} message="Session expired. Log in again"/>); // Pass method to handle state as props
   } else {
-    // Try to login automatically first // TODO: Show 'token expired' if old token
     return (<DownloadBox />)
   }
 }
@@ -57,100 +60,12 @@ class DownloadBox extends React.Component {
   }
   render() {
     return (
-      <div className="box whitebg">
-        <p>You are logged in and can download the link from here.</p>
-        <button onClick="DownloadGame">DL GME</button>
-      </div>
-    );
-  }
-}
-
-// Only show login form if user is not logged in
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      password: "",
-      loginErrors: ""
-    };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleState = this.props.handleState;
-  }
-
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  }
-
-  handleSubmit(event) {
-    const { username, password } = this.state;
-
-    var bodyFormData = new FormData();
-    bodyFormData.append('name', username);
-    bodyFormData.append('password', password);
-
-    axios({
-      method: 'post',
-      url: 'http://maltebp.dk:7000/login',
-      //url: 'http://localhost:7000/login',
-      data: bodyFormData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Origin': 'http://maltebp.dk:7000/login'
-        //'Access-Control-Allow-Origin': 'http://localhost:7000'
-      },
-      withCredentials: true
-    })
-
-      .then(response => {
-        // TODO remove these alerts and logs!
-        //console.log(response);
-        const token = response.data;
-        var decoded = jwt.decode(token.jwt);
-        //console.log(decoded);
-        var result = JSON.stringify(response.statusText) + "\nJWT:\n" + JSON.stringify(decoded).replace(/\\/g, "");
-        alert(result);
-        //if (response.data.logged_in) {
-        //this.props.handleSuccessfulAuth(response.data);
-        //}
-        localStorage.setItem("dftoken", token);
-        console.log("Token in child " + token);
-        console.log("Read from localStorage" + localStorage.getItem("dftoken"));
-        this.handleState();
-      })
-      .catch(error => {
-        console.log("login error", error);
-      });
-    event.preventDefault();
-  }
-
-  render() {
-    return (
       <div className="box">
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            defaultValue={this.state.username}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={this.state.password}
-            onChange={this.handleChange}
-            required
-          />
-          <button type="Login">Login</button>
-        </form>
+        <h2>Hello, user!</h2>
+        <p>You are logged in and can download the game from here.</p>
+        <p>Just a dummy file, no need to install it :-)</p>
+        <a className="buttonLink" href="http://mirrors.dotsrc.org/linuxmint-cd/stable/19.3/linuxmint-19.3-cinnamon-64bit.iso">Download Deep Flight</a>
+        <p>Size: 8 MB</p>
       </div>
     );
   }

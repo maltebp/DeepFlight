@@ -4,17 +4,15 @@
 }
 
 a {
-  color:white;
+  color: white;
   text-decoration: underline overline;
 }
 
-
-body{
+body {
   background-image: url("images/df.jpg");
   background-color: #cccccc;
   color: #fff;
-  font-family: 'Pixellari', 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Pixellari', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   margin: 0 auto;
   max-width: 1000px;
 }
@@ -29,85 +27,65 @@ h1.header {
 }
 
 ul.header li {
-  display:inline;
+  display: inline;
   list-style-type: none;
-  margin:0;
+  margin: 0;
 }
 
 ul.header {
   text-align: center;
-  padding:0;
+  padding: 0;
 }
 
 ul.header li a {
-  color:#fff;
+  color: #fff;
   font-weight: bold;
   text-decoration: none;
-  padding:20px;
-  display:inline-block;
-  border-top:2px solid transparent;
-  border-bottom:2px solid transparent;
+  padding: 20px;
+  display: inline-block;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
 }
 
 .active {
-  border-top:2px solid white !important;
-  border-bottom:2px solid white !important;
+  border-top: 2px solid white !important;
+  border-bottom: 2px solid white !important;
 }
 
-.content h1, .content h2, .content h3, .box{
-  /*margin:1%; /*To reflect box margin*/
-  text-align: center;
+.box {
+  margin: 1%;
 }
 
-.box{
-  margin:1%;
-}
-
-.boxwrapper{
+.boxwrapper {
   display: -webkit-flex;
   display: -ms-flexbox;
   overflow: hidden;
   font-family: monospace;
+  margin-bottom: 20px;
 }
 
-.whitebg{
-  background:white;
-  color:black;
+.longread {
+  padding-bottom: 60px;
 }
 
-.box{
-  display: table-cell;
+.whitebg {
+  background: white;
   padding: 20px;
+  color: black;
+}
+
+.box {
+  display: table-cell;
   box-sizing: border-box;
-  margin-bottom:20px;
 }
-
-/*Smaller screens*/
-@media only screen and (max-width: 600px) {
-  .box, .box3, ul.header li {
-    display: block;
-    width: 100%;
-  }
-}
-
-/*Bigger screens*/
-@media only screen and (min-width: 600px) {
-.boxwrapper{
-display:flex;
-}
-  .box, .boxwrapper {
-   flex:1;
-  }
-}
-
 
 /*Style the web form*/
 
-form label, form input{
-  display:block;
-  width:100%;
+form label, form input {
+  display: block;
+  width: 100%;
   box-sizing: border-box;
-  color:white;
+  color: white;
   background-color: transparent;
   text-align: center;
   border: none;
@@ -117,19 +95,75 @@ form label, form input{
   font-size: 1.3em;
 }
 
-form button{
-  color:black;
-  width:100%;
+button, form button, .buttonLink {
+  color: black;
+  width: 100%;
   background-color: #ffffff;
-  border:none;
-  padding:20px;
-  margin-top:10px;
-  margin-bottom:20px;
+  border: none;
+  padding: 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
   font-family: 'Courier New', Courier, monospace;
 }
 
-  form {
-    text-align: center;
-    margin: 0 auto;
-    max-width: 320px;
+.buttonLink{
+  display: inline-block;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+form {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 320px;
+}
+
+.imageoverlay{
+  margin-top: -200px;
+  text-align: right;
+  padding:20px;
+  color: white;
+}
+
+.imageoverlay h1 {
+  font-family: 'Pixellari', monospace;
+  font-size:3em;
+}
+
+.imageoverlay p {
+  font-size: 2em;
+}
+
+table {
+  width:100%;
+  font-family: 'Pixellari';
+  font-size:1.2em;
+}
+
+/*Smaller screens*/
+
+@media only screen and (max-width: 600px) {
+  .box, .box3, ul.header li {
+    display: block;
+    width: 100%;
+    margin-left:0px;
+    margin-right:0px;
   }
+  /*reset imageoverlay*/
+  .imageoverlay{
+    margin-top: 10px;
+    color: black;
+    background:white;
+  }
+}
+
+/*Bigger screens*/
+
+@media only screen and (min-width: 600px) {
+  .boxwrapper {
+    display: flex;
+  }
+  .box, .boxwrapper {
+    flex: 1;
+  }
+}
