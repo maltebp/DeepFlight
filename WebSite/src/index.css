@@ -79,34 +79,6 @@ ul.header li a {
   box-sizing: border-box;
 }
 
-/*Smaller screens*/
-
-@media only screen and (max-width: 600px) {
-  .box, .box3, ul.header li {
-    display: block;
-    width: 100%;
-    margin-left:0px;
-    margin-right:0px;
-  }
-  /*reset imageoverlay*/
-  .imageoverlay{
-    margin-top: 10px;
-    color: black;
-    background:white;
-  }
-}
-
-/*Bigger screens*/
-
-@media only screen and (min-width: 600px) {
-  .boxwrapper {
-    display: flex;
-  }
-  .box, .boxwrapper {
-    flex: 1;
-  }
-}
-
 /*Style the web form*/
 
 form label, form input {
@@ -166,4 +138,32 @@ table {
   width:100%;
   font-family: 'Pixellari';
   font-size:1.2em;
+}
+
+/*Smaller screens*/
+
+@media only screen and (max-width: 600px) {
+  .box, .box3, ul.header li {
+    display: block;
+    width: 100%;
+    margin-left:0px;
+    margin-right:0px;
+  }
+  /*reset imageoverlay*/
+  .imageoverlay{
+    margin-top: 10px;
+    color: black;
+    background:white;
+  }
+}
+
+/*Bigger screens*/
+
+@media only screen and (min-width: 600px) {
+  .boxwrapper {
+    display: flex;
+  }
+  .box, .boxwrapper {
+    flex: 1;
+  }
 }

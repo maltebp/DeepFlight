@@ -14,8 +14,8 @@ class Download extends Component {
     this.setState({
       token: localStorage.getItem("dftoken"),
     })
-    console.log("Handlin' state");
-    console.log("Token in Parent: " + JSON.stringify(this.state.token))
+    //console.log("Handlin' state");
+    //console.log("Token in Parent: " + JSON.stringify(this.state.token))
   }
 
   render() {
@@ -42,15 +42,14 @@ class Download extends Component {
 // Show download text box if logged in
 function FilterDownload(props) {
   const token = props.token;
-  console.log("Token in FilterDownload: " + JSON.stringify(token));
+  const today = new Date();
+  //console.log("Token in FilterDownload: " + JSON.stringify(token));
   if (token === 'undefined'
     || token === null) {
-    return (<Login handleState={props.handleState} />); // Pass method to handle state as props
-  //} else if (new Date() > jwt.decode(token)){
-    //return (<Login handleState={props.handleState} />); // Pass method to handle state as props
+    return (<Login handleState={props.handleState} message="Login to download game"/>); // Pass method to handle state as props
+  } else if (today > new Date(jwt.decode(token).exp * 1000)){ // jwt deals in seconds, so * 1000
+    return (<Login handleState={props.handleState} message="Session expired. Log in again"/>); // Pass method to handle state as props
   } else {
-    alert(token);
-    // Try to login automatically first // TODO: Show 'token expired' if old token
     return (<DownloadBox />)
   }
 }

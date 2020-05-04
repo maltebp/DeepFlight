@@ -43,17 +43,17 @@ class Login extends Component {
         })
 
             .then(response => {
-                const token = response.data;
-                var decoded = jwt.decode(token.jwt);
+                const token = response.data.jwt;
+                var decoded = jwt.decode(token);
                 console.log(decoded);
                 //alert(jwt.decode(token.jwt));
                 //var result = JSON.stringify(response.statusText) + "\nJWT:\n" + JSON.stringify(decoded).replace(/\\/g, "");
                 //if (response.data.logged_in) {
                 //this.props.handleSuccessfulAuth(response.data);
                 //}
-                localStorage.setItem("dftoken", token.jwt);
-                console.log("Token in child " + token);
-                console.log("Read from localStorage" + localStorage.getItem("dftoken"));
+                localStorage.setItem("dftoken", token);
+                //console.log("Token in child " + token);
+                console.log("Read from localStorage: \n" + localStorage.getItem("dftoken"));
                 this.handleState();
             })
             .catch(error => {
@@ -65,7 +65,8 @@ class Login extends Component {
     render() {
         return (
             <div className="box">
-                <h2>LOGIN TO DOWNLOAD THE GAME!</h2>
+                <h2>Login</h2>
+                <p>{this.props.message}</p>
                 <form onSubmit={this.handleSubmit}>
                     <input
                         type="text"
