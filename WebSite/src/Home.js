@@ -24,7 +24,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const url = "http://maltebp.dk:10000/gameapi/planets";
+    const url = "http://maltebp.dk:10000/gameapi/round/current";
     axios({
       method: 'get',
       url: url,
@@ -37,6 +37,7 @@ class Home extends Component {
       withCredentials: true
     })
       .then(response => {
+        console.log(response);
         const scores = response.data.planets;
         console.log(scores);
         this.setState({
@@ -52,34 +53,30 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
-        <div className="boxwrapper">
-          <h1 className="box">Universal ratings (top 5)</h1>
-          <h1 className="box">Last round ratings (top 5)</h1>
-        </div>
-        <div className="boxwrapper">
-          <div className="box whitebg">
-            <table>
-              <tbody>
+      <div className="boxwrapper">
+        <div className="box whitebg">
+          <h1>Universal ratings (top 5)</h1>
+          <table>
+            <tbody>
               <tr><td>{this.state.universal[0]}</td><td>{this.state.lastRound[0]}</td></tr>
               <tr><td>{this.state.universal[1]}</td><td>{this.state.lastRound[1]}</td></tr>
               <tr><td>{this.state.universal[2]}</td><td>{this.state.lastRound[2]}</td></tr>
               <tr><td>{this.state.universal[3]}</td><td>{this.state.lastRound[3]}</td></tr>
             </tbody>
-            </table>
-          </div>
-          <div className="box whitebg">
+          </table>
+            </div>
+        <div className="box whitebg">
+            <h1 >Last round ratings (top 5)</h1>
             <table>
               <tbody>
-              <tr><td>{this.state.universal[0]}</td><td>{this.state.lastRound[0]}</td></tr>
-              <tr><td>{this.state.universal[1]}</td><td>{this.state.lastRound[1]}</td></tr>
-              <tr><td>{this.state.universal[2]}</td><td>{this.state.lastRound[2]}</td></tr>
-              <tr><td>{this.state.universal[3]}</td><td>{this.state.lastRound[3]}</td></tr>
-            </tbody>
+                <tr><td>{this.state.universal[0]}</td><td>{this.state.lastRound[0]}</td></tr>
+                <tr><td>{this.state.universal[1]}</td><td>{this.state.lastRound[1]}</td></tr>
+                <tr><td>{this.state.universal[2]}</td><td>{this.state.lastRound[2]}</td></tr>
+                <tr><td>{this.state.universal[3]}</td><td>{this.state.lastRound[3]}</td></tr>
+              </tbody>
             </table>
           </div>
         </div>
-      </div>
     );
   }
 }
