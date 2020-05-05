@@ -8,8 +8,7 @@
 # User-specific stuff
 target
 workspace.xml
-*.iml
-.idea/
+.idea
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
@@ -100,6 +99,7 @@ fabric.properties
 # User-specific stuff
 
 # Generated files
+/WebSite/node_modules/
 
 # Sensitive or high-churn files
 
@@ -150,3 +150,4 @@ fabric.properties
 # Markdown Navigator plugin
 
 # End of https://www.gitignore.io/api/clion,intellij
+
