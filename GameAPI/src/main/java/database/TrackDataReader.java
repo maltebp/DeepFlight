@@ -9,7 +9,7 @@ public class TrackDataReader {
 
 
     /**
-     * Loads Track block data from a test file in the 'testtrackdata' folder
+     * Loads tracks block data from a test file in the 'testtrackdata' folder
      */
     public static byte[] getTrackData(String filename){
 
@@ -31,7 +31,7 @@ public class TrackDataReader {
 
             long fileSize = new File(path).length();
 
-            System.out.println("\nLoading Track Data");
+            System.out.println("\nLoading tracks Data");
             System.out.println("File: " + path);
             System.out.println("Size: " + fileSize + " bytes");
 
