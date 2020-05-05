@@ -44,27 +44,38 @@ function FilterDownload(props) {
   const token = props.token;
   const today = new Date();
   //console.log("Token in FilterDownload: " + JSON.stringify(token));
-  if (token === 'undefined'
-    || token === null) {
-    return (<Login handleState={props.handleState} message="Login to download game"/>); // Pass method to handle state as props
+  if (token === null
+    || token === undefined) {
+    return (<Login handleState={props.handleState} message="Please log in to download game"/>); // Pass method to handle state as props
   } else if (today > new Date(jwt.decode(token).exp * 1000)){ // jwt deals in seconds, so * 1000
-    return (<Login handleState={props.handleState} message="Session expired. Log in again"/>); // Pass method to handle state as props
+    return (<Login handleState={props.handleState} message="Session expired. Please log in again"/>); // Pass method to handle state as props
   } else {
     return (<DownloadBox />)
   }
 }
 
 class DownloadBox extends React.Component {
-  DownloadGame() {
-    console.log("Starting download")
-  }
+
+constructor(props) {
+    super(props);
+    this.state = {isToggleOn: true};
+    this.handleDownload = this.handleDownload.bind(this);  }
+
+    handleDownload() {
+        this.setState(state => ({ isToggleOn: false }));
+        console.log("BAAA")
+        alert("Starting download");
+        this.setState(state => ({ isToggleOn: true }));
+    }
+
   render() {
     return (
       <div className="box">
         <h2>Hello, user!</h2>
         <p>You are logged in and can download the game from here.</p>
         <p>Just a dummy file, no need to install it :-)</p>
-        <a className="buttonLink" href="http://mirrors.dotsrc.org/linuxmint-cd/stable/19.3/linuxmint-19.3-cinnamon-64bit.iso">Download Deep Flight</a>
+        <button type="button" disabled={!this.state.isToggleOn} onClick={this.handleDownload}>{this.state.isToggleOn ? 'Download' : 'Please wait...'}</button>
+        <a className="buttonLink" href="http://mirrors.dotsrc.org/linuxmint-cd/stable/19.3/linuxmint-19.3-cinnamon-64bit.iso">Link as button</a>
         <p>Size: 8 MB</p>
       </div>
     );
