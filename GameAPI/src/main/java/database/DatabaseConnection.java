@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoClient;
@@ -52,7 +52,7 @@ public class DatabaseConnection {
 
 
     /**
-     * Enables test mode for future Database.DatabaseDAO objects, such that they will
+     * Enables test mode for future database.DatabaseDAO objects, such that they will
      * use a temporary test database.
      * The test database name is DB_NAME+_test, and it's recreated when this method
      * is called. */

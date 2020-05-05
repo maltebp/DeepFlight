@@ -1,10 +1,9 @@
-package Database;
+package database;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
-import model.Planet;
 import model.Track;
 
 import java.util.List;
@@ -63,7 +62,7 @@ public List<Track> getAllTracks(){
 
 
     /**
-     * Enables test mode for future Database.DatabaseDAO objects, such that they will
+     * Enables test mode for future database.DatabaseDAO objects, such that they will
      * use a temporary test database.
      * The test database name is DB_NAME+_test, and it's recreated when this method
      * is called. */

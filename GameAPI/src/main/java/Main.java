@@ -1,6 +1,6 @@
 
-import Database.DatabaseConnection;
-import Database.DatabaseDAO;
+import database.DatabaseConnection;
+import database.DatabaseDAO;
 
 import java.net.UnknownHostException;
 
