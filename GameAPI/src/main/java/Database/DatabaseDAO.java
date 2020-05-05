@@ -1,14 +1,15 @@
-package Database;
+package database;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
-import model.tracks;
+import model.Planet;
+import model.Track;
 
 import java.util.List;
 
-public class DatabaseDAO {
+public class    DatabaseDAO {
 
     private Datastore database;
 
@@ -23,27 +24,21 @@ public class DatabaseDAO {
     }
 
 
-public tracks getAllTracks(){
+public List<Track> getAllTracks(){
 
-    Query<tracks> query = DatabaseConnection.getInstance().find(tracks.class);
-    List<tracks> trac = query.asList();
-    for(int i = 0; i<trac.size();i++){
-        System.out.println(trac.get(i).getName());
-                System.out.println(trac.get(i).getPlanetId());
-        System.out.println(trac.get(i).getSeed());
-        for(int j = 0; j<trac.get(i).getTimes().size();j++){
-            System.out.println(trac.get(i).getTimes().get(j));
-        }
-    }
-    return null;
+    Query<Track> query = DatabaseConnection.getInstance().find(Track.class);
+    return query.asList();
 }
+
+
+
 
 
 
     /** String enum identifying a Collection within the Mongo database */
   public enum Collection {
         PLANETS("planets"),
-        TRACKS("tracks"),
+        TRACKS("Track"),
         ROUNDS("rounds"),
         TRACKDATA("trackdata");
 
@@ -88,10 +83,10 @@ public tracks getAllTracks(){
         db.addPlanet(new Planet(3, "Lupto", new int[]{150,50,100}));
         db.addPlanet(new Planet(4, "Aerth", new int[]{255,150,125}));
 
-        db.addTrack(new tracks(1, "ABCD123", 1, 1000));
-        db.addTrack(new tracks(2, "ASDJ685", 2, 3000));
-        db.addTrack(new tracks(3, "PIDF564", 3, 2000));
-        db.addTrack(new tracks(4, "OKGJ884", 4, 1500));
+        db.addTrack(new Track(1, "ABCD123", 1, 1000));
+        db.addTrack(new Track(2, "ASDJ685", 2, 3000));
+        db.addTrack(new Track(3, "PIDF564", 3, 2000));
+        db.addTrack(new Track(4, "OKGJ884", 4, 1500));
 
         db.addTrackBlockData( 1, TrackDataReader.getTrackData("smar.dftbd") );
         db.addTrackBlockData( 2, TrackDataReader.getTrackData("turnsa.dftbd") );

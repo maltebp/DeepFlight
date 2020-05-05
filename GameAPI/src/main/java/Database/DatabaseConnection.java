@@ -1,10 +1,13 @@
-package Database;
+package database;
 
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoClient;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 
+import model.Planet;
+import model.Round;
+import model.Track;
 
 import java.net.UnknownHostException;
 import java.util.HashSet;
@@ -30,7 +33,9 @@ public class DatabaseConnection {
         MongoClientURI uri = new MongoClientURI(DB_SERVER_URL);
         com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(uri);
         HashSet<Class> classes = new HashSet<>();
-        classes.add(tracks.class);
+        classes.add(Track.class);
+        classes.add(Planet.class);
+        classes.add(Round.class);
         Morphia m = new Morphia(classes);
         dbName = DB_NAME + (testMode ? "_test" : "");
         handler = m.createDatastore(mongoClient, dbName);
@@ -47,7 +52,7 @@ public class DatabaseConnection {
 
 
     /**
-     * Enables test mode for future Database.DatabaseDAO objects, such that they will
+     * Enables test mode for future database.DatabaseDAO objects, such that they will
      * use a temporary test database.
      * The test database name is DB_NAME+_test, and it's recreated when this method
      * is called. */

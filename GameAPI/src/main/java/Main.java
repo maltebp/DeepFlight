@@ -8,8 +8,8 @@ public class Main {
 
     public static void main(String[] args) throws UnknownHostException {
         DatabaseConnection.enableTestMode();
-        Database.DatabaseDAO db = new Database.DatabaseDAO();
-        db.getAllTracks();
+/*        Database.DatabaseDAO db = new Database.DatabaseDAO();
+        db.getAllTracks();*/
 
         TestGameAPI testGameAPI = new TestGameAPI();
         //testGameAPI.start();

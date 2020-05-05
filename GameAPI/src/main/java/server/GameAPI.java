@@ -1,6 +1,5 @@
 package server;
 
-import database.DatabaseConnector;
 import io.javalin.Javalin;
 import io.javalin.core.util.Header;
 import io.javalin.plugin.openapi.annotations.ContentType;
@@ -56,7 +55,7 @@ public class GameAPI {
                     context.method(), context.url(), context.body());
         });
 
-        // Returns all planets
+      /*  // Returns all planets
         server.get("/planets", context -> {
             DatabaseConnector db = DatabaseConnector.getInstance();
 
@@ -73,10 +72,11 @@ public class GameAPI {
 
             db.close();
         });
+*/
 
 
 
-
+/*
 
 
         server.get("/track/:trackid/blockdata", context -> {
@@ -109,6 +109,7 @@ public class GameAPI {
             context.status(200);
 
         });
+*/
 
 
 
