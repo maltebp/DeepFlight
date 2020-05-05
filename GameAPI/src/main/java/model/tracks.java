@@ -2,48 +2,50 @@ package model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import dev.morphia.annotations.Id;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.io.IOException;
+import java.util.List;
+import javax.persistence.*;
 
-public class Track {
 
-    private int id;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+public class tracks {
+    @Id
+    private ObjectId _id;
 
     private String name;
 
-    private int planetId;
+    private String planetId;
 
-    private int length;
+    private String seed;
 
-    public int getId() {
-        return id;
-    }
+    private List<String> times;
 
-    public String getName() {
-        return name;
-    }
 
-    public int getPlanetId() {
-        return planetId;
-    }
 
-    public int getLength() {
-        return length;
-    }
+
+
+
+
+
 
     // Default constructor is required for JSON serialization
-    public Track(){ }
 
-    public Track(int id, String name, int planetId, int length) {
-        this.id = id;
-        this.name = name;
-        this.planetId = planetId;
-        this.length = length;
-    }
+
+
+
 
 
 
@@ -53,25 +55,25 @@ public class Track {
     }
 
 
-    public static Track fromDocument(Document document) {
+    public static tracks fromDocument(Document document) {
         JSONObject jsonObject = new JSONObject(document.toJson());
         jsonObject.put("id", jsonObject.get("_id"));
         jsonObject.remove("_id");
 
         try{
-            return new ObjectMapper().readValue(jsonObject.toString(), Track.class);
+            return new ObjectMapper().readValue(jsonObject.toString(), tracks.class);
         }catch(IOException e){
             e.printStackTrace();
             return null;
         }
     }
-
+/*
     public Document toDocument(){
         JSONObject json = new JSONObject(this);
         json.put("_id", id);
         json.remove("id");
         return Document.parse(json.toString());
     }
-
+*/
 
 }

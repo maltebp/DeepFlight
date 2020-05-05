@@ -1,12 +1,14 @@
 package Database;
 
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
+
+import model.tracks;
 
 import java.net.UnknownHostException;
+import java.util.HashSet;
 
 public class DatabaseConnection {
     private static final String DB_NAME = "gamedb";
@@ -17,31 +19,33 @@ public class DatabaseConnection {
 
     private static boolean testMode = true;
 
-    private MongoClient client;
-    private MongoDatabase database;
+
+    //private MongoDatabase database;
+    private static MongoClient client;
+    private static DatabaseConnection instance = new DatabaseConnection();
+    private static Datastore handler;
 
 
-    private static DatabaseConnection ourInstance = new DatabaseConnection();
-
-    public static DatabaseConnection getInstance() {
-        return ourInstance;
-    }
 
     private DatabaseConnection() {
-
+        MongoClientURI uri = new MongoClientURI(DB_SERVER_URL);
+        com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(uri);
+        HashSet<Class> classes = new HashSet<>();
+        classes.add(tracks.class);
+        Morphia m = new Morphia(classes);
         dbName = DB_NAME + (testMode ? "_test" : "");
-
-        MongoClient mongoClient = MongoClients.create(DB_SERVER_URL);
-        database = mongoClient.getDatabase(dbName);
-
+        handler = m.createDatastore(mongoClient, dbName);
         //client = createClient();
         // database = client.getDatabase(dbName);
     }
 
-
-    public MongoDatabase getDatabase(){
-        return database;
+    public static Datastore getInstance(){
+        return handler;
     }
+
+
+
+
 
     /**
      * Enables test mode for future Database.DatabaseDAO objects, such that they will

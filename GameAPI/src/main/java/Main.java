@@ -9,10 +9,12 @@ public class Main {
 
     public static void main(String[] args) throws UnknownHostException {
         DatabaseConnection.enableTestMode();
+        DatabaseDAO db = new DatabaseDAO();
+db.getAllTracks();
 
-
-        GameAPI gameAPI = new GameAPI();
-        gameAPI.start();
+        TestGameAPI testGameAPI = new TestGameAPI();
+        //testGameAPI.start();
+    //gameAPI.start();
 
     }
 
