@@ -8,7 +8,9 @@ from source.Database import databasecontroller
 from source.model.planet import *
 
 _UPDATE_FREQUENCY = 30 # seconds
-_ROUND_LENGTH = 1440 # Minutes
+_ROUND_LENGTH = 1 # Minutes
+_CLEAR_DATABSE_ON_START = True
+_TEST_MODE = True
 
 # Number of rounds to base the universal ranking upon
 _UNIVERSAL_RANKING_ROUND_COUNT  = 3
@@ -179,7 +181,7 @@ def startUpdater():
     print("\nSTARTING UNIVERSE UPDATER!")
 
     # TODO: Remove test flag, when ready
-    databasecontroller.initializeDatabase(testMode=True, clearDatabase=True)
+    databasecontroller.initializeDatabase(testMode=_TEST_MODE, clearDatabase=_CLEAR_DATABSE_ON_START)
 
     while True:
         updateUniverse()
