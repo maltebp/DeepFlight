@@ -1,61 +1,36 @@
+package Database;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.Mongo;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import dev.morphia.Datastore;
-import dev.morphia.Morphia;
-import javafx.application.Platform;
 import model.Planet;
 import model.Round;
 import model.Track;
 import org.bson.Document;
 import org.bson.types.Binary;
-import org.jongo.Jongo;
-import org.mongojack.JacksonMongoCollection;
 
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
-public class DatabaseConnector {
+public class DatabaseDAO {
 
-
-
-    // TODO: Fix password in code
-    private static final String DB_NAME = "gamedb";
-    private static final String DB_USER = "universeupdater";
-    private static final String DB_PASSWORD = "deepflightisawesome";
-    private static final String DB_SERVER_URL = "mongodb+srv://"+DB_USER+":"+DB_PASSWORD+"@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority";
-private static String dbName = "";
-
-    private static boolean testMode = true;
-
-    private MongoClient client;
     private MongoDatabase database;
 
-    public DatabaseConnector() throws UnknownHostException {
-        dbName = DB_NAME + (testMode ? "_test" : "");
+    // TODO: Fix password in code
+    private static DatabaseConnection connection = DatabaseConnection.getInstance();
 
-        MongoClient mongoClient = MongoClients.create(DB_SERVER_URL);
-        MongoDatabase database = mongoClient.getDatabase(dbName);
-        //client = createClient();
-       // database = client.getDatabase(dbName);
+    public DatabaseDAO(){
+        database = connection.getDatabase();
 
-        MongoCollection<Document> brugere = database.getCollection("brugere");
-        System.out.println(database.getCollection("users").count());
-
-
+        getRounds();
 
     }
+
+
 
 
     public void addPlanet(Planet planet){
@@ -155,7 +130,7 @@ private static String dbName = "";
 
     public List<Round> getRounds(){
         MongoCollection<Document> collection = database.getCollection(Collection.ROUNDS.toString());
-
+        database.getCollection(Collection.ROUNDS.name);
         List<Round> rounds = new LinkedList<>();
         for( Document round : collection.find() )
             rounds.add(Round.fromDocument(round));
@@ -164,14 +139,6 @@ private static String dbName = "";
     }
 
 
-
-    public void close(){
-        if( client != null ) {
-            // Closes client and database
-            client.close();
-            client = null;
-        }
-    }
 
 
     /** String enum identifying a Collection within the Mongo database */
@@ -202,21 +169,21 @@ private static String dbName = "";
 
 
     /**
-     * Enables test mode for future DatabaseConnector objects, such that they will
+     * Enables test mode for future Database.DatabaseDAO objects, such that they will
      * use a temporary test database.
      * The test database name is DB_NAME+_test, and it's recreated when this method
      * is called. */
-   public static void enableTestMode() throws UnknownHostException {
+  /* public static void enableTestMode() throws UnknownHostException {
         testMode = true;
         /*MongoClient client = createClient();
         client.getDatabase(DB_NAME + "_test").drop();
         client.close();
-        setupTestDatabase();*/
+        setupTestDatabase();
     }
 
     /** Adds test data to test database */
-    private static void setupTestDatabase() throws UnknownHostException {
-        DatabaseConnector db = new DatabaseConnector();
+   /* private static void setupTestDatabase() throws UnknownHostException {
+        DatabaseDAO db = new DatabaseDAO();
         db.addPlanet(new Planet(1, "Smar", new int[]{123,150,111}));
         db.addPlanet(new Planet(2, "Turnsa", new int[]{200,100,50}));
         db.addPlanet(new Planet(3, "Lupto", new int[]{150,50,100}));
@@ -235,6 +202,6 @@ private static String dbName = "";
         db.addRound(new Round(1, new int[]{1,2,3,4}, System.currentTimeMillis(), System.currentTimeMillis() + 86400000));
 
         db.close();
-    }
+    }*/
 
 }

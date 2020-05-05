@@ -10,5 +10,8 @@
         <module name="gameapi" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gameapi" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

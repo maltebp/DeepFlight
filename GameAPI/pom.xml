@@ -88,12 +88,6 @@
         -->
 
         <dependency>
-            <groupId>org.mongojack</groupId>
-            <artifactId>mongojack</artifactId>
-            <version>3.0.1</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.jongo</groupId>
             <artifactId>jongo</artifactId>
             <version>0.3</version>
@@ -137,7 +131,24 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.8.0-beta4</version>
         </dependency>
+        <dependency>
+            <groupId>org.jongo</groupId>
+            <artifactId>jongo</artifactId>
+            <version>1.4.0</version>
+        </dependency>
 
+<!--MORPHIA-->
+
+            <dependency>
+                <groupId>dev.morphia.morphia</groupId>
+                <artifactId>core</artifactId>
+                <version>1.5.8</version>
+            </dependency>
+        <dependency>
+            <groupId>org.mongojack</groupId>
+            <artifactId>mongojack</artifactId>
+            <version>3.0.1</version>
+        </dependency>
 
     </dependencies>
 </project>

@@ -1,3 +1,4 @@
+import Database.DatabaseDAO;
 import io.javalin.Javalin;
 import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Planet;
@@ -7,6 +8,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
+import java.net.UnknownHostException;
 
 
 public class GameAPI {
@@ -17,11 +19,12 @@ public class GameAPI {
     private Javalin server = null;
 
 
-    public void start(){
+    public void start() throws UnknownHostException {
         if( server != null ){
             System.out.println("WARNING: Server isn't stopped before starting");
             stop();
         }
+        DatabaseDAO db = new DatabaseDAO();
 
         server = Javalin.create(config -> {
             config.contextPath = URL_ROOT;
@@ -49,11 +52,9 @@ public class GameAPI {
             try{
                 int planetId = Integer.parseInt(context.pathParam("id"));
 
-                DatabaseConnector db = new DatabaseConnector();
+                DatabaseDAO db = new DatabaseDAO();
 
                 Planet planet = db.getPlanetMongoJack(planetId);
-
-                db.close();
 
                 context.result(planet.toString());
                 context.status(HttpStatus.OK_200);
@@ -68,7 +69,7 @@ public class GameAPI {
 
         // Returns all planets
         server.get("/planets", context -> {
-            DatabaseConnector db = new DatabaseConnector();
+            DatabaseDAO db = new DatabaseDAO();
 
             JSONArray planets = new JSONArray();
             for( Planet planet : db.getPlanets() ){
@@ -81,12 +82,12 @@ public class GameAPI {
             context.contentType(ContentType.JSON);
             context.status(200);
 
-            db.close();
+            //db.close();
         });
 
         // Get user
         server.get("/round/current", context -> {
-            DatabaseConnector db = new DatabaseConnector();
+            DatabaseDAO db = new DatabaseDAO();
 
             // Find the current round (using start and end time
             long currentTime = System.currentTimeMillis();
@@ -129,7 +130,7 @@ public class GameAPI {
             response.remove("trackIds");
             response.put("tracks", jsonTracks);
 
-            db.close();
+            //db.close();
 
             context.result(response.toString());
             context.status(200);
@@ -139,7 +140,7 @@ public class GameAPI {
 
         server.get("/track/:trackid/blockdata", context -> {
 
-            DatabaseConnector db = new DatabaseConnector();
+            DatabaseDAO db = new DatabaseDAO();
 
             int trackId;
             try{
@@ -160,7 +161,7 @@ public class GameAPI {
 
 
 
-            db.close();
+            //db.close();
 
             context.result(new ByteArrayInputStream(trackData));
             context.contentType("application");
@@ -186,10 +187,5 @@ public class GameAPI {
 
 
         });
-
     }
-
-
-
-
 }

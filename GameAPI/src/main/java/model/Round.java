@@ -80,7 +80,7 @@ public class Round {
         JSONObject baseJson = new JSONObject(document.toJson());
 
         JSONObject adjustedJson = new JSONObject();
-        adjustedJson.put("roundNumber", baseJson.getInt("_id"));
+        adjustedJson.put("roundNumber", baseJson.get("_id"));
         adjustedJson.put("trackIds", baseJson.get("trackIds"));
         adjustedJson.put("startDate", document.getLong("startDate"));
         adjustedJson.put("endDate", document.getLong("endDate"));
