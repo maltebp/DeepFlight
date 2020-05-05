@@ -2,12 +2,11 @@ package server;
 
 import database.DatabaseConnector;
 import io.javalin.Javalin;
-import io.javalin.core.util.Header;
 import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Planet;
-import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import server.services.DownloadService;
 import server.services.UserService;
 
 import java.io.ByteArrayInputStream;
@@ -19,7 +18,6 @@ public class GameAPI {
     private static final int    PORT     = 10000;
 
     private Javalin server = null;
-
 
     public void start(){
         if( server != null ){
@@ -74,11 +72,6 @@ public class GameAPI {
             db.close();
         });
 
-
-
-
-
-
         server.get("/track/:trackid/blockdata", context -> {
 
             DatabaseConnector db = DatabaseConnector.getInstance();
@@ -100,8 +93,6 @@ public class GameAPI {
                 return;
             }
 
-
-
             db.close();
 
             context.result(new ByteArrayInputStream(trackData));
@@ -110,16 +101,10 @@ public class GameAPI {
 
         });
 
-
-
-
-
-
         server.get("", context -> {
             context.status(200);
             context.result("server.GameAPI is up and running!");
         });
-
 
         // Get Track
         server.get("/track/:trackid", context -> {
@@ -127,11 +112,11 @@ public class GameAPI {
 
         });
 
-
         new UserService(server);
+        //server.get("/download", ctx->{
+        //    ctx.status(200);
+        //    ctx.result("Hooray!");
+        //});
+        new DownloadService(server);
     }
-
-
-
-
 }
