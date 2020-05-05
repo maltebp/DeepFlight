@@ -15,5 +15,9 @@
     "gametext": "The game DeepFlight was created by Malte Pedersen as part of an introductory course in C#, and is inspired by 80's 'cave flier' games. As as player you explore different caves on the four planets Aerth, Turnsa, Lupto and Smar. The planets have different color themes, but also different properties when it comes to the shape and difficulty. Every day, new caves are created, so if you want to keep your overall high score, there's no time to rest.",
     "projectheader": "The project",
     "projecttext": "This site and the game are part of separate projects at the Technical University of Denmark, spring 2020."
+  },
+  "login": {
+    "standard": "Please log in to download game.",
+    "loggedout": "Session expired. Please log in again"
   }
 }
