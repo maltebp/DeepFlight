@@ -115,7 +115,6 @@ public class Planet {
         }
     }
 
-
     public Document toDocument(){
         JSONObject json = new JSONObject(this);
         json.put("_id", id);

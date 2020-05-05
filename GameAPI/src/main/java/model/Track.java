@@ -35,21 +35,7 @@ public class Track {
 
     private HashMap<String,Integer> times;
 
-
-
-
-
-
-
-
     // Default constructor is required for JSON serialization
-
-
-
-
-
-
-
 
     public JSONObject toJSON() throws JsonProcessingException {
         return new JSONObject(new ObjectMapper().writeValueAsString(this));

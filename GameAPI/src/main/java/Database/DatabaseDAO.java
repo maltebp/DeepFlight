@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
+import model.Planet;
 import model.Track;
 
 import java.util.List;
@@ -23,18 +24,14 @@ public class DatabaseDAO {
     }
 
 
-public Track getAllTracks(){
+public List<Track> getAllTracks(){
 
     Query<Track> query = DatabaseConnection.getInstance().find(Track.class);
-    List<Track> trac = query.asList();
-    for(int i = 0; i<trac.size();i++){
-        System.out.println(trac.get(i).getName());
-        System.out.println(trac.get(i).getPlanetId());
-        System.out.println(trac.get(i).getSeed());
-        System.out.println(trac.get(i).getTimes().values());
-    }
-    return null;
+    return query.asList();
 }
+
+
+
 
 
 

@@ -137,13 +137,13 @@
             <version>1.4.0</version>
         </dependency>
 
-<!--MORPHIA-->
+        <!--MORPHIA-->
 
-            <dependency>
-                <groupId>dev.morphia.morphia</groupId>
-                <artifactId>core</artifactId>
-                <version>1.5.8</version>
-            </dependency>
+        <dependency>
+            <groupId>dev.morphia.morphia</groupId>
+            <artifactId>core</artifactId>
+            <version>1.5.8</version>
+        </dependency>
         <dependency>
             <groupId>org.mongojack</groupId>
             <artifactId>mongojack</artifactId>
