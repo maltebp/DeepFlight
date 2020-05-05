@@ -104,6 +104,7 @@ button, form button, .buttonLink {
   margin-top: 10px;
   margin-bottom: 20px;
   font-family: 'Courier New', Courier, monospace;
+  text-decoration:none;
 }
 
 button:disabled {

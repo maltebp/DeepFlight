@@ -55,11 +55,15 @@ class Login extends Component {
                 //console.log("Token in child " + token);
                 console.log("Read from localStorage: \n" + localStorage.getItem("dftoken"));
                 this.handleParentState();
-                this.refs.btn.removeAttribute("disabled");
+                if (this.refs.btn !== null || this.refs.btn !== undefined) {
+                    this.refs.btn.removeAttribute("disabled");
+                }
             })
             .catch(error => {
                 console.log("axios login error", error);
-                if (this.refs.btn != null || this.refs.btn != undefined) {
+                alert("Login failed.")
+                localStorage.setItem("dftoken", null);
+                if (this.refs.btn !== null || this.refs.btn !== undefined) {
                     this.refs.btn.removeAttribute("disabled");
                 }
             });

@@ -99,6 +99,7 @@ fabric.properties
 # User-specific stuff
 
 # Generated files
+/WebSite/node_modules/
 
 # Sensitive or high-churn files
 
@@ -149,3 +150,4 @@ fabric.properties
 # Markdown Navigator plugin
 
 # End of https://www.gitignore.io/api/clion,intellij
+
