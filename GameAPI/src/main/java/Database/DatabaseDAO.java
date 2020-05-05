@@ -1,11 +1,15 @@
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
 import javafx.application.Platform;
 import model.Planet;
 import model.Round;
@@ -15,30 +19,42 @@ import org.bson.types.Binary;
 import org.jongo.Jongo;
 import org.mongojack.JacksonMongoCollection;
 
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DatabaseConnector {
 
-    private static final String DB_SERVER_URL = "mongodb://localhost:27017";
+
 
     // TODO: Fix password in code
     private static final String DB_NAME = "gamedb";
-    private static final String DB_USER = "game";
+    private static final String DB_USER = "universeupdater";
     private static final String DB_PASSWORD = "deepflightisawesome";
+    private static final String DB_SERVER_URL = "mongodb+srv://"+DB_USER+":"+DB_PASSWORD+"@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority";
+private static String dbName = "";
 
-    private static boolean testMode = false;
+    private static boolean testMode = true;
 
     private MongoClient client;
     private MongoDatabase database;
 
     public DatabaseConnector() throws UnknownHostException {
-        String dbName = DB_NAME + (testMode ? "_test" : "");
+        dbName = DB_NAME + (testMode ? "_test" : "");
 
-        client = createClient();
-        database = client.getDatabase(dbName);
+        MongoClient mongoClient = MongoClients.create(DB_SERVER_URL);
+        MongoDatabase database = mongoClient.getDatabase(dbName);
+        //client = createClient();
+       // database = client.getDatabase(dbName);
+
+        MongoCollection<Document> brugere = database.getCollection("brugere");
+        System.out.println(database.getCollection("users").count());
+
+
+
     }
 
 
@@ -60,10 +76,11 @@ public class DatabaseConnector {
     }
 
     public Planet getPlanetMongoJack(int planetId) {
-        JacksonMongoCollection<Planet> collection = JacksonMongoCollection.builder()
+       /* JacksonMongoCollection<Planet> collection = JacksonMongoCollection.builder()
                 .build(client, DB_NAME, Collection.PLANETS.toString(), Planet.class);
 
-        return collection.find(Filters.eq("_id",planetId)).first();
+        return collection.find(Filters.eq("_id",planetId)).first();*/
+       return null;
     }
 
     public List<Planet> getPlanets(){
@@ -189,12 +206,12 @@ public class DatabaseConnector {
      * use a temporary test database.
      * The test database name is DB_NAME+_test, and it's recreated when this method
      * is called. */
-    public static void enableTestMode() throws UnknownHostException {
+   public static void enableTestMode() throws UnknownHostException {
         testMode = true;
-        MongoClient client = createClient();
+        /*MongoClient client = createClient();
         client.getDatabase(DB_NAME + "_test").drop();
         client.close();
-        setupTestDatabase();
+        setupTestDatabase();*/
     }
 
     /** Adds test data to test database */
