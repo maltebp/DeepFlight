@@ -2,7 +2,7 @@ package server.services;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-
+import org.eclipse.jetty.http.HttpStatus;
 
 
 public class RankingsService {
@@ -13,18 +13,13 @@ public class RankingsService {
     }
 
 
-    public void getUniversalRankings(Context context) {
-
-        // Get all users from database
-        // Get ranking of all users
-
-
-
-        
+    private void getUniversalRankings(Context context) {
+        context.status(HttpStatus.NOT_IMPLEMENTED_501);
     }
 
-    public void getRoundRankings(Context context) {
 
+    private void getRoundRankings(Context context) {
+        context.status(HttpStatus.NOT_IMPLEMENTED_501);
     }
 
 }

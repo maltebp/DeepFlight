@@ -16,6 +16,7 @@ public class UserService {
 
     public UserService(Javalin server) {
 
+
         server.get("user/:username", context -> {
             getUser(context, false);
         });
@@ -29,13 +30,13 @@ public class UserService {
     }
 
 
-    public void getAllUsers(Context context){
+    private void getAllUsers(Context context){
         context.status(HttpStatus.NOT_IMPLEMENTED_501);
     }
 
 
 
-    public void getUser(Context context, boolean privateInfo){
+    private void getUser(Context context, boolean privateInfo){
 
         // TODO: Remove this once users are stored in Mongo database
         if( !privateInfo ){

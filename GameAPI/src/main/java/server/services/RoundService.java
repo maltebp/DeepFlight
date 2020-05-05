@@ -18,7 +18,16 @@ public class RoundService {
     public RoundService(Javalin server) {
 
         server.get("round/current", this::getCurrentRound );
+        server.get("round/:roundid", this::getCurrentRound );
 
+        // Potential resources
+        // server.get(round/:roundid);
+        // server.get("round/previous");
+    }
+
+
+    private void getRound(Context context){
+        context.status(HttpStatus.NOT_IMPLEMENTED_501);
     }
 
 
