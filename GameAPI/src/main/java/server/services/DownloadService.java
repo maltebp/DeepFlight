@@ -8,6 +8,7 @@ import kong.unirest.Unirest;
 import org.eclipse.jetty.http.HttpStatus;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,7 +58,7 @@ public class DownloadService {
         //for (int i = 0; i < bytes.length; i++) {
         //System.out.print((char) bArray[i]);
         //}
-        ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream(bytes);
         return stream;
     }
 }
