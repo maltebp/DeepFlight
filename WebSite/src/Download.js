@@ -46,9 +46,9 @@ function FilterDownload(props) {
   //console.log("Token in FilterDownload: " + JSON.stringify(token));
   if (token === null
     || token === undefined) {
-    return (<Login handleState={props.handleState} message="Please log in to download game"/>); // Pass method to handle state as props
+    return (<Login handleState={props.handleState} message={text.login.standard}/>); // Pass method to handle state as props
   } else if (today > new Date(jwt.decode(token).exp * 1000)){ // jwt deals in seconds, so * 1000
-    return (<Login handleState={props.handleState} message="Session expired. Please log in again"/>); // Pass method to handle state as props
+    return (<Login handleState={props.handleState} message={text.login.loggedout}/>); // Pass method to handle state as props
   } else {
     return (<DownloadBox />)
   }
@@ -67,7 +67,8 @@ constructor(props) {
 
 downloadGame(){
         // source: https://medium.com/@drevets/you-cant-prompt-a-file-download-with-the-content-disposition-header-using-axios-xhr-sorry-56577aa706d6
-        const url = "http://localhost:10000/gameapi/downloadgame";
+        //const url = "http://localhost:10000/gameapi/downloadgame";
+        const url = "htto://maltebp.dk:10000:10000/gameapi/downloadgame";
         axios({
               method: 'get',
               url: url,

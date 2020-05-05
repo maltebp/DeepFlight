@@ -13,9 +13,8 @@ import java.io.InputStream;
 import static org.eclipse.jetty.http.HttpStatus.*;
 
 public class DownloadGameService {
-    final String AUTH_URL = "http://localhost:7000/jwt/exchangeUser";
-    //final String AUTH_URL = "http://maltebp.dk:7000/jwt/exchangeUser";
-    final String FILE_PATH = "GameAPI/src/main/resources/deepflight.zip";
+    //final String AUTH_URL = "http://localhost:7000/jwt/exchangeUser";
+    final String AUTH_URL = "http://maltebp.dk:7000/jwt/exchangeUser";
     final String FILE_NAME = "DeepFlight.zip";
 
     public DownloadGameService(Javalin server) {
@@ -54,7 +53,6 @@ public class DownloadGameService {
     }
 
     private InputStream getFileAsStream(String pathString) throws IOException {
-
         // 1 TODO: DELETE
         //byte[] bytes = TrackDataReader.getTrackData(FILE_NAME);
         //ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
