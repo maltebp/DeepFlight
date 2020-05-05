@@ -63,19 +63,28 @@ constructor(props) {
     this.handleDownload = this.handleDownload.bind(this);  }
 
 downloadGame(){
+        // source: https://medium.com/@drevets/you-cant-prompt-a-file-download-with-the-content-disposition-header-using-axios-xhr-sorry-56577aa706d6
+        const url = "http://localhost:10000/gameapi/downloadgame";
         axios({
               method: 'get',
-              url: "http://tyrmi.com",
+              url: url,
               headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "http://tyrmi.com",
-                'Accept': 'application/json',
-                'Authorization': localStorage.getItem("dftoken")
+                'responseType': 'blob',
+                'Access-Control-Allow-Origin': url,
+                'Accept': 'application',
+                'Authorization': 'Bearer ' + localStorage.getItem("dftoken")
               },
               withCredentials: true
             })
               .then(response => {
-                console.log(response);
+                console.log(response.data);
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', 'DeepFlight.zip');
+                  document.body.appendChild(link);
+                  link.click();
               })
               .catch(error => {
                 console.log("axios download results error", error);
@@ -84,7 +93,7 @@ downloadGame(){
 
     handleDownload() {
         this.setState(state => ({ isToggleOn: false }));
-        alert("Starting download");
+        //alert("Starting download");
         this.downloadGame();
         this.setState(state => ({ isToggleOn: true }));
     }

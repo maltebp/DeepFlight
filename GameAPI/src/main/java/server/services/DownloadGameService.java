@@ -15,13 +15,13 @@ import java.nio.file.Paths;
 
 import static org.eclipse.jetty.http.HttpStatus.*;
 
-public class DownloadService {
+public class DownloadGameService {
     final String AUTH_URL = "http://localhost:7000/jwt/exchangeUser";
     //final String AUTH_URL = "http://maltebp.dk:7000/jwt/exchangeUser";
     final String FILE_PATH = "GameAPI/src/main/resources/DeepFlight.zip";
 
-    public DownloadService(Javalin server) {
-        server.get("/download", context -> {
+    public DownloadGameService(Javalin server) {
+        server.get("/downloadgame", context -> {
             downloadGame(context);
         });
     }
@@ -45,8 +45,9 @@ public class DownloadService {
         // Send file
         try {
             context.status(OK_200);
-            //context.bodyAsBytes();
-            context.result(getFileAsByteArrayInputStream(FILE_PATH));
+            context.header(Header.CONTENT_DISPOSITION, "attachment; filename=DeepFlight.zip");
+            context.result(getFileAsStream(FILE_PATH));
+            context.contentType("application");
         } catch (Exception e) {
             e.printStackTrace();
             context.status(INTERNAL_SERVER_ERROR_500);
@@ -54,7 +55,7 @@ public class DownloadService {
 
     }
 
-    private ByteArrayInputStream getFileAsByteArrayInputStream(String pathString) throws IOException {
+    private ByteArrayInputStream getFileAsStream(String pathString) throws IOException {
         Path path = Paths.get(pathString);
         byte[] bytes = Files.readAllBytes(path);
         ByteArrayInputStream stream = new ByteArrayInputStream(bytes);

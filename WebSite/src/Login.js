@@ -23,7 +23,6 @@ class Login extends Component {
     }
 
     handleSubmit(event) {
-        this.refs.btn.setAttribute("disabled", "disabled");
         const { username, password } = this.state;
         var bodyFormData = new FormData();
         bodyFormData.append('name', username);
@@ -55,16 +54,10 @@ class Login extends Component {
                 //console.log("Token in child " + token);
                 console.log("Read from localStorage: \n" + localStorage.getItem("dftoken"));
                 this.handleParentState();
-                if (this.refs.btn !== null || this.refs.btn !== undefined) {
-                    this.refs.btn.removeAttribute("disabled");
-                }
             })
             .catch(error => {
                 console.log("axios login error", error);
                 alert("Login failed.")
-                if (this.refs.btn !== null || this.refs.btn !== undefined) {
-                    this.refs.btn.removeAttribute("disabled");
-                }
             });
 
         event.preventDefault();

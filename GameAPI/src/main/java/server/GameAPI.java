@@ -6,7 +6,7 @@ import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Planet;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import server.services.DownloadService;
+import server.services.DownloadGameService;
 import server.services.UserService;
 
 import java.io.ByteArrayInputStream;
@@ -113,10 +113,6 @@ public class GameAPI {
         });
 
         new UserService(server);
-        //server.get("/download", ctx->{
-        //    ctx.status(200);
-        //    ctx.result("Hooray!");
-        //});
-        new DownloadService(server);
+        new DownloadGameService(server);
     }
 }
