@@ -5,12 +5,15 @@ import database.DatabaseConnector;
 import database.IDatabaseDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Planet;
 import model.Round;
 import model.Track;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class RoundService {
@@ -23,8 +26,22 @@ public class RoundService {
 
 
     private void getAllRounds(Context context){
-        
+        // TODO: Set correct database DAO
+        IDatabaseDAO db = null;
+
+        List<Round> rounds = db.getRounds();
+
+        JSONArray roundsJson = new JSONArray();
+        for( Round round : rounds ){
+            roundsJson.put(round.toJSON());
+        }
+
+
+        context.status(HttpStatus.OK_200);
+        context.contentType(ContentType.JSON);
+        context.result(roundsJson.toString());
     }
+
 
     private void getCurrentRound(Context context) {
         DatabaseConnector db = DatabaseConnector.getInstance();
@@ -49,7 +66,7 @@ public class RoundService {
             JSONObject response = current.toJSON();
 
             JSONArray jsonTracks = new JSONArray();
-            for( int trackId : current.getTrackIds() ){
+            for( String trackId : current.getTrackIds() ){
                 Track track = db.getTrack(trackId);
                 if( track == null )
                     // TODO: Implement proper error response

@@ -11,7 +11,6 @@ import model.Track;
 import org.bson.Document;
 import org.bson.types.Binary;
 
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,7 +58,7 @@ public class DatabaseConnector {
     }
 
 
-    public Planet getPlanet(int planetId) {
+    public Planet getPlanet(String planetId) {
         MongoCollection<Document> trackCollection = database.getCollection( Collection.PLANETS.toString() );
 
         Document responseObject = trackCollection.find(Filters.eq("_id", planetId)).first();
@@ -91,7 +90,7 @@ public class DatabaseConnector {
 
 
 
-    public Track getTrack(int trackId) {
+    public Track getTrack(String trackId) {
         MongoCollection<Document> trackCollection = database.getCollection( Collection.TRACKS.toString() );
 
         Document result = trackCollection.find(Filters.eq("_id", trackId)).first();
@@ -195,7 +194,7 @@ public class DatabaseConnector {
 
     /** Adds test data to test database */
     private static void setupTestDatabase() {
-        DatabaseConnector db = new DatabaseConnector();
+/*        DatabaseConnector db = new DatabaseConnector();
         db.addPlanet(new Planet(1, "Smar", new int[]{123,150,111}));
         db.addPlanet(new Planet(2, "Turnsa", new int[]{200,100,50}));
         db.addPlanet(new Planet(3, "Lupto", new int[]{150,50,100}));
@@ -211,9 +210,9 @@ public class DatabaseConnector {
         db.addTrackBlockData( 3, TrackDataReader.getTrackData("lupto.dftbd") );
         db.addTrackBlockData( 4, TrackDataReader.getTrackData("aerth.dftbd") );
 
-        db.addRound(new Round(1, new int[]{1,2,3,4}, System.currentTimeMillis(), System.currentTimeMillis() + 86400000));
+        db.addRound(new Round(1, new String[]{1,2,3,4}, System.currentTimeMillis(), System.currentTimeMillis() + 86400000));
 
-        db.close();
+        db.close();*/
     }
 
 }

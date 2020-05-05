@@ -2,8 +2,6 @@ package model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
 import org.bson.Document;
 import org.json.JSONObject;
 
@@ -16,7 +14,7 @@ public class Track {
 
     private String name;
 
-    private int planetId;
+    private String planetId;
 
     private HashMap<String, Integer> times;
 
@@ -40,11 +38,11 @@ public class Track {
         this.name = name;
     }
 
-    public int getPlanetId() {
+    public String getPlanetId() {
         return planetId;
     }
 
-    public void setPlanetId(int planetId) {
+    public void setPlanetId(String planetId) {
         this.planetId = planetId;
     }
 

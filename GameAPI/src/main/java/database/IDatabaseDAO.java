@@ -7,27 +7,27 @@ import model.Track;
 import model.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 public interface IDatabaseDAO {
 
-    Planet getPlanet(String userId);
+    Planet getPlanet(String userId) throws DatabaseException, NoSuchElementException;
 
-    Planet getPlanets();
+    List<Planet> getPlanets() throws DatabaseException;
 
-    User getUser(String userId);
+    User getUser(String userId) throws DatabaseException, NoSuchElementException;
 
-    List<User> getUsers();
+    List<User> getUsers() throws DatabaseException;
 
-    Track getTrack(String trackId);
+    Track getTrack(String trackId) throws DatabaseException, NoSuchElementException;
 
-    byte[] getTrackData(String trackId);
+    byte[] getTrackData(String trackId) throws DatabaseException, NoSuchElementException;
 
-    Round updateTrackTime(String trackId, String userId, int time);
+    boolean updateTrackTime(String trackId, String userId, int time) throws DatabaseException, NoSuchElementException;
 
-    Round getRounds();
+    List<Round> getRounds() throws DatabaseException;
 
-    Round getCurrentRound();
-
+    Round getCurrentRound() throws DatabaseException;
 
 }
