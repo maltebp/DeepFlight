@@ -13,15 +13,14 @@ import java.util.Arrays;
 
 public class Planet {
 
-    private int id;
+    private String id;
     private String name;
     private int[] color;
-
 
     // Default constructor must exist for JSON deserialize to work
     public Planet() {}
 
-    public Planet(int id, String name, int[] color) {
+    public Planet(String id, String name, int[] color) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -31,7 +30,7 @@ public class Planet {
     }
 
     // Getters required for JSON serialization
-    public int getId() {
+    public String getId() {
         return id;
     }
     public String getName() {
@@ -40,7 +39,7 @@ public class Planet {
     public int[] getColor() {
         return color;
     }
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
     public void setName(String name) {

@@ -14,9 +14,12 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class Round {
+
+    private String id;
 
     // Also used for ID
     private int roundNumber;
@@ -26,6 +29,8 @@ public class Round {
     private long startDate;
 
     private long endDate;
+
+    private HashMap<String, Double> rankings;
 
     // Public default constructor required for JSON serialization
     public Round() { }

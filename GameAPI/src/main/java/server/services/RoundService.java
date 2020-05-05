@@ -2,6 +2,7 @@ package server.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import database.DatabaseConnector;
+import database.IDatabaseDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import model.Planet;
@@ -16,20 +17,14 @@ public class RoundService {
 
 
     public RoundService(Javalin server) {
-
         server.get("round/current", this::getCurrentRound );
-        server.get("round/:roundid", this::getCurrentRound );
-
-        // Potential resources
-        // server.get(round/:roundid);
-        // server.get("round/previous");
+        server.get("round/all", this::getAllRounds );
     }
 
 
-    private void getRound(Context context){
-        context.status(HttpStatus.NOT_IMPLEMENTED_501);
+    private void getAllRounds(Context context){
+        
     }
-
 
     private void getCurrentRound(Context context) {
         DatabaseConnector db = DatabaseConnector.getInstance();

@@ -8,45 +8,53 @@ import org.bson.Document;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Track {
 
-    private int id;
+    private String id;
 
     private String name;
 
     private int planetId;
 
-    private int length;
+    private HashMap<String, Integer> times;
 
-    public int getId() {
+    // Default constructor is required for JSON serialization
+    public Track(){ }
+
+
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getPlanetId() {
         return planetId;
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    // Default constructor is required for JSON serialization
-    public Track(){ }
-
-    public Track(int id, String name, int planetId, int length) {
-        this.id = id;
-        this.name = name;
+    public void setPlanetId(int planetId) {
         this.planetId = planetId;
-        this.length = length;
     }
 
+    public HashMap<String, Integer> getTimes() {
+        return times;
+    }
 
-
+    public void setTimes(HashMap<String, Integer> times) {
+        this.times = times;
+    }
 
     public JSONObject toJSON() throws JsonProcessingException {
         return new JSONObject(new ObjectMapper().writeValueAsString(this));
