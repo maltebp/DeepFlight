@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Login from './Login';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import text from './text/text.json';
 
 class Download extends Component {
   constructor(props) {
@@ -15,8 +16,6 @@ class Download extends Component {
     this.setState({
       token: localStorage.getItem("dftoken"),
     })
-    //console.log("Handlin' state");
-    //console.log("Token in Parent: " + JSON.stringify(this.state.token))
   }
 
   render() {
@@ -25,13 +24,13 @@ class Download extends Component {
         <div className="boxwrapper longread">
           <FilterDownload token={this.state.token} handleState={this.handleState.bind(this)} />
           <div className="box whitebg">
-            <h2>Installation</h2>
-            <h3>Windows</h3>
-            <p>Instructions</p>
-            <h3>Mac</h3>
-            <p>Instructions</p>
-            <h3>Linux</h3>
-            <p>Instructions</p>
+            <h2>{text.installation.header}</h2>
+            <h3>{text.installation.winheader}</h3>
+            <p>{text.installation.wintext}</p>
+            <h3>{text.installation.macheader}</h3>
+            <p>{text.installation.mactext}</p>
+            <h3>{text.installation.linheader}</h3>
+            <p>{text.installation.lintext}</p>
           </div>
         </div>
       </div>
@@ -59,7 +58,11 @@ class DownloadBox extends React.Component {
 
 constructor(props) {
     super(props);
-    this.state = {isToggleOn: true};
+    this.state = {
+    isToggleOn: true,
+ message: "",
+ user: "pilot"
+    };
     this.handleDownload = this.handleDownload.bind(this);  }
 
 downloadGame(){
@@ -68,17 +71,19 @@ downloadGame(){
         axios({
               method: 'get',
               url: url,
+              responseType: 'arraybuffer',
               headers: {
-                'Content-Type': 'application/json',
-                'responseType': 'blob',
+                'Content-Type': 'application/zip',
+
                 'Access-Control-Allow-Origin': url,
-                'Accept': 'application',
+                'Accept': 'json/application',
                 'Authorization': 'Bearer ' + localStorage.getItem("dftoken")
               },
               withCredentials: true
             })
               .then(response => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
+              console.log(response)
+                const url = window.URL.createObjectURL(new Blob([response.data], {type: "octet/stream"}));
                   const link = document.createElement('a');
                   link.href = url;
                   link.setAttribute('download', 'DeepFlight.zip');
@@ -87,6 +92,7 @@ downloadGame(){
               })
               .catch(error => {
                 console.log("axios download results error", error);
+                this.setState(state => ({message: "Download failed."}));
               });
     }
 
@@ -94,17 +100,18 @@ downloadGame(){
         this.setState(state => ({ isToggleOn: false }));
         //alert("Starting download");
         this.downloadGame();
-        this.setState(state => ({ isToggleOn: true }));
+        setTimeout(() => {  this.setState(state => ({ isToggleOn: true })); }, 1000);
+
     }
 
   render() {
     return (
       <div className="box">
-        <h2>Hello, user!</h2>
+        <h2>Hello, {this.state.user}!</h2>
         <p>You are logged in and can download the game from here.</p>
         <p>Just a dummy file, no need to install it :-)</p>
         <button type="button" disabled={!this.state.isToggleOn} onClick={this.handleDownload}>{this.state.isToggleOn ? 'Download' : 'Please wait...'}</button>
-        <a className="buttonLink" href="http://mirrors.dotsrc.org/linuxmint-cd/stable/19.3/linuxmint-19.3-cinnamon-64bit.iso">Link as button</a>
+        <h1>{this.state.message}</h1>
         <p>Size: 8 MB</p>
       </div>
     );
