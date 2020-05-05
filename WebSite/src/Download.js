@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Login from './Login';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 
 class Download extends Component {
   constructor(props) {
@@ -61,10 +62,30 @@ constructor(props) {
     this.state = {isToggleOn: true};
     this.handleDownload = this.handleDownload.bind(this);  }
 
+downloadGame(){
+        axios({
+              method: 'get',
+              url: "http://tyrmi.com",
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "http://tyrmi.com",
+                'Accept': 'application/json',
+                'Authorization': localStorage.getItem("dftoken")
+              },
+              withCredentials: true
+            })
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.log("axios download results error", error);
+              });
+    }
+
     handleDownload() {
         this.setState(state => ({ isToggleOn: false }));
-        console.log("BAAA")
         alert("Starting download");
+        this.downloadGame();
         this.setState(state => ({ isToggleOn: true }));
     }
 

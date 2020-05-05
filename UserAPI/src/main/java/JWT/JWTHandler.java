@@ -5,9 +5,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javalinjwt.JWTGenerator;
@@ -45,23 +42,6 @@ public class JWTHandler {
                     .withClaim("user", jsonUser)
                     .withExpiresAt(expiration);
             return token.sign(alg);
-
-        //Remove password from userobject
-        user.adgangskode="";
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String jsonUser = mapper.writeValueAsString(user);
-
-        JWTCreator.Builder token = JWT.create()
-                .withClaim("user", jsonUser);
-        return token.sign(alg);
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    };
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
