@@ -9,6 +9,7 @@ class Login extends Component {
             name: "",
             password: "",
             loginErrors: "",
+            toggled: false,
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,7 +24,7 @@ class Login extends Component {
     }
 
     handleSubmit(event) {
-        this.refs.btn.setAttribute("disabled", "disabled");
+        this.setState(state => ({ toggled: true }));
         const { username, password } = this.state;
         var bodyFormData = new FormData();
         bodyFormData.append('name', username);
@@ -55,17 +56,12 @@ class Login extends Component {
                 //console.log("Token in child " + token);
                 console.log("Read from localStorage: \n" + localStorage.getItem("dftoken"));
                 this.handleParentState();
-                if (this.refs.btn !== null || this.refs.btn !== undefined) {
-                    this.refs.btn.removeAttribute("disabled");
-                }
+                setTimeout(() => {  this.setState(state => ({ toggled: false })); }, 1000);
             })
             .catch(error => {
                 console.log("axios login error", error);
                 alert("Login failed.")
-                localStorage.setItem("dftoken", null);
-                if (this.refs.btn !== null || this.refs.btn !== undefined) {
-                    this.refs.btn.removeAttribute("disabled");
-                }
+                setTimeout(() => {  this.setState(state => ({ toggled: false })); }, 200);
             });
 
         event.preventDefault();
@@ -95,7 +91,7 @@ class Login extends Component {
                         required
                     />
 
-                    <button ref="btn" type="Login">Login</button>
+                    <button ref="btn" disabled={this.state.toggled} type="Login">Login</button>
                 </form>
             </div>
         );
