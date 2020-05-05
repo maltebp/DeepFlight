@@ -2,6 +2,7 @@ package model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -10,20 +11,21 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import java.io.IOException;
-import java.util.List;
-import javax.persistence.*;
+import java.util.HashMap;
 
-
-
+@Getter
+@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-public class tracks {
+@Entity("tracks")
+public class Track {
     @Id
-    private ObjectId _id;
+    private String id;
 
     private String name;
 
@@ -31,8 +33,7 @@ public class tracks {
 
     private String seed;
 
-    private List<String> times;
-
+    private HashMap<String,Integer> times;
 
 
 
@@ -55,13 +56,13 @@ public class tracks {
     }
 
 
-    public static tracks fromDocument(Document document) {
+    public static Track fromDocument(Document document) {
         JSONObject jsonObject = new JSONObject(document.toJson());
         jsonObject.put("id", jsonObject.get("_id"));
         jsonObject.remove("_id");
 
         try{
-            return new ObjectMapper().readValue(jsonObject.toString(), tracks.class);
+            return new ObjectMapper().readValue(jsonObject.toString(), Track.class);
         }catch(IOException e){
             e.printStackTrace();
             return null;
