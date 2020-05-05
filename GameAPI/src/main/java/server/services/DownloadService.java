@@ -40,23 +40,23 @@ public class DownloadService {
             System.out.println(response);
             context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
             return;
-        } else {
-            try {
-                context.status(OK_200);
-                context.result(getFileAsByteArrayInputStream(FILE_PATH));
-            } catch (Exception e) {
-                e.printStackTrace();
-                context.status(INTERNAL_SERVER_ERROR_500);
-            }
         }
+
+        // Send file
+        try {
+            context.status(OK_200);
+            //context.bodyAsBytes();
+            context.result(getFileAsByteArrayInputStream(FILE_PATH));
+        } catch (Exception e) {
+            e.printStackTrace();
+            context.status(INTERNAL_SERVER_ERROR_500);
+        }
+
     }
 
     private ByteArrayInputStream getFileAsByteArrayInputStream(String pathString) throws IOException {
         Path path = Paths.get(pathString);
         byte[] bytes = Files.readAllBytes(path);
-        //for (int i = 0; i < bytes.length; i++) {
-        //System.out.print((char) bArray[i]);
-        //}
         ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
         return stream;
     }

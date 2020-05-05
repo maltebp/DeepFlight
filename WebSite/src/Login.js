@@ -62,7 +62,6 @@ class Login extends Component {
             .catch(error => {
                 console.log("axios login error", error);
                 alert("Login failed.")
-                localStorage.setItem("dftoken", null);
                 if (this.refs.btn !== null || this.refs.btn !== undefined) {
                     this.refs.btn.removeAttribute("disabled");
                 }
