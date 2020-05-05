@@ -54,8 +54,8 @@ public class Track {
         this.times = times;
     }
 
-    public JSONObject toJSON() throws JsonProcessingException {
-        return new JSONObject(new ObjectMapper().writeValueAsString(this));
+    public JSONObject toJSON(){
+        return new JSONObject(this);
     }
 
 

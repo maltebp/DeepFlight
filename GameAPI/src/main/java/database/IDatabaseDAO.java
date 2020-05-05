@@ -1,6 +1,5 @@
 package database;
 
-import com.mongodb.MongoQueryException;
 import model.Planet;
 import model.Round;
 import model.Track;
@@ -12,11 +11,13 @@ import java.util.NoSuchElementException;
 
 public interface IDatabaseDAO {
 
-    Planet getPlanet(String userId) throws DatabaseException, NoSuchElementException;
+    Planet getPlanet(String planetId) throws DatabaseException, NoSuchElementException;
 
     List<Planet> getPlanets() throws DatabaseException;
 
     User getUser(String userId) throws DatabaseException, NoSuchElementException;
+
+    User getUserFromUsername(String username) throws DatabaseException, NoSuchElementException;
 
     List<User> getUsers() throws DatabaseException;
 

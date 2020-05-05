@@ -58,8 +58,8 @@ public class Planet {
                 '}';
     }
 
-    public JSONObject toJSON() throws JsonProcessingException {
-        return new JSONObject(new ObjectMapper().writeValueAsString(this));
+    public JSONObject toJSON() {
+        return new JSONObject(this);
     }
 
     public static Planet fromMongoObject(DBObject object) {

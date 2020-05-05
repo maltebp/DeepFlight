@@ -1,19 +1,17 @@
 package server.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import database.DatabaseConnector;
+import database.DatabaseException;
 import database.IDatabaseDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.ContentType;
-import model.Planet;
 import model.Round;
-import model.Track;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
 
 
 public class RoundService {
@@ -26,23 +24,54 @@ public class RoundService {
 
 
     private void getAllRounds(Context context){
-        // TODO: Set correct database DAO
-        IDatabaseDAO db = null;
+        try{
+            // TODO: Set correct database DAO
+            IDatabaseDAO db = null;
+            List<Round> rounds = db.getRounds();
 
-        List<Round> rounds = db.getRounds();
+            // Convert to JSON List
+            JSONArray roundsJson = new JSONArray();
+            for( Round round : rounds ){
+                roundsJson.put(round.toJSON());
+            }
 
-        JSONArray roundsJson = new JSONArray();
-        for( Round round : rounds ){
-            roundsJson.put(round.toJSON());
+            context.status(HttpStatus.OK_200);
+            context.contentType(ContentType.JSON);
+            context.result(roundsJson.toString());
+
+        }catch(DatabaseException e){
+            e.printStackTrace();
+            context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+            context.contentType("text/plain");
+            context.result("An error occured when accessing the database");
         }
-
-
-        context.status(HttpStatus.OK_200);
-        context.contentType(ContentType.JSON);
-        context.result(roundsJson.toString());
     }
 
 
+    private void getCurrentRound(Context context){
+        try{
+            // TODO: Set the correct DatabaseDAO
+            IDatabaseDAO db = null;
+            Round round = db.getCurrentRound();
+            context.result(round.toJSON().toString());
+            context.contentType(ContentType.JSON);
+            context.status(HttpStatus.OK_200);
+
+        }catch(NoSuchElementException e){
+            context.status(HttpStatus.NOT_FOUND_404);
+            context.result("No round is currently active");
+            context.contentType("text/plain");
+
+        }catch(DatabaseException e){
+            e.printStackTrace();
+            context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+            context.contentType("text/plain");
+            context.result("An error occured when accessing the database");
+
+        }
+    }
+
+/*
     private void getCurrentRound(Context context) {
         DatabaseConnector db = DatabaseConnector.getInstance();
 
@@ -99,7 +128,7 @@ public class RoundService {
 
 
 
-    }
+    }*/
 
 
 }
