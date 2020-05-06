@@ -69,7 +69,8 @@ public List<Track> getAllTracks(){
 
     @Override
     public List<User> getUsers() throws DatabaseException {
-        return null;
+        Query<User> query = DatabaseConnection.getInstance().find(User.class);
+        return query.asList();
     }
 
     @Override
