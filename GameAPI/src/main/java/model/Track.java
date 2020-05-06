@@ -2,6 +2,7 @@ package model;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 @Entity("tracks")
 public class Track {
     @Id
-    private String id;
+    private ObjectId id;
 
     private String name;
 

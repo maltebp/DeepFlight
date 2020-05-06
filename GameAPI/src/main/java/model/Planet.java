@@ -27,7 +27,7 @@ import dev.morphia.query.UpdateResults;
 
 
 public class Planet {
-
+    @Id
     private String id;
     private String name;
     private int[] color;

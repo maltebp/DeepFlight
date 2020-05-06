@@ -1,6 +1,7 @@
 package model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.morphia.annotations.Id;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Round {
-
+    @Id
     private String id;
 
     // Also used for ID

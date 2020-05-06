@@ -1,8 +1,11 @@
 
 import database.DatabaseConnection;
+import database.DatabaseDAO;
+import model.Track;
 import server.APIServer;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 
 public class Main {
@@ -14,9 +17,11 @@ public class Main {
 //        DatabaseConnection.enableTestMode();
 /*        Database.DatabaseDAO db = new Database.DatabaseDAO();
         db.getAllTracks();*/
-
-       // TestGameAPI testGameAPI = new TestGameAPI();
-        //testGameAPI.start();
+        DatabaseDAO databaseDAO = new DatabaseDAO();
+        List<Track> track = databaseDAO.getAllTracks();
+        System.out.println(track);
+        TestGameAPI testGameAPI = new TestGameAPI();
+        testGameAPI.start();
         //gameAPI.start();
 
     }

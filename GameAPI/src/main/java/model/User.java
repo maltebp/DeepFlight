@@ -1,9 +1,10 @@
 package model;
 
+import dev.morphia.annotations.Id;
 import org.json.JSONObject;
 
 public class User {
-
+    @Id
     private String id;
     private String username;
     private int rank; // This is universal rank
