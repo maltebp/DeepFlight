@@ -14,54 +14,71 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 
 public class DatabaseConnection {
-    private static final String DB_NAME = "gamedb";
-    private static final String DB_USER = "universeupdater";
-    private static final String DB_PASSWORD = "deepflightisawesome";
-    private static final String DB_SERVER_URL = "mongodb+srv://"+DB_USER+":"+DB_PASSWORD+"@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority";
+    private final String DB_NAME = "gamedb";
+    private final String DB_TESTING_SUFFIX = "_test";
+    private final String DB_USER = "universeupdater";
+    private final String DB_PASSWORD = "deepflightisawesome";
+    private final String DB_SERVER_URL = "mongodb+srv://"+DB_USER+":"+DB_PASSWORD+"@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority";
     private static String dbName = "";
 
     private static boolean testMode = true;
 
-
-    //private MongoDatabase database;
-
-  private static DatabaseConnection instance = new DatabaseConnection();
-    private static Datastore handler;
-
-
+    private Morphia morphia;
+    private MongoClient mongoClient;
+    private static DatabaseConnection instance = new DatabaseConnection();
+    private static Datastore datastore;
 
     private DatabaseConnection() {
         MongoClientURI uri = new MongoClientURI(DB_SERVER_URL);
-        MongoClient mongoClient = new MongoClient(uri);
+        mongoClient = new MongoClient(uri);
         HashSet<Class> classes = new HashSet<>();
         classes.add(Track.class);
         classes.add(Planet.class);
         classes.add(Round.class);
-        Morphia m = new Morphia(classes);
-        dbName = DB_NAME + (testMode ? "_test" : "");
-        handler = m.createDatastore(mongoClient, dbName);
-        //client = createClient();
-        // database = client.getDatabase(dbName);
+        morphia = new Morphia(classes);
+        dbName = createDbNameFromMode(testMode);
+        datastore = createDatastoreOfDbName(dbName);
     }
 
-    public static Datastore getInstance(){
-        return handler;
+    public static DatabaseConnection getInstance(){
+        if (instance == null) {
+            instance = new DatabaseConnection();
+        }
+        return instance;
     }
 
-
-
-
+    public Datastore getDatastore () {
+        return datastore;
+    }
 
     /**
      * Enables test mode for future database.DatabaseDAO objects, such that they will
      * use a temporary test database.
      * The test database name is DB_NAME+_test, and it's recreated when this method
      * is called. */
-    public static void enableTestMode() throws UnknownHostException {
-        testMode = true;
-        /*MongoClient client = createClient();
-        client.getDatabase(DB_NAME + "_test").drop();
-        client.close();
-        setupTestDatabase();*/
+    public void setTestMode(boolean isTesting) throws UnknownHostException {
+        if (testMode != isTesting) {
+            testMode = isTesting;
+            dbName = createDbNameFromMode(testMode);
+            datastore = createDatastoreOfDbName(dbName);
+        }
+    }
+
+    /**
+     * Returns the correct name for the DB, matching the inputted isTesting boolean.
+     * @param isTesting the boolean representation of the testing mode.
+     * @return DB name depending on inputted state.
+     */
+    private String createDbNameFromMode(boolean isTesting) {
+        return DB_NAME + (isTesting ? DB_TESTING_SUFFIX : "");
+    }
+
+    /**
+     * Returns a Datastore object matching the inputted DB name.
+     * @param dbName is name on the DB to create correlating Datastore of.
+     * @return Datastore matching the inputted DB name.
+     */
+    private Datastore createDatastoreOfDbName (String dbName){
+        return morphia.createDatastore(mongoClient, dbName);
     }
 }
