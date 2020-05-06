@@ -56,6 +56,7 @@ public class TrackService {
     }
 
 
+
     private void getTrackData(Context context){
         String trackId = context.pathParam("trackid");
 
@@ -82,81 +83,56 @@ public class TrackService {
     }
 
 
-    private void postTrackTime(Context context){
+
+
+    private void postTrackTime(Context context) {
         String trackId = context.pathParam("trackid");
         String username = context.pathParam("username");
 
-        String userToken = context.header(Header.AUTHORIZATION);
         String timeUpdateKey;
         int time;
 
-        try{
+        try {
             String body = context.body();
             JSONObject bodyJson = new JSONObject(body);
-        }catch(JSONException e){
+            time = bodyJson.getInt("time");
+            timeUpdateKey = bodyJson.getString("string");
 
-        }
+            // Authenticate user token
+            boolean validToken = UserAuthentication.authenticate(context, username);
+            if (!validToken) return;
 
+            // Authenticate update key
+            if (!timeUpdateKey.equals(TIME_UPDATE_KEY)) {
+                context.status(HttpStatus.UNAUTHORIZED_401);
+                context.result("Update time key is not valid");
+                return;
+            }
 
-        try{
-
-        }catch(NumberFormatException e){
-
-            //context.result(String.format("The given time '%s' is not a number!", time));
-            context.status(HttpStatus.BAD_REQUEST_400);
-        }
-
-        try{
-            // TODO: Set the correct DatabaseDAO
+            // Update the time
+            // TODO: Set correct database
             IDatabaseDAO db = null;
-            byte[] trackData = db.getTrackData(trackId);
-            context.result(new ByteArrayInputStream(trackData));
-            context.contentType("application");
+            boolean newRecord = db.updateTrackTime(trackId, username, time);
+
+            // Setup response
+            JSONObject responseJson = new JSONObject();
+            responseJson.put("newRecord", newRecord);
+            context.result(responseJson.toString());
             context.status(HttpStatus.OK_200);
 
+        } catch (JSONException e) {
+            context.result(String.format("Couldn't parse JSON body (%s)", e.getMessage()));
+            context.status(HttpStatus.BAD_REQUEST_400);
 
-        }catch(NoSuchElementException e){
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
             context.status(HttpStatus.NOT_FOUND_404);
-            context.result(String.format("Couldn't find trackdata for track with ID '%s'", trackId));
-            context.contentType("text/plain");
+            context.result("Couldn't find Track in database");
 
-        }catch(DatabaseException e){
+        } catch (DatabaseException e) {
             e.printStackTrace();
             context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
-            context.contentType("text/plain");
-            context.result("An error occured when accessing the database");
+            context.result("Internal Error: An error occured when accessing the databse");
         }
     }
-
-
-
-  /*  // Check authentication
-    HttpResponse<String> response = Unirest.get("http://maltebp.dk:7000/jwt/exchangeUser")
-            .header(Header.AUTHORIZATION, context.header(Header.AUTHORIZATION))
-            .asString();
-
-            if( response.getStatus() == HttpStatus.UNAUTHORIZED_401 ){
-        context.status(HttpStatus.UNAUTHORIZED_401);
-        return;
-    }
-
-            if( response.getStatus() != HttpStatus.OK_200 ){
-        System.out.println("Status code was not 200, when authenticating token");
-        System.out.println(response);
-        context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
-        return;
-    }
-
-            try{
-        JSONObject responseContent = new JSONObject(response.getBody());
-
-        //System.out.println(response.getBody());
-
-        // Verify we got correct user
-        if( !userName.equals(responseContent.get("brugernavn")) ){
-            context.status(HttpStatus.UNAUTHORIZED_401);
-            return;
-        }
-
-        userInfo.put("username", responseContent.get("brugernavn"));*/
 }
