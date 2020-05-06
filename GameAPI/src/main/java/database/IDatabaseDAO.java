@@ -5,7 +5,7 @@ import model.Round;
 import model.Track;
 import model.User;
 
-import javax.persistence.EntityExistsException;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 

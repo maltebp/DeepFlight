@@ -8,6 +8,7 @@ import model.Planet;
 import model.Round;
 import model.Track;
 import model.User;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,12 +36,16 @@ public List<Track> getAllTracks(){
 
     @Override
     public Planet getPlanet(String planetId) throws DatabaseException, NoSuchElementException {
-        Query<Planet> underPaidQuery = DatabaseConnection.getInstance().find(Planet.class).filter("_id",planetId);
+        ObjectId objectId = new ObjectId(planetId);
+        Planet planet = DatabaseConnection.getInstance().get(Planet.class,objectId);
+        System.out.println(planet);
+        return planet;
     }
 
     @Override
     public List<Planet> getPlanets() throws DatabaseException {
-        return null;
+        Query<Planet> query = DatabaseConnection.getInstance().find(Planet.class);
+        return query.asList();
     }
 
     @Override
@@ -50,6 +55,11 @@ public List<Track> getAllTracks(){
 
     @Override
     public User getUserFromUsername(String username) throws DatabaseException, NoSuchElementException {
+        return null;
+    }
+
+    @Override
+    public User addUser(String username) throws DatabaseException {
         return null;
     }
 
@@ -80,6 +90,11 @@ public List<Track> getAllTracks(){
 
     @Override
     public Round getCurrentRound() throws DatabaseException {
+        return null;
+    }
+
+    @Override
+    public Round getPreviousRound() throws DatabaseException, NoSuchElementException {
         return null;
     }
 
