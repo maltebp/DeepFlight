@@ -64,7 +64,10 @@ public List<Track> getAllTracks(){
 
     @Override
     public User addUser(String username) throws DatabaseException {
-        return null;
+       User newUser = User.builder().rank(0).rating(0).username(username).build();
+       newUser.setId(DatabaseConnection.getInstance().save(newUser).getId().toString());
+
+        return newUser;
     }
 
     @Override
@@ -75,7 +78,9 @@ public List<Track> getAllTracks(){
 
     @Override
     public Track getTrack(String trackId) throws DatabaseException, NoSuchElementException {
-        return null;
+        ObjectId objectId = new ObjectId(trackId);
+        Track track = DatabaseConnection.getInstance().get(Track.class,objectId);
+        return track;
     }
 
     @Override
@@ -90,7 +95,8 @@ public List<Track> getAllTracks(){
 
     @Override
     public List<Round> getRounds() throws DatabaseException {
-        return null;
+        Query<Round> query = DatabaseConnection.getInstance().find(Round.class);
+        return query.asList();
     }
 
     @Override
