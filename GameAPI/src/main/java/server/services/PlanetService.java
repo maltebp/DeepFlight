@@ -1,5 +1,6 @@
 package server.services;
 
+import database.DatabaseDAO;
 import database.DatabaseException;
 import database.IDatabaseDAO;
 import io.javalin.Javalin;
@@ -26,7 +27,7 @@ public class PlanetService {
     private void getAllPlanets(Context context) {
         try{
             // TODO: Set correct database DAO
-            IDatabaseDAO db = null;
+            IDatabaseDAO db = new DatabaseDAO();
             List<Planet> planets = db.getPlanets();
 
             // Convert to JSON List
@@ -51,7 +52,7 @@ public class PlanetService {
 
         try{
             // TODO: Set correct database
-            IDatabaseDAO db = null;
+            IDatabaseDAO db = new DatabaseDAO();
             String planetId = context.pathParam("planetid");
             Planet planet = db.getPlanet(planetId);
 

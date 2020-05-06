@@ -13,12 +13,13 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws UnknownHostException, DatabaseException {
-       /* APIServer apiServer = new APIServer();
-        apiServer.start();*/
+        APIServer apiServer = new APIServer();
+        apiServer.start();
 
 //        DatabaseConnection.enableTestMode();
 /*        Database.DatabaseDAO db = new Database.DatabaseDAO();
         db.getAllTracks();*/
+/*
         DatabaseDAO databaseDAO = new DatabaseDAO();
         List<Track> track = databaseDAO.getAllTracks();
         List<Planet> planet = databaseDAO.getPlanets();
@@ -29,6 +30,7 @@ public class Main {
         TestGameAPI testGameAPI = new TestGameAPI();
         testGameAPI.start();
         //gameAPI.start();
+*/
 
     }
 
