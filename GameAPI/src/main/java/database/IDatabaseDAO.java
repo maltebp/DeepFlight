@@ -41,6 +41,8 @@ public interface IDatabaseDAO {
 
     List<Round> getRounds() throws DatabaseException;
 
-    Round getCurrentRound() throws DatabaseException;
+    Round getCurrentRound() throws DatabaseException, NoSuchElementException;
+
+    Round getPreviousRound() throws DatabaseException, NoSuchElementException;
 
 }

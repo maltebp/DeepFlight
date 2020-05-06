@@ -41,6 +41,17 @@ public class User {
         this.rating = rating;
     }
 
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", rank=" + rank +
+                ", rating=" + rating +
+                '}';
+    }
+
     public JSONObject toJSON(){
         JSONObject json = new JSONObject(this);
         return new JSONObject(this);

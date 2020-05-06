@@ -50,6 +50,7 @@ public class PlanetService {
     private void getPlanet(Context context) {
 
         try{
+            // TODO: Set correct database
             IDatabaseDAO db = null;
             String planetId = context.pathParam("planetid");
             Planet planet = db.getPlanet(planetId);

@@ -3,7 +3,6 @@ package server.services;
 import database.DatabaseException;
 import database.IDatabaseDAO;
 import io.javalin.Javalin;
-import io.javalin.core.util.Header;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Track;
@@ -118,6 +117,7 @@ public class TrackService {
             JSONObject responseJson = new JSONObject();
             responseJson.put("newRecord", newRecord);
             context.result(responseJson.toString());
+            context.contentType(ContentType.JSON);
             context.status(HttpStatus.OK_200);
 
         } catch (JSONException e) {
