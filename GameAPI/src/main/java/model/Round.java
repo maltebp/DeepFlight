@@ -1,6 +1,7 @@
 package model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import org.bson.Document;
 import org.json.JSONArray;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
+@Entity("rounds")
 public class Round {
     @Id
     private String id;

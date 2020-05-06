@@ -4,10 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
-import model.Planet;
-import model.Round;
-import model.Track;
-import model.User;
+import model.*;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -64,7 +61,10 @@ public List<Track> getAllTracks(){
 
     @Override
     public User addUser(String username) throws DatabaseException {
-        return null;
+       User newUser = User.builder().rank(0).rating(0).username(username).build();
+       newUser.setId(DatabaseConnection.getInstance().save(newUser).getId().toString());
+
+        return newUser;
     }
 
     @Override
@@ -75,12 +75,16 @@ public List<Track> getAllTracks(){
 
     @Override
     public Track getTrack(String trackId) throws DatabaseException, NoSuchElementException {
-        return null;
+        ObjectId objectId = new ObjectId(trackId);
+        Track track = DatabaseConnection.getInstance().get(Track.class,objectId);
+        return track;
     }
 
     @Override
     public byte[] getTrackData(String trackId) throws DatabaseException, NoSuchElementException {
-        return new byte[0];
+        ObjectId objectId = new ObjectId(trackId);
+        Trackdata trackdata = DatabaseConnection.getInstance().get(Trackdata.class,objectId);
+        return trackdata.getTrackdata();
     }
 
     @Override
@@ -90,7 +94,8 @@ public List<Track> getAllTracks(){
 
     @Override
     public List<Round> getRounds() throws DatabaseException {
-        return null;
+        Query<Round> query = DatabaseConnection.getInstance().find(Round.class);
+        return query.asList();
     }
 
     @Override
