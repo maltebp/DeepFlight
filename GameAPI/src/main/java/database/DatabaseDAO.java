@@ -50,12 +50,16 @@ public List<Track> getAllTracks(){
 
     @Override
     public User getUser(String userId) throws DatabaseException, NoSuchElementException {
-        return null;
+        ObjectId objectId = new ObjectId(userId);
+        User user = DatabaseConnection.getInstance().get(User.class,objectId);
+        return user;
     }
 
     @Override
     public User getUserFromUsername(String username) throws DatabaseException, NoSuchElementException {
-        return null;
+        Query<User> query = DatabaseConnection.getInstance().find(User.class).filter("username",username);
+        User user = query.asList().get(0);
+        return user;
     }
 
     @Override

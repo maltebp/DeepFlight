@@ -1,8 +1,19 @@
 package model;
 
+import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
+import lombok.Builder;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity("users")
 public class User {
     @Id
     private String id;
