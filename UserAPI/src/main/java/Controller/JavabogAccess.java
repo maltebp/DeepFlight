@@ -16,10 +16,7 @@ import java.rmi.RemoteException;
 public class JavabogAccess {
 
 
-
-
-
-    public static Bruger login(String name, String password) throws RemoteException, MalformedURLException, NotBoundException {
+    public static Bruger login(String name, String password) throws RemoteException, MalformedURLException, NotBoundException, IllegalArgumentException {
         Brugeradmin ba = null;
         ba = (Brugeradmin) Naming.lookup("rmi://javabog.dk/brugeradmin");
         return ba.hentBruger(name, password);

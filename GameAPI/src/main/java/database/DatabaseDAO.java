@@ -4,11 +4,15 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
+import model.Planet;
+import model.Round;
 import model.Track;
+import model.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
-public class    DatabaseDAO {
+public class DatabaseDAO implements IDatabaseDAO {
 
     private Datastore database;
 
@@ -29,9 +33,55 @@ public List<Track> getAllTracks(){
     return query.asList();
 }
 
+    @Override
+    public Planet getPlanet(String planetId) throws DatabaseException, NoSuchElementException {
+        Query<Planet> underPaidQuery = DatabaseConnection.getInstance().find(Planet.class).filter("_id",planetId);
+    }
 
+    @Override
+    public List<Planet> getPlanets() throws DatabaseException {
+        return null;
+    }
 
+    @Override
+    public User getUser(String userId) throws DatabaseException, NoSuchElementException {
+        return null;
+    }
 
+    @Override
+    public User getUserFromUsername(String username) throws DatabaseException, NoSuchElementException {
+        return null;
+    }
+
+    @Override
+    public List<User> getUsers() throws DatabaseException {
+        return null;
+    }
+
+    @Override
+    public Track getTrack(String trackId) throws DatabaseException, NoSuchElementException {
+        return null;
+    }
+
+    @Override
+    public byte[] getTrackData(String trackId) throws DatabaseException, NoSuchElementException {
+        return new byte[0];
+    }
+
+    @Override
+    public boolean updateTrackTime(String trackId, String userId, int time) throws DatabaseException, NoSuchElementException {
+        return false;
+    }
+
+    @Override
+    public List<Round> getRounds() throws DatabaseException {
+        return null;
+    }
+
+    @Override
+    public Round getCurrentRound() throws DatabaseException {
+        return null;
+    }
 
 
     /** String enum identifying a Collection within the Mongo database */
