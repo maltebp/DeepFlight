@@ -1,14 +1,23 @@
 package server.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import database.DatabaseException;
+import database.IDatabaseDAO;
 import io.javalin.Javalin;
 import io.javalin.core.util.Header;
 import io.javalin.http.Context;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import model.User;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import server.UserAuthentication;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 
 public class UserService {
@@ -31,70 +40,74 @@ public class UserService {
 
 
     private void getAllUsers(Context context){
-        context.status(HttpStatus.NOT_IMPLEMENTED_501);
+        try{
+            // TODO: Add correct database info
+            IDatabaseDAO db = null;
+            List<User> users = db.getUsers();
+            context.result(new JSONArray(users).toString());
+            context.status(HttpStatus.OK_200);
+        }catch(DatabaseException e){
+            e.printStackTrace();
+            context.result("Internal Server Error: Unexpected error occured when accessing database");
+            context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+        }
     }
 
 
 
     private void getUser(Context context, boolean privateInfo){
+        String username = context.pathParam("username");
 
-        // TODO: Remove this once users are stored in Mongo database
-        if( !privateInfo ){
-            context.status(HttpStatus.NOT_IMPLEMENTED_501);
-            return;
-        }
+        context.contentType("text/plain");
 
-        String userName = context.pathParam("username");
-        JSONObject userInfo = new JSONObject();
-
+        // Authenticate the user, if we want to get private info
         if( privateInfo ){
 
-            // Check authentication
-            HttpResponse<String> response = Unirest.get("http://maltebp.dk:7000/jwt/exchangeUser")
-                    .header(Header.AUTHORIZATION, context.header(Header.AUTHORIZATION))
-                    .asString();
-
-            if( response.getStatus() == HttpStatus.UNAUTHORIZED_401 ){
+            // Get token from header
+            String token = context.header(Header.AUTHORIZATION);
+            if( token == null ){
+                context.result("Missing authentication token");
                 context.status(HttpStatus.UNAUTHORIZED_401);
                 return;
             }
 
-            if( response.getStatus() != HttpStatus.OK_200 ){
-                System.out.println("Status code was not 200, when authenticating token");
-                System.out.println(response);
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
-                return;
-            }
-
+            // Authenticate the user
             try{
-                JSONObject responseContent = new JSONObject(response.getBody());
-
-                //System.out.println(response.getBody());
-
-                // Verify we got correct user
-                if( !userName.equals(responseContent.get("brugernavn")) ){
+                boolean validToken = UserAuthentication.authenticate(username, token);
+                if( !validToken ){
+                    context.result(String.format("The given token '%s' was not authenticated couldn't be authenticated", username));
                     context.status(HttpStatus.UNAUTHORIZED_401);
                     return;
                 }
-
-                userInfo.put("username", responseContent.get("brugernavn"));
-
-            }catch(JSONException e){
+            }catch(UserAuthentication.ServerException e){
+                System.out.println(String.format("Exception when authenticating user '%s': ", username));
                 e.printStackTrace();
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+                context.result("Internal Error: " + e);
                 return;
             }
         }
 
-        // TODO: Add public data here
-        // Test data:
-        userInfo.put("rank", 10);
-        userInfo.put("rating", 2.39);
+        // Fetch user data from database
+        User user = null;
+        try {
+            // TODO: Add correct database here
+            IDatabaseDAO db = null;
+            try{
+                user = db.getUserFromUsername(username);
+            } catch (NoSuchElementException e) {
+                // User didn't exist in database yet, so we create it
+                user = db.addUser(username);
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            context.result("Internal Server Error: Unexpected error occured when accessing database");
+            context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+            return;
+        }
 
-        // Add private user data
-        context.result(userInfo.toString());
+        context.result(user.toJSON().toString());
         context.status(HttpStatus.OK_200);
     }
-
 
 }

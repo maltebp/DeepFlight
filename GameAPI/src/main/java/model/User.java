@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 public class User {
 
     private String id;
@@ -37,5 +39,10 @@ public class User {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public JSONObject toJSON(){
+        JSONObject json = new JSONObject(this);
+        return new JSONObject(this);
     }
 }
