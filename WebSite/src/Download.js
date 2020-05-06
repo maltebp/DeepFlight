@@ -93,13 +93,15 @@ downloadGame(){
               })
               .catch(error => {
                 console.log("axios download results error", error);
+                //TODO: Grade errors based on server reply
                 this.setState(state => ({message: "Download failed."}));
+                setTimeout(() => {  this.setState(state => ({ message: "" })); }, 4000);
               });
     }
 
     handleDownload() {
         this.setState(state => ({ isToggleOn: false }));
-        //alert("Starting download");
+        this.setState(state => ({message: "Starting download."}));
         this.downloadGame();
         setTimeout(() => {  this.setState(state => ({ isToggleOn: true })); }, 1000);
 
@@ -112,7 +114,7 @@ downloadGame(){
         <p>You are logged in and can download the game from here.</p>
         <p>Just a dummy file, no need to install it :-)</p>
         <button type="button" disabled={!this.state.isToggleOn} onClick={this.handleDownload}>{this.state.isToggleOn ? 'Download' : 'Please wait...'}</button>
-        <h1>{this.state.message}</h1>
+        <p className="alert">{this.state.message}</p>
         <p>Size: 8 MB</p>
       </div>
     );
