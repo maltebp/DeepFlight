@@ -27,17 +27,15 @@ import dev.morphia.query.UpdateResults;
 
 
 public class Planet {
-
-    @JsonProperty("_id")
-    private int id;
+    @Id
+    private String id;
     private String name;
     private int[] color;
-
 
     // Default constructor must exist for JSON deserialize to work
     public Planet() {}
 
-    public Planet(int id, String name, int[] color) {
+    public Planet(String id, String name, int[] color) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -47,8 +45,7 @@ public class Planet {
     }
 
     // Getters required for JSON serialization
-    @JsonProperty("_id")
-    public int getId() {
+    public String getId() {
         return id;
     }
     public String getName() {
@@ -57,9 +54,7 @@ public class Planet {
     public int[] getColor() {
         return color;
     }
-
-    @JsonProperty("_id")
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
     public void setName(String name) {
@@ -78,8 +73,8 @@ public class Planet {
                 '}';
     }
 
-    public JSONObject toJSON() throws JsonProcessingException {
-        return new JSONObject(new ObjectMapper().writeValueAsString(this));
+    public JSONObject toJSON() {
+        return new JSONObject(this);
     }
 
     public static Planet fromMongoObject(DBObject object) {

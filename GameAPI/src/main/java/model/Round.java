@@ -1,36 +1,36 @@
 package model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import dev.morphia.annotations.Id;
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.json.JsonWriterSettings;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class Round {
+    @Id
+    private String id;
 
     // Also used for ID
     private int roundNumber;
 
-    private int[] trackIds = null;
+    private String[] trackIds = null;
 
     private long startDate;
 
     private long endDate;
 
+    private HashMap<String, Double> rankings;
+
     // Public default constructor required for JSON serialization
     public Round() { }
 
-    public Round(int roundNumber, int[] trackIds, long startDate, long endDate) {
+    public Round(int roundNumber, String[] trackIds, long startDate, long endDate) {
         this.roundNumber = roundNumber;
         this.trackIds = trackIds;
         this.startDate = startDate;
@@ -41,7 +41,7 @@ public class Round {
         return roundNumber;
     }
 
-    public int[] getTrackIds() {
+    public String[] getTrackIds() {
         return trackIds;
     }
 
@@ -51,6 +51,18 @@ public class Round {
 
     public long getEndDate() {
         return endDate;
+    }
+
+    public void setRankings(HashMap<String, Double> rankings) {
+        this.rankings = rankings;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public HashMap<String, Double> getRankings() {
+        return rankings;
     }
 
     @Override
@@ -91,6 +103,39 @@ public class Round {
             e.printStackTrace();
             return null;
         }
+    }
+
+
+    // TODO: Remove this!
+    public static void main(String[] args) {
+        Round round = new Round();
+        round.id = "thisisanid";
+        round.trackIds = new String[]{"1", "2", "3", "4"};
+        round.roundNumber = 99;
+        round.startDate = 10000000;
+        round.endDate = 20000000;
+
+        HashMap<String, Double> rankings = new HashMap<>();
+        rankings.put("Malte", 1.234);
+        rankings.put("Andreas", 3.455);
+
+        round.rankings = rankings;
+
+        System.out.println(round.toJSON());
+
+        List<Round> rounds = new ArrayList<>();
+        rounds.add(round);
+        rounds.add(round);
+        rounds.add(round);
+
+
+        JSONArray roundsJson = new JSONArray();
+        for( Round thisRound : rounds ){
+            roundsJson.put(thisRound.toJSON());
+        }
+
+        System.out.println(roundsJson);
+
     }
 
 }

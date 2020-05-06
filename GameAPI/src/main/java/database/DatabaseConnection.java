@@ -1,7 +1,8 @@
 package database;
 
+import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoClient;
+
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 
@@ -23,15 +24,15 @@ public class DatabaseConnection {
 
 
     //private MongoDatabase database;
-    private static MongoClient client;
-    private static DatabaseConnection instance = new DatabaseConnection();
+
+  private static DatabaseConnection instance = new DatabaseConnection();
     private static Datastore handler;
 
 
 
     private DatabaseConnection() {
         MongoClientURI uri = new MongoClientURI(DB_SERVER_URL);
-        com.mongodb.MongoClient mongoClient = new com.mongodb.MongoClient(uri);
+        MongoClient mongoClient = new MongoClient(uri);
         HashSet<Class> classes = new HashSet<>();
         classes.add(Track.class);
         classes.add(Planet.class);

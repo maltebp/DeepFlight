@@ -8,7 +8,7 @@ import model.Track;
 
 import java.util.List;
 
-public class DatabaseDAO {
+public class    DatabaseDAO {
 
     private Datastore database;
 
