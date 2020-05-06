@@ -1,10 +1,7 @@
 import database.DatabaseConnection;
 import database.DatabaseDAO;
 import database.DatabaseException;
-import model.Planet;
-import model.Round;
-import model.Track;
-import model.User;
+import model.*;
 import org.bson.types.ObjectId;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -114,6 +111,17 @@ public class TestDatabaseDAO {
         System.out.println("returnList length: "+roundsList.size());
         System.out.println("Count:" +count);
         assertEquals(count,roundsList.size());
+
+    }
+
+
+    @Test
+    public void getTracksdata() throws DatabaseException {
+        Trackdata wantedTrackdata = Trackdata.builder().id("5eb14d50d9d2602cb220ce43").build();
+
+        byte[] returnTrackdata = databaseDAO.getTrackData(wantedTrackdata.getId());
+
+        System.out.println(returnTrackdata);
 
     }
 }
