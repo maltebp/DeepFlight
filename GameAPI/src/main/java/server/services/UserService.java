@@ -1,5 +1,6 @@
 package server.services;
 
+import database.DatabaseDAO;
 import database.DatabaseException;
 import database.IDatabaseDAO;
 import io.javalin.Javalin;
@@ -18,6 +19,9 @@ public class UserService {
 
 
     public UserService(Javalin server) {
+
+        server.get("user/all", this::getAllUsers);
+
         server.get("user/:username", context -> {
             getUser(context, false);
         });
@@ -26,16 +30,16 @@ public class UserService {
             getUser(context, true);
         });
 
-        server.get("user/all", this::getAllUsers);
     }
 
 
     private void getAllUsers(Context context){
         try{
             // TODO: Add correct database info
-            IDatabaseDAO db = null;
+            IDatabaseDAO db = new DatabaseDAO();
             List<User> users = db.getUsers();
             context.result(new JSONArray(users).toString());
+            context.contentType(ContentType.JSON);
             context.status(HttpStatus.OK_200);
         }catch(DatabaseException e){
             e.printStackTrace();
@@ -58,13 +62,20 @@ public class UserService {
         // Fetch user data from database
         User user = null;
         try {
-            // TODO: Add correct database here
-            IDatabaseDAO db = null;
+            IDatabaseDAO db = new DatabaseDAO();
             try{
                 user = db.getUserFromUsername(username);
             } catch (NoSuchElementException e) {
-                // User didn't exist in database yet, so we create it
-                user = db.addUser(username);
+                if( privateInfo ){
+                    // If private, we want to create the user
+                    // in the database
+                    user = db.addUser(username);
+                }else{
+                    // ... otherwise, just return an error
+                    context.result(String.format("Couldn't find user with username '%s'",username));
+                    context.status(HttpStatus.NOT_FOUND_404);
+                    return;
+                }
             }
         } catch (DatabaseException e) {
             e.printStackTrace();
