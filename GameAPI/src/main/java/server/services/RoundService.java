@@ -30,7 +30,6 @@ public class RoundService {
 
     private void getAllRounds(Context context){
         try{
-            // TODO: Set correct database DAO
             IDatabaseDAO db = new DatabaseDAO();
             List<Round> rounds = db.getRounds();
 
@@ -56,7 +55,6 @@ public class RoundService {
 
     private void getCurrentRound(Context context){
         try{
-            // TODO: Set the correct DatabaseDAO
             IDatabaseDAO db = new DatabaseDAO();
             Round round = db.getCurrentRound();
             convertRankings(round);
@@ -81,7 +79,6 @@ public class RoundService {
 
     private void getPreviousRound(Context context){
         try{
-            // TODO: Set the correct DatabaseDAO
             IDatabaseDAO db = new DatabaseDAO();
             Round round = db.getPreviousRound();
             convertRankings(round);

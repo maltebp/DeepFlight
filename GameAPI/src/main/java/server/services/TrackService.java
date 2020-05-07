@@ -25,9 +25,6 @@ public class TrackService {
         server.get("track/:trackid/trackdata", this::getTrackData );
 
         server.post("track/:trackid/times/:username", this::postTrackTime );
-
-        // Potential services / resources:
-        // GET track/:trackid/times
     }
 
 
@@ -35,7 +32,6 @@ public class TrackService {
         String trackId = context.pathParam("trackid");
 
         try{
-            // TODO: Set the correct DatabaseDAO
             IDatabaseDAO db = new DatabaseDAO();
             Track track = db.getTrack(trackId);
             context.result(track.toJSON().toString());
@@ -61,7 +57,6 @@ public class TrackService {
         String trackId = context.pathParam("trackid");
 
         try{
-            // TODO: Set the correct DatabaseDAO
             IDatabaseDAO db = new DatabaseDAO();
             byte[] trackData = db.getTrackData(trackId);
             context.result(new ByteArrayInputStream(trackData));
@@ -96,7 +91,7 @@ public class TrackService {
             String body = context.body();
             JSONObject bodyJson = new JSONObject(body);
             time = bodyJson.getInt("time");
-            timeUpdateKey = bodyJson.getString("string");
+            timeUpdateKey = bodyJson.getString("updateKey");
 
             // Authenticate user token
             boolean validToken = UserAuthentication.authenticate(context, username);
@@ -110,7 +105,6 @@ public class TrackService {
             }
 
             // Update the time
-            // TODO: Set correct database
             IDatabaseDAO db = new DatabaseDAO();
             boolean newRecord = db.updateTrackTime(trackId, username, time);
 

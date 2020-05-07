@@ -18,7 +18,7 @@ import lombok.Builder;
 @Indexes(@Index(fields = @Field(value = "$**", type = IndexType.TEXT)))
 public class User {
     @Id
-    private ObjectId id;
+    private String id;
     private String username;
     private int rank; // This is universal rank
     private double rating; // This is universal rating
@@ -32,11 +32,11 @@ public class User {
     // region Properties
 
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 

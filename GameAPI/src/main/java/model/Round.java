@@ -21,7 +21,7 @@ import java.util.List;
 })
 public class Round {
     @Id
-    private ObjectId id;
+    private String id;
 
     // Also used for ID
     private int roundNumber;

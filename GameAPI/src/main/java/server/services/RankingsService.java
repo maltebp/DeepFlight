@@ -1,6 +1,6 @@
 package server.services;
 
-import com.mongodb.util.JSON;
+import database.DatabaseDAO;
 import database.DatabaseException;
 import database.IDatabaseDAO;
 import io.javalin.Javalin;
@@ -24,8 +24,7 @@ public class RankingsService {
 
     private void getUniversalRankings(Context context) {
         try{
-            // TODO: Set the correct database
-            IDatabaseDAO db = null;
+            IDatabaseDAO db = new DatabaseDAO();
             List<User> users = db.getUsers();
 
             // Sort based on ranking

@@ -15,8 +15,6 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     private Datastore database;
 
-    // TODO: Fix password in code
-
 
     public DatabaseDAO(){
       database = DatabaseConnection.getInstance().getDatastore();
@@ -51,7 +49,7 @@ public class DatabaseDAO implements IDatabaseDAO {
     public User addUser(String username) throws DatabaseException {
         User newUser = new User(username);
         String userIdString = database.save(newUser).getId().toString();
-        newUser.setId(new ObjectId(userIdString));
+        newUser.setId(userIdString);
 
         return newUser;
     }

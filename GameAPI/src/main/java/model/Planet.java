@@ -10,7 +10,7 @@ import dev.morphia.annotations.Id;
 @Entity("planets")
 public class Planet {
     @Id
-    private ObjectId id;
+    private String id;
     private String name;
     private int[] color;
 
@@ -18,7 +18,7 @@ public class Planet {
     public Planet() {}
 
     public Planet(String id, String name, int[] color) {
-        this.id = new ObjectId(id);
+        this.id = id;
         this.name = name;
         this.color = color;
 
@@ -28,7 +28,7 @@ public class Planet {
 
     // Getters required for JSON serialization
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
     public String getName() {
@@ -38,7 +38,7 @@ public class Planet {
         return color;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 

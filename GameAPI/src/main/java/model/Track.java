@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public class Track {
     @Id
-    private ObjectId id;
+    private String id;
 
     private String name;
 

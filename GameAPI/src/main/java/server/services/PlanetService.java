@@ -26,7 +26,6 @@ public class PlanetService {
 
     private void getAllPlanets(Context context) {
         try{
-            // TODO: Set correct database DAO
             IDatabaseDAO db = new DatabaseDAO();
             List<Planet> planets = db.getPlanets();
 
@@ -51,7 +50,6 @@ public class PlanetService {
     private void getPlanet(Context context) {
 
         try{
-            // TODO: Set correct database
             IDatabaseDAO db = new DatabaseDAO();
             String planetId = context.pathParam("planetid");
             Planet planet = db.getPlanet(planetId);

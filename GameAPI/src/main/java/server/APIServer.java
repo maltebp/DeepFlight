@@ -54,6 +54,7 @@ public class APIServer {
         // Setup root endpoint
         server.get("/", context -> {
             context.status(HttpStatus.OK_200);
+            context.contentType("text/plain");
             context.result("GameAPI is up and running!");
         });
 

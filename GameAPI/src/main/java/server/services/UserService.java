@@ -35,7 +35,6 @@ public class UserService {
 
     private void getAllUsers(Context context){
         try{
-            // TODO: Add correct database info
             IDatabaseDAO db = new DatabaseDAO();
             List<User> users = db.getUsers();
             context.result(new JSONArray(users).toString());
