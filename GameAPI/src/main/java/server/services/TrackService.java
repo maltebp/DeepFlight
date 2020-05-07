@@ -1,5 +1,6 @@
 package server.services;
 
+import database.DatabaseDAO;
 import database.DatabaseException;
 import database.IDatabaseDAO;
 import io.javalin.Javalin;
@@ -35,7 +36,7 @@ public class TrackService {
 
         try{
             // TODO: Set the correct DatabaseDAO
-            IDatabaseDAO db = null;
+            IDatabaseDAO db = new DatabaseDAO();
             Track track = db.getTrack(trackId);
             context.result(track.toJSON().toString());
             context.contentType(ContentType.JSON);
@@ -61,7 +62,7 @@ public class TrackService {
 
         try{
             // TODO: Set the correct DatabaseDAO
-            IDatabaseDAO db = null;
+            IDatabaseDAO db = new DatabaseDAO();
             byte[] trackData = db.getTrackData(trackId);
             context.result(new ByteArrayInputStream(trackData));
             context.contentType("application");
@@ -110,7 +111,7 @@ public class TrackService {
 
             // Update the time
             // TODO: Set correct database
-            IDatabaseDAO db = null;
+            IDatabaseDAO db = new DatabaseDAO();
             boolean newRecord = db.updateTrackTime(trackId, username, time);
 
             // Setup response

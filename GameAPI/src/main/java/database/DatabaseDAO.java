@@ -61,10 +61,11 @@ public List<Track> getAllTracks(){
 
     @Override
     public User addUser(String username) throws DatabaseException {
-       User newUser = User.builder().rank(0).rating(0).username(username).build();
+       /*User newUser = User.builder().rank(0).rating(0).username(username).build();
        newUser.setId(DatabaseConnection.getInstance().save(newUser).getId().toString());
 
-        return newUser;
+        return newUser;*/
+       return null;
     }
 
     @Override
