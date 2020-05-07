@@ -1,31 +1,42 @@
 package model;
 
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import dev.morphia.annotations.*;
+import dev.morphia.utils.IndexType;
+import lombok.*;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.json.JSONObject;
 import lombok.Builder;
 
+@Getter
+@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity("users")
+@Indexes(@Index(fields = @Field(value = "$**", type = IndexType.TEXT)))
 public class User {
     @Id
-    private String id;
+    private ObjectId id;
     private String username;
     private int rank; // This is universal rank
     private double rating; // This is universal rating
 
-    public String getId() {
+    public User (String username){
+        this.username = username;
+        rank = 0;
+        rating = 0;
+    }
+
+    // region Properties
+
+
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -53,6 +64,7 @@ public class User {
         this.rating = rating;
     }
 
+    // endregion
 
     @Override
     public String toString() {

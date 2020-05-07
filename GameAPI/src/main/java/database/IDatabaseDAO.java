@@ -33,6 +33,8 @@ public interface IDatabaseDAO {
 
     List<User> getUsers() throws DatabaseException;
 
+    void deleteUser(String userId) throws DatabaseException;
+
     Track getTrack(String trackId) throws DatabaseException, NoSuchElementException;
 
     byte[] getTrackData(String trackId) throws DatabaseException, NoSuchElementException;

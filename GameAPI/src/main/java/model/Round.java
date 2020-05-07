@@ -1,9 +1,9 @@
 package model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
+import dev.morphia.annotations.*;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,9 +13,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 @Entity("rounds")
+@Indexes({
+        @Index(
+                fields = @Field("startDate"),
+                options = @IndexOptions(name = "round_startDate")
+        )
+})
 public class Round {
     @Id
-    private String id;
+    private ObjectId id;
 
     // Also used for ID
     private int roundNumber;
@@ -56,10 +62,6 @@ public class Round {
 
     public void setRankings(HashMap<String, Double> rankings) {
         this.rankings = rankings;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public HashMap<String, Double> getRankings() {

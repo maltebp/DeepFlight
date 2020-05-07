@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
+import dev.morphia.query.Sort;
 import model.*;
 import org.bson.types.ObjectId;
 
@@ -18,74 +19,62 @@ public class DatabaseDAO implements IDatabaseDAO {
 
 
     public DatabaseDAO(){
-      database = DatabaseConnection.getInstance();
-
-       // database.getDatabase().getCollection(Collection.PLANETS.toString());
-
+      database = DatabaseConnection.getInstance().getDatastore();
     }
 
 
-public List<Track> getAllTracks(){
-
-    Query<Track> query = DatabaseConnection.getInstance().find(Track.class);
-    return query.asList();
-}
+    public List<Track> getAllTracks(){
+        return database.createQuery(Track.class).find().toList();
+    }
 
     @Override
     public Planet getPlanet(String planetId) throws DatabaseException, NoSuchElementException {
-        ObjectId objectId = new ObjectId(planetId);
-        Planet planet = DatabaseConnection.getInstance().get(Planet.class,objectId);
-        System.out.println(planet);
-        return planet;
+        return database.createQuery(Planet.class).field("id").equal(new ObjectId(planetId)).first();
     }
 
     @Override
     public List<Planet> getPlanets() throws DatabaseException {
-        Query<Planet> query = DatabaseConnection.getInstance().find(Planet.class);
-        return query.asList();
+        return database.createQuery(Planet.class).find().toList();
     }
 
     @Override
     public User getUser(String userId) throws DatabaseException, NoSuchElementException {
-        ObjectId objectId = new ObjectId(userId);
-        User user = DatabaseConnection.getInstance().get(User.class,objectId);
-        return user;
+        return database.createQuery(User.class).field("id").equal(new ObjectId(userId)).first();
     }
 
     @Override
     public User getUserFromUsername(String username) throws DatabaseException, NoSuchElementException {
-        Query<User> query = DatabaseConnection.getInstance().find(User.class).filter("username",username);
-        User user = query.asList().get(0);
-        return user;
+        return database.createQuery(User.class).field("username").equal(username).first();
     }
 
     @Override
     public User addUser(String username) throws DatabaseException {
-       /*User newUser = User.builder().rank(0).rating(0).username(username).build();
-       newUser.setId(DatabaseConnection.getInstance().save(newUser).getId().toString());
+        User newUser = new User(username);
+        String userIdString = database.save(newUser).getId().toString();
+        newUser.setId(new ObjectId(userIdString));
 
-        return newUser;*/
-       return null;
+        return newUser;
     }
 
     @Override
     public List<User> getUsers() throws DatabaseException {
-        Query<User> query = DatabaseConnection.getInstance().find(User.class);
-        return query.asList();
+        return database.createQuery(User.class).find().toList();
+    }
+
+    @Override
+    public void deleteUser(String userId) throws DatabaseException {
+        Query<User> deleteQuery = database.createQuery(User.class).field("id").equal(new ObjectId(userId));
+        database.delete(deleteQuery);
     }
 
     @Override
     public Track getTrack(String trackId) throws DatabaseException, NoSuchElementException {
-        ObjectId objectId = new ObjectId(trackId);
-        Track track = DatabaseConnection.getInstance().get(Track.class,objectId);
-        return track;
+        return database.createQuery(Track.class).field("id").equal(new ObjectId(trackId)).first();
     }
 
     @Override
     public byte[] getTrackData(String trackId) throws DatabaseException, NoSuchElementException {
-        ObjectId objectId = new ObjectId(trackId);
-        Trackdata trackdata = DatabaseConnection.getInstance().get(Trackdata.class,objectId);
-        return trackdata.getTrackdata();
+        return new byte[0];
     }
 
     @Override
@@ -95,18 +84,17 @@ public List<Track> getAllTracks(){
 
     @Override
     public List<Round> getRounds() throws DatabaseException {
-        Query<Round> query = DatabaseConnection.getInstance().find(Round.class);
-        return query.asList();
+        return database.createQuery(Round.class).find().toList();
     }
 
     @Override
     public Round getCurrentRound() throws DatabaseException {
-        return null;
+        return database.createQuery(Round.class).order(Sort.descending("roundNumber")).first();
     }
 
     @Override
     public Round getPreviousRound() throws DatabaseException, NoSuchElementException {
-        return null;
+        return database.createQuery(Round.class).order(Sort.descending("roundNumber")).offset(1).first();
     }
 
 
