@@ -3,6 +3,7 @@ package database;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
+import dev.morphia.query.Criteria;
 import dev.morphia.query.Query;
 import dev.morphia.query.Sort;
 import model.*;
@@ -87,12 +88,24 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     @Override
     public Round getCurrentRound() throws DatabaseException {
-        return database.createQuery(Round.class).order(Sort.descending("roundNumber")).first();
+        long currEpochMillis = System.currentTimeMillis();
+        return getRoundFromEpochMillis(currEpochMillis);
     }
 
     @Override
     public Round getPreviousRound() throws DatabaseException, NoSuchElementException {
-        return database.createQuery(Round.class).order(Sort.descending("roundNumber")).offset(1).first();
+        long preEpochMillis = System.currentTimeMillis();
+        preEpochMillis -= 86400000;
+
+        return getRoundFromEpochMillis(preEpochMillis);
+    }
+
+    private Round getRoundFromEpochMillis(long epochMillis) {
+        Query<Round> q = database.createQuery(Round.class);
+        q.and(q.criteria("startDate").lessThanOrEq(epochMillis),
+                q.criteria("endDate").greaterThanOrEq(epochMillis));
+
+        return q.first();
     }
 
 
