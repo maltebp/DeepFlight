@@ -6,17 +6,21 @@ import database.IDatabaseDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.ContentType;
+import model.Round;
 import model.Track;
+import model.User;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
+import java.util.HashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class TrackService {
 
-    private static final String TIME_UPDATE_KEY = "";
+    private static final String TIME_UPDATE_KEY = "verysecurekey1234";
 
 
     public TrackService(Javalin server){
@@ -34,6 +38,7 @@ public class TrackService {
         try{
             IDatabaseDAO db = new DatabaseDAO();
             Track track = db.getTrack(trackId);
+            convertTimes(track);
             context.result(track.toJSON().toString());
             context.contentType(ContentType.JSON);
             context.status(HttpStatus.OK_200);
@@ -49,6 +54,27 @@ public class TrackService {
             context.contentType("text/plain");
             context.result("An error occured when accessing the database");
         }
+    }
+
+    /*
+       Convers the track times from (user id, rating), to
+       (username, rating), because it's much more convenient
+       on the client side.
+    */
+    private void convertTimes(Track track ) throws DatabaseException{
+        IDatabaseDAO database = new DatabaseDAO();
+        List<User> users = database.getUsers();
+
+        HashMap<String, Integer> newTimes = new HashMap<>();
+
+        for(User user : users){
+            Integer time = track.getTimes().get(user.getId());
+            if( time != null ){
+                newTimes.put(user.getUsername(), time);
+            }
+        }
+
+        track.setTimes(newTimes);
     }
 
 
@@ -116,7 +142,7 @@ public class TrackService {
             context.status(HttpStatus.OK_200);
 
         } catch (JSONException e) {
-            context.result(String.format("Couldn't parse JSON body (%s)", e.getMessage()));
+            context.result(String.format("Couldn't parse JS ON body (%s)", e.getMessage()));
             context.status(HttpStatus.BAD_REQUEST_400);
 
         } catch (NoSuchElementException e) {

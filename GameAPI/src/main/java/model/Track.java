@@ -31,6 +31,14 @@ public class Track {
 
     private HashMap<String,Integer> times;
 
+    public HashMap<String, Integer> getTimes(){
+        return times;
+    }
+
+    public void setTimes(HashMap<String, Integer> times) {
+        this.times = times;
+    }
+
     public JSONObject toJSON() {
         return new JSONObject(this);
     }
