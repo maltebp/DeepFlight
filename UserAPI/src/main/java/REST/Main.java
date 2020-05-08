@@ -2,31 +2,50 @@ package REST;
 
 import Controller.Authendicator;
 import JWT.JWTHandler;
-
-
+import Prometheus.QueuedThreadPoolCollector;
+import Prometheus.StatisticsHandlerCollector;
 import Respons.Response;
 import Respons.ResponseText;
 import brugerautorisation.data.Bruger;
-
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
+import io.javalin.http.Handler;
+import io.prometheus.client.exporter.HTTPServer;
 import javalinjwt.JavalinJWT;
+import javalinjwt.examples.JWTResponse;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 public class Main {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        /*Code from https://javalin.io/tutorials/prometheus-example*/
+        StatisticsHandler statisticsHandler = new StatisticsHandler();
+        QueuedThreadPool queuedThreadPool = new QueuedThreadPool(200, 8, 60_000);
+        initializePrometheus(statisticsHandler, queuedThreadPool);
+
         //Initializing server
         Javalin app = Javalin.create(config -> {
             // ACCEPTS ALL CLIENTS: ONLY FOR TESTING
             config.enableCorsForAllOrigins();
+            config.server(()-> {
+                Server server = new Server(queuedThreadPool);
+                server.setHandler(statisticsHandler);
+                return server;
+            });
+
+
             // TODO: add client url for game and site, local and remote. These urls can be read from the console.
             //config.enableCorsForOrigin(
             //        "http://localhost:3000/", // Web site local: OK
-            //        "https://master.d3lj15etjpqs5m.amplifyapp.com/" // Web site remote
+            //        "http://maltebp.dk/" // Web site remote
             //);
 
         }).start(7000);
@@ -53,17 +72,15 @@ public class Main {
                 //Redirection to a responsemessage, providing with informaion on how to post a login request.
                 ctx.redirect("/loginRequest",302);
             }
-
         });
 
 
         /*
-        Respons.Respons message for no access token.
+        Response message for no access token.
          */
         app.get("/loginRequest",ctx->{
             ctx.status(401);
-            //ctx.result("Please provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
-            ctx.result(Response.generateResponse(ResponseText.LOGIN_INFO_RESPONCE,null));
+            ctx.result("Pleases provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
         });
 /*
 #####################################################################################################################################
@@ -93,4 +110,13 @@ public class Main {
 
 
 
+
+
+    /*Code from https://javalin.io/tutorials/prometheus-example*/
+
+    private static void initializePrometheus(StatisticsHandler statisticsHandler, QueuedThreadPool queuedThreadPool) throws IOException {
+        StatisticsHandlerCollector.initialize(statisticsHandler); // collector is included in source code
+        QueuedThreadPoolCollector.initialize(queuedThreadPool); // collector is included in source code
+        HTTPServer prometheusServer = new HTTPServer(7080);
+    }
 }

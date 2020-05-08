@@ -1,0 +1,4 @@
+
+
+# Stop CRLF convert bash files
+*.sh text eol=lf

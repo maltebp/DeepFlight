@@ -1,105 +1,119 @@
 import React, { Component } from "react";
-import axios from 'axios';
+import Login from './Login';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
+import text from './text/text.json';
 
 class Download extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      token: localStorage.getItem("dftoken"),
+    }
+  }
+
+  handleState() {
+    this.setState({
+      token: localStorage.getItem("dftoken"),
+    })
+  }
+
   render() {
     return (
       <div>
-        <h2>LOGIN TO DOWNLOAD THE GAME!</h2>
-        <div className="boxwrapper">
-        <div className="box">
-        <Login/>
-        </div>
+        <div className="boxwrapper longread">
+          <FilterDownload token={this.state.token} handleState={this.handleState.bind(this)} />
+          <div className="box whitebg">
+            <h2>{text.installation.header}</h2>
+            <h3>{text.installation.winheader}</h3>
+            <p>{text.installation.wintext}</p>
+            <h3>{text.installation.macheader}</h3>
+            <p>{text.installation.mactext}</p>
+            <h3>{text.installation.linheader}</h3>
+            <p>{text.installation.lintext}</p>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-// Only show login form if user is not logged in
-class Login extends Component {
-  constructor(props) {
+// Show the login menu of the user has no token
+// Show download text box if logged in
+function FilterDownload(props) {
+  const token = props.token;
+  const today = new Date();
+  //console.log("Token in FilterDownload: " + JSON.stringify(token));
+  if (token === null
+    || token === undefined) {
+    return (<Login handleState={props.handleState} message={text.login.standard}/>); // Pass method to handle state as props
+  } else if (today > new Date(jwt.decode(token).exp * 1000)){ // jwt deals in seconds, so * 1000
+    return (<Login handleState={props.handleState} message={text.login.loggedout}/>); // Pass method to handle state as props
+  } else {
+    return (<DownloadBox />)
+  }
+}
+
+class DownloadBox extends React.Component {
+
+constructor(props) {
     super(props);
-
     this.state = {
-      name: "",
-      password: "",
-      loginErrors: ""
+    isToggleOn: true,
+ message: "",
+ user: "pilot"
     };
+    this.handleDownload = this.handleDownload.bind(this);  }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
+downloadGame(){
+        // source: https://medium.com/@drevets/you-cant-prompt-a-file-download-with-the-content-disposition-header-using-axios-xhr-sorry-56577aa706d6
+        //const url = "http://localhost:10000/gameapi/downloadgame";
+        const url = "htto://maltebp.dk:10000:10000/gameapi/downloadgame";
+        axios({
+              method: 'get',
+              url: url,
+              responseType: 'arraybuffer',
+              headers: {
+                'Content-Type': 'application/zip',
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  }
+                'Access-Control-Allow-Origin': url,
+                'Accept': 'json/application',
+                'Authorization': 'Bearer ' + localStorage.getItem("dftoken")
+              },
+              withCredentials: true
+            })
+              .then(response => {
+              console.log(response)
+                const url = window.URL.createObjectURL(new Blob([response.data], {type: "octet/stream"}));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', 'DeepFlight.zip');
+                  document.body.appendChild(link);
+                  link.click();
+              })
+              .catch(error => {
+                console.log("axios download results error", error);
+                this.setState(state => ({message: "Download failed."}));
+              });
+    }
 
-  handleSubmit(event) {
-    const { username, password } = this.state;
+    handleDownload() {
+        this.setState(state => ({ isToggleOn: false }));
+        //alert("Starting download");
+        this.downloadGame();
+        setTimeout(() => {  this.setState(state => ({ isToggleOn: true })); }, 1000);
 
-    var bodyFormData = new FormData();
-    bodyFormData.append('name', username);
-    bodyFormData.append('password', password);
-
-    axios({
-      method: 'post',
-      url: 'http://maltebp.dk:7000/login',
-      //url: 'http://localhost:7000/login',
-      data: bodyFormData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Origin': 'http://maltebp.dk:7000/login'
-        //'Access-Control-Allow-Origin': 'http://localhost:7000'
-      },
-      withCredentials: true})
-
-      .then(response => {
-        // TODO remove these alerts and logs!
-        console.log(response);
-        const token = response.data;
-        var decoded = jwt.decode(token.jwt);
-        console.log(decoded);
-        var result = JSON.stringify(response.statusText) + "\nJWT:\n" + JSON.stringify(decoded).replace(/\\/g, "");
-        alert(result);
-        //if (response.data.logged_in) {
-          //this.props.handleSuccessfulAuth(response.data);
-        //}
-        localStorage.setItem("dftoken", response.result);
-      })
-      .catch(error => {
-        console.log("login error", error);
-      });
-    event.preventDefault();
-  }
+    }
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            defaultvalue={this.state.username}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={this.state.password}
-            onChange={this.handleChange}
-            required
-          />
-
-          <button type="Login">Login</button>
-        </form>
+      <div className="box">
+        <h2>Hello, {this.state.user}!</h2>
+        <p>You are logged in and can download the game from here.</p>
+        <p>Just a dummy file, no need to install it :-)</p>
+        <button type="button" disabled={!this.state.isToggleOn} onClick={this.handleDownload}>{this.state.isToggleOn ? 'Download' : 'Please wait...'}</button>
+        <h1>{this.state.message}</h1>
+        <p>Size: 8 MB</p>
       </div>
     );
   }
