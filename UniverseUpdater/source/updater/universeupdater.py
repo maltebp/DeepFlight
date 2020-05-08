@@ -8,7 +8,7 @@ from source.Database import databasecontroller
 from source.model.planet import *
 
 _UPDATE_FREQUENCY = 30 # seconds
-_ROUND_LENGTH = 1 # Minutes
+_ROUND_LENGTH = 10 # Minutes
 _CLEAR_DATABSE_ON_START = True
 _TEST_MODE = True
 

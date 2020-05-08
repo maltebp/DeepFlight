@@ -9,7 +9,7 @@ import inspect
 from source.model.track import Track
 
 
-__TRACK_GENERATOR_PATH = os.path.dirname(__file__) + "\TrackGenerator.exe"
+__TRACK_GENERATOR_PATH = os.path.dirname(__file__) + "/"+"TrackGenerator"
 __TRACK_FILE_NAME = "generatedtrack"
 __TRACK_FILE_EXT = ".dftbd"
 
