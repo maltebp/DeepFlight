@@ -24,8 +24,8 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    //const url = "http://maltebp.dk:10000/gameapi/round/current";
-    const url = "http://localhost:10000/gameapi/rankings/universal"
+    const url = "http://maltebp.dk:10000/gameapi/round/current";
+    //const url = "http://localhost:10000/gameapi/rankings/universal"
     axios({
       method: 'get',
       url: url,
