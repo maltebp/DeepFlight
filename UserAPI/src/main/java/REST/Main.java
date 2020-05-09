@@ -2,14 +2,21 @@ package REST;
 
 import Controller.Authendicator;
 import JWT.JWTHandler;
+import Prometheus.QueuedThreadPoolCollector;
+import Prometheus.StatisticsHandlerCollector;
+import Respons.Response;
+import Respons.ResponseText;
 import brugerautorisation.data.Bruger;
-
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
+import io.prometheus.client.exporter.HTTPServer;
 import javalinjwt.JavalinJWT;
 import javalinjwt.examples.JWTResponse;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -18,15 +25,27 @@ import java.util.Optional;
 public class Main {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        /*Code from https://javalin.io/tutorials/prometheus-example*/
+        StatisticsHandler statisticsHandler = new StatisticsHandler();
+        QueuedThreadPool queuedThreadPool = new QueuedThreadPool(200, 8, 60_000);
+        initializePrometheus(statisticsHandler, queuedThreadPool);
+
         //Initializing server
         Javalin app = Javalin.create(config -> {
             // ACCEPTS ALL CLIENTS: ONLY FOR TESTING
             config.enableCorsForAllOrigins();
+            config.server(()-> {
+                Server server = new Server(queuedThreadPool);
+                server.setHandler(statisticsHandler);
+                return server;
+            });
+
+
             // TODO: add client url for game and site, local and remote. These urls can be read from the console.
             //config.enableCorsForOrigin(
             //        "http://localhost:3000/", // Web site local: OK
-            //        "https://master.d3lj15etjpqs5m.amplifyapp.com/" // Web site remote
+            //        "http://maltebp.dk/" // Web site remote
             //);
 
         }).start(7000);
@@ -53,7 +72,6 @@ public class Main {
                 //Redirection to a responsemessage, providing with informaion on how to post a login request.
                 ctx.redirect("/loginRequest",302);
             }
-
         });
 
 
@@ -77,89 +95,28 @@ public class Main {
         Rest endpoint: param: logininformation
         response: token String.
          */
-        app.post("/login", ctx -> {
-
-          try {
-              System.out.println("Endpoint: login");
-              String name = ctx.formParam("name");
-              String pwd = ctx.formParam("password");
-
-              System.out.println(name + ",pwd " + pwd); //For debugging
-              Bruger user = Authendicator.Authendication(name, pwd);
-              if (user == null) {
-                  ctx.status(401);
-                  ctx.result("Unauthorized");
-              } else {
-                  String token = JWTHandler.provider.generateToken(user);
-                  ctx.json(new JWTResponse(token));
-              }
-          }catch (IllegalArgumentException e){
-              ctx.status(401);
-              ctx.result("Could not fin user");
-          }
-        });
-
+        app.post("/login",LoginHandler.login);
 
         /*
         Endpoint for changing password
         */
+        app.post("/jwt/changeLogin",LoginHandler.changePassword);
 
-        app.post("/jwt/changeLogin", ctx->{
-            System.out.println("Endpoint: /login/changeLogin");
-            try {
-                String pwd = ctx.formParam("new_password");
-
-                ObjectMapper mapper = new ObjectMapper();
-                Bruger bruger = mapper.readValue(unpactkToken(ctx,"user"), Bruger.class);
-                System.out.println(bruger.toString());
-
-
-                String username = bruger.brugernavn;
-                String password = ctx.formParam("password");
-                System.out.println(pwd+username+password); //For debugging
-
-                Bruger newUser = Authendicator.AuthChangePassword(username, password, pwd);
-
-                if (newUser == null) {
-                    ctx.status(500);
-                    ctx.result("Internal server error");
-                }
-
-                ctx.result("Sucessfully changed password");
-
-            }catch (Exception e){
-                e.printStackTrace();
-                ctx.status(400);
-                ctx.result("Missing param");
-            }
-        });
-        /*
-####################################################RESOLVE ENDPOINT#################################################################################
- */
 
         //Get user info in exchange for JWT.
-        app.get("/jwt/exchangeUser", ctx->{
-
-            ctx.result(unpactkToken(ctx,"user"));
-        });
-
-
-
+        app.get("/jwt/exchangeUser",LoginHandler.exchangeUser );
 
     }
-/*
-####################################################HELPER FUNCTIONS#################################################################################
- */
 
-    /*
-    A clumsy way of unpacking tokens
-     */
 
-    private static String unpactkToken(io.javalin.http.Context ctx, String infoToRetrive){
-        Optional<DecodedJWT> decodedJWT = JavalinJWT.getTokenFromHeader(ctx)
-                .flatMap(JWTHandler.provider::validateToken);
 
-        return decodedJWT.get().getClaim(infoToRetrive).asString();
 
+
+    /*Code from https://javalin.io/tutorials/prometheus-example*/
+
+    private static void initializePrometheus(StatisticsHandler statisticsHandler, QueuedThreadPool queuedThreadPool) throws IOException {
+        StatisticsHandlerCollector.initialize(statisticsHandler); // collector is included in source code
+        QueuedThreadPoolCollector.initialize(queuedThreadPool); // collector is included in source code
+        HTTPServer prometheusServer = new HTTPServer(7080);
     }
 }

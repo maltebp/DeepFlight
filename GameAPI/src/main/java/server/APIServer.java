@@ -4,8 +4,6 @@ import io.javalin.Javalin;
 import org.eclipse.jetty.http.HttpStatus;
 import server.services.*;
 
-
-
 public class APIServer {
 
     private static final String URL_ROOT = "/gameapi";

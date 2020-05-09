@@ -1,6 +1,9 @@
 package database;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -12,7 +15,6 @@ public class TrackDataReader {
      * Loads Track block data from a test file in the 'testtrackdata' folder
      */
     public static byte[] getTrackData(String filename){
-
         // Append folder name
         filename = "testtrackdata/"+filename;
 

@@ -10,13 +10,10 @@ import model.Round;
 import model.User;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-
 
 public class RoundService {
 
@@ -107,16 +104,16 @@ public class RoundService {
         (username, rating), because it's much more convenient
         on the client side.
      */
-    private void convertRankings(Round round) throws DatabaseException{
-        if( round.getRankings() != null ){
+    private void convertRankings(Round round) throws DatabaseException {
+        if (round.getRankings() != null) {
             IDatabaseDAO database = new DatabaseDAO();
             List<User> users = database.getUsers();
 
             HashMap<String, Double> newRankings = new HashMap<>();
 
-            for(User user : users){
+            for (User user : users) {
                 Double ranking = round.getRankings().get(user.getId());
-                if( ranking != null ){
+                if (ranking != null) {
                     newRankings.put(user.getUsername(), ranking);
                 }
             }
@@ -124,6 +121,5 @@ public class RoundService {
             round.setRankings(newRankings);
         }
     }
-
 
 }

@@ -4,7 +4,6 @@ import dev.morphia.annotations.*;
 import dev.morphia.utils.IndexType;
 import lombok.*;
 import lombok.AllArgsConstructor;
-import org.bson.types.ObjectId;
 import org.json.JSONObject;
 import lombok.Builder;
 
@@ -19,6 +18,7 @@ import lombok.Builder;
 public class User {
     @Id
     private String id;
+
     private String username;
     private int rank; // This is universal rank
     private double rating; // This is universal rating

@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Home from "./Home";
 import Download from "./Download";
-import Signup from "./Signup";
+import About from "./About";
 
 class Main extends Component {
   render() {
@@ -17,12 +17,12 @@ class Main extends Component {
           <ul className="header">
             <li><NavLink exact to="/">High Scores</NavLink></li>
             <li><NavLink to="/download">Download</NavLink></li>
-            <li><NavLink to="/signup">Sign up</NavLink></li>
+            <li><NavLink to="/about">About the game</NavLink></li>
           </ul>
           <div className="content">
           <Route exact path="/" component={Home}/>
          <Route path="/download" component={Download}/>
-         <Route path="/signup" component={Signup}/>
+         <Route path="/about" component={About}/>
           </div>
         </div>
         </HashRouter>

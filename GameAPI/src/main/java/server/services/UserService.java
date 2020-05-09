@@ -1,10 +1,8 @@
 package server.services;
-
 import database.DatabaseDAO;
 import database.DatabaseException;
 import database.IDatabaseDAO;
 import io.javalin.Javalin;
-import io.javalin.core.util.Header;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.ContentType;
 import model.User;
@@ -21,7 +19,6 @@ public class UserService {
     public UserService(Javalin server) {
 
         server.get("user/all", this::getAllUsers);
-
         server.get("user/:username", context -> {
             getUser(context, false);
         });
@@ -46,7 +43,6 @@ public class UserService {
             context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
         }
     }
-
 
 
     private void getUser(Context context, boolean privateInfo){

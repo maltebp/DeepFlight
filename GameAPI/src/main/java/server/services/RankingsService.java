@@ -18,8 +18,8 @@ public class RankingsService {
 
     public RankingsService(Javalin server){
         server.get("rankings/universal", this::getUniversalRankings );
-    }
 
+    }
 
 
     private void getUniversalRankings(Context context) {
@@ -51,4 +51,5 @@ public class RankingsService {
             context.result("An error occured when accessing the database");
         }
     }
+
 }

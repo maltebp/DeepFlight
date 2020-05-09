@@ -7,7 +7,7 @@ COPY GameAPI.jar .
 
 # RUN mvn install -Dskiptests
 
-CMD ["java", "-jar", "server.APIServer.jar"]
+CMD ["java", "-jar", "GameAPI.jar"]
 
 EXPOSE 10000
 
