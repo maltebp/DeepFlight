@@ -17,13 +17,10 @@ class About extends Component {
             <p>{text.about.gametext}</p>
             <h2>{text.about.projectheader}</h2>
             <p>{text.about.projecttext}</p>
-
-
             </div>
               <p>This page is made by gruppe 0, DTU software, Backend Development, may 2020. </p>
           </div>
         </div>
-
       </div>
     );
   }
