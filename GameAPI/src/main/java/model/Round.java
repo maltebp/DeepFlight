@@ -1,36 +1,43 @@
 package model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import dev.morphia.annotations.*;
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.json.JsonWriterSettings;
+import org.bson.types.ObjectId;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
+@Entity("rounds")
+@Indexes({
+        @Index(
+                fields = @Field("startDate"),
+                options = @IndexOptions(name = "round_startDate")
+        )
+})
 public class Round {
+    @Id
+    private String id;
 
     // Also used for ID
     private int roundNumber;
 
-    private int[] trackIds = null;
+    private String[] trackIds = null;
 
     private long startDate;
 
     private long endDate;
 
+    private HashMap<String, Double> rankings;
+
     // Public default constructor required for JSON serialization
     public Round() { }
 
-    public Round(int roundNumber, int[] trackIds, long startDate, long endDate) {
+    public Round(int roundNumber, String[] trackIds, long startDate, long endDate) {
         this.roundNumber = roundNumber;
         this.trackIds = trackIds;
         this.startDate = startDate;
@@ -41,7 +48,7 @@ public class Round {
         return roundNumber;
     }
 
-    public int[] getTrackIds() {
+    public String[] getTrackIds() {
         return trackIds;
     }
 
@@ -51,6 +58,14 @@ public class Round {
 
     public long getEndDate() {
         return endDate;
+    }
+
+    public void setRankings(HashMap<String, Double> rankings) {
+        this.rankings = rankings;
+    }
+
+    public HashMap<String, Double> getRankings() {
+        return rankings;
     }
 
     @Override
@@ -66,31 +81,4 @@ public class Round {
     public JSONObject toJSON() {
         return new JSONObject(this);
     }
-
-
-    public Document toDocument(){
-        JSONObject json = new JSONObject(this);
-        json.put("_id", roundNumber);
-        json.remove("roundNumber");
-        return Document.parse(json.toString());
-    }
-
-
-    public static Round fromDocument(Document document){
-        JSONObject baseJson = new JSONObject(document.toJson());
-
-        JSONObject adjustedJson = new JSONObject();
-        adjustedJson.put("roundNumber", baseJson.getInt("_id"));
-        adjustedJson.put("trackIds", baseJson.get("trackIds"));
-        adjustedJson.put("startDate", document.getLong("startDate"));
-        adjustedJson.put("endDate", document.getLong("endDate"));
-
-        try {
-            return new ObjectMapper().readValue(adjustedJson.toString(), Round.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 }

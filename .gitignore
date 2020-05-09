@@ -7,11 +7,19 @@
 
 # User-specific stuff
 target/
+<<<<<<< HEAD
+venv/
+__pycache__/
+workspace.xml
+*.iml
+.idea/
+=======
 workspace.xml
 .idea/
 venv/
 __pycache__/
 *.iml
+>>>>>>> origin/master
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
@@ -152,6 +160,10 @@ fabric.properties
 
 # Markdown Navigator plugin
 
+<<<<<<< HEAD
+# End of https://www.gitignore.io/api/clion,intellij
+=======
 # End of https://www.gitignore.io/api/clion,intellij
 
 
+>>>>>>> origin/master
