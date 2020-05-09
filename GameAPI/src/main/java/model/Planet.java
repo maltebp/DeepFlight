@@ -1,27 +1,23 @@
 package model;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
-import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
-import java.io.IOException;
 import java.util.Arrays;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 
+@Entity("planets")
 public class Planet {
-
-    private int id;
+    @Id
+    private String id;
     private String name;
     private int[] color;
-
 
     // Default constructor must exist for JSON deserialize to work
     public Planet() {}
 
-    public Planet(int id, String name, int[] color) {
+    public Planet(String id, String name, int[] color) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -31,7 +27,8 @@ public class Planet {
     }
 
     // Getters required for JSON serialization
-    public int getId() {
+
+    public String getId() {
         return id;
     }
     public String getName() {
@@ -40,9 +37,11 @@ public class Planet {
     public int[] getColor() {
         return color;
     }
-    public void setId(int id) {
+
+    public void setId(String id) {
         this.id = id;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -59,49 +58,9 @@ public class Planet {
                 '}';
     }
 
-    public JSONObject toJSON() throws JsonProcessingException {
-        return new JSONObject(new ObjectMapper().writeValueAsString(this));
+    public JSONObject toJSON() {
+        return new JSONObject(this);
     }
 
-    public static Planet fromMongoObject(DBObject object) {
-        JSONObject jsonObject = new JSONObject(JSON.serialize(object));
-        jsonObject.put("id", jsonObject.get("_id"));
-        jsonObject.remove("_id");
-
-        try{
-            return new ObjectMapper().readValue(jsonObject.toString(), Planet.class);
-        }catch(IOException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public DBObject toMongoObject(){
-        JSONObject json = new JSONObject(this);
-        json.put("_id", id);
-        json.remove("id");
-        return (DBObject) JSON.parse(json.toString());
-    }
-
-    public static Planet fromDocument(Document document) {
-        JSONObject jsonObject = new JSONObject(document.toJson());
-        jsonObject.put("id", jsonObject.get("_id"));
-        jsonObject.remove("_id");
-
-        try{
-            return new ObjectMapper().readValue(jsonObject.toString(), Planet.class);
-        }catch(IOException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-    public Document toDocument(){
-        JSONObject json = new JSONObject(this);
-        json.put("_id", id);
-        json.remove("id");
-        return Document.parse(json.toString());
-    }
 
 }
