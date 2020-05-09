@@ -202,28 +202,4 @@ public class HandlerTest {
 
     }
 
-
-    @Test
-    public void Guest_login_SameGuestUserCantLogin_Twise(){
-        Bruger user1 = new Bruger();
-        user1.adgangskode="admin0";
-        user1.brugernavn="admin0";
-
-        Bruger user2 = new Bruger();
-        user2.adgangskode="admin0";
-        user2.brugernavn="admin0";
-
-        app.start(1234);
-        app.post("/login",LoginHandler.login);
-
-        HttpResponse response = Unirest.post("http://localhost:1234/login").field("name",user1.brugernavn).field("password",user1.adgangskode).asString();
-        //Return status code Suceed
-        assertThat(response.getStatus()).isEqualTo(200);
-
-        JSONObject json = new JSONObject(response.getBody().toString());
-        System.out.println(json.toString());
-        //Checking that the UserAPI returns a jwt in the body if the login suceed
-        Assert.assertTrue(json.has("jwt"));
-
-    }
 }
