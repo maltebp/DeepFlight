@@ -4,7 +4,7 @@ import bson
 # Settings
 _db_user = "universeupdater"
 _db_password = "deepflightisawesome"
-_db_name = "game"
+_db_name = "gamedb"
 
 #Collections
 df_collections = []
@@ -31,7 +31,7 @@ def initializeDatabase(testMode=False, clearDatabase=False):
     print(f"\tTest mode: {testMode}")
     print(f"\tClear database: {clearDatabase}")
 
-    db_name = "gamedb" + ("_test" if testMode else "")
+    db_name = _db_name + ("_test" if testMode else "")
     global db
     db = client[db_name]
     print(f"\tDatabase name: {db_name}")

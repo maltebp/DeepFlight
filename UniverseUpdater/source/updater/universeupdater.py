@@ -9,8 +9,8 @@ from source.model.planet import *
 
 _UPDATE_FREQUENCY = 30 # seconds
 _ROUND_LENGTH = 10 # Minutes
-_CLEAR_DATABSE_ON_START = True
-_TEST_MODE = True
+_CLEAR_DATABSE_ON_START = False
+_TEST_MODE = False
 
 # Number of rounds to base the universal ranking upon
 _UNIVERSAL_RANKING_ROUND_COUNT  = 3
