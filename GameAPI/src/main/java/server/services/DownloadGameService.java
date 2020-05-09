@@ -24,6 +24,7 @@ public class DownloadGameService {
     }
 
     private void downloadGame(Context context) {
+
         // Check authentication token
         HttpResponse<String> response = Unirest.get(AUTH_URL)
                 .header(Header.AUTHORIZATION, context.header(Header.AUTHORIZATION))
@@ -38,7 +39,6 @@ public class DownloadGameService {
             context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
             return;
         }
-
         // Send file
         try {
             context.status(OK_200);
@@ -49,24 +49,11 @@ public class DownloadGameService {
             e.printStackTrace();
             context.status(INTERNAL_SERVER_ERROR_500);
         }
-
     }
 
     private InputStream getFileAsStream(String pathString) throws IOException {
-        // 1 TODO: DELETE
-        //byte[] bytes = TrackDataReader.getTrackData(FILE_NAME);
-        //ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-        //return stream;
-
-        // 2
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classloader.getResourceAsStream(pathString);
         return inputStream;
-
-        // 3 TODO: DELETE
-        /*Path path = Paths.get(pathString);
-        byte[] bytes = Files.readAllBytes(path);
-        ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-        return stream;*/
     }
 }

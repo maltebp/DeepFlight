@@ -33,7 +33,6 @@ public class Main {
                 return server;
             });
 
-
             // TODO: add client url for game and site, local and remote. These urls can be read from the console.
             //config.enableCorsForOrigin(
             //        "http://localhost:3000/", // Web site local: OK
