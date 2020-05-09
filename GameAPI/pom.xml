@@ -33,7 +33,7 @@
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <finalName>server.GameAPI</finalName>
+                    <finalName>GameAPI</finalName>
                 </configuration>
                 <executions>
                     <execution>
