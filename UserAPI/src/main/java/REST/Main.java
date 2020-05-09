@@ -1,26 +1,17 @@
 package REST;
 
-import Controller.Authendicator;
 import JWT.JWTHandler;
 import Prometheus.QueuedThreadPoolCollector;
 import Prometheus.StatisticsHandlerCollector;
-import Respons.Response;
-import Respons.ResponseText;
-import brugerautorisation.data.Bruger;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import io.javalin.Javalin;
-import io.javalin.http.Handler;
 import io.prometheus.client.exporter.HTTPServer;
 import javalinjwt.JavalinJWT;
-import javalinjwt.examples.JWTResponse;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Optional;
 
 public class Main {
