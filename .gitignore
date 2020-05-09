@@ -6,9 +6,10 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-__pycache__/
+
+target/
 venv/
-target
+__pycache__/
 workspace.xml
 *.iml
 .idea/
@@ -102,6 +103,7 @@ fabric.properties
 # User-specific stuff
 
 # Generated files
+/WebSite/node_modules/
 
 # Sensitive or high-churn files
 
@@ -151,4 +153,10 @@ fabric.properties
 
 # Markdown Navigator plugin
 
+<<<<<<< HEAD
 # End of https://www.gitignore.io/api/clion,intellij
+=======
+# End of https://www.gitignore.io/api/clion,intellij
+
+
+>>>>>>> origin/master

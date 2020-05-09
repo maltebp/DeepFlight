@@ -23,7 +23,7 @@ public class Authendicator {
     public static Bruger AuthChangePassword(String username, String password, String newPassword)  {
         System.out.println(username); //For debuggin
         System.out.println(password); //For debuggin
-
+        System.out.println(newPassword);
         try{
 
             Bruger newUser = JavabogAccess.changePassword(username,password,newPassword);
