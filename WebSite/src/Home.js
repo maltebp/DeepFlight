@@ -39,7 +39,6 @@ class Home extends Component {
     })
       .then(response => {
         console.log(response);
-        // read 5 first uni scores
         const scores = response.data;
         console.log(scores);
         this.setState({

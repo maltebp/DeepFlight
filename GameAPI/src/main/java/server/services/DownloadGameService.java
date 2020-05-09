@@ -52,20 +52,8 @@ public class DownloadGameService {
     }
 
     private InputStream getFileAsStream(String pathString) throws IOException {
-        // 1 TODO: DELETE
-        //byte[] bytes = TrackDataReader.getTrackData(FILE_NAME);
-        //ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-        //return stream;
-
-        // 2
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classloader.getResourceAsStream(pathString);
         return inputStream;
-
-        // 3 TODO: DELETE
-        /*Path path = Paths.get(pathString);
-        byte[] bytes = Files.readAllBytes(path);
-        ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-        return stream;*/
     }
 }
