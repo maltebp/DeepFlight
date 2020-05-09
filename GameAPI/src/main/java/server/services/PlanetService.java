@@ -48,10 +48,10 @@ public class PlanetService {
 
 
     private void getPlanet(Context context) {
+        String planetId = context.pathParam("planetid");
 
         try{
             IDatabaseDAO db = new DatabaseDAO();
-            String planetId = context.pathParam("planetid");
             Planet planet = db.getPlanet(planetId);
 
             context.status(HttpStatus.OK_200);
@@ -59,9 +59,8 @@ public class PlanetService {
             context.result(planet.toJSON().toString());
 
         }catch(NoSuchElementException e){
-            e.printStackTrace();
             context.status(HttpStatus.NOT_FOUND_404);
-            context.result("No round is currently active");
+            context.result(String.format("Could not find planet with ID '%s'", planetId));
             context.contentType("text/plain");
 
         }catch(DatabaseException e){

@@ -2,7 +2,7 @@
 
 #mvn clean package\
 
-#mvn clean package &&\
+mvn clean package &&\
 scp -r -i "$AMAZON_KEY" Dockerfile target/GameAPI.jar startContainer.sh df-user@maltebp.dk:./DeepFlight/GameAPI &&\
 ssh -i "$AMAZON_KEY" df-user@maltebp.dk "cd DeepFlight/GameAPI &&  ./startContainer.sh"
 

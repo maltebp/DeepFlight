@@ -24,12 +24,15 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     @Override
     public Planet getPlanet(String planetId) throws DatabaseException, NoSuchElementException {
-        Planet planet = database.createQuery(Planet.class).field("id").equal(new ObjectId(planetId)).first();
-
-        if (planet == null) {
-            throw new NoSuchElementException(String.format("No such Planet exist. PlanetID: %s", planetId));
+        try{
+            Planet planet = database.createQuery(Planet.class).field("id").equal(new ObjectId(planetId)).first();
+            if (planet == null) {
+                throw new NoSuchElementException(String.format("No such Planet exist. PlanetID: %s", planetId));
+            }
+            return planet;
+        }catch(IllegalArgumentException e){
+            throw new NoSuchElementException("Couldn't find Track with that ID: " + e.getMessage());
         }
-        return planet;
     }
 
     @Override
@@ -77,11 +80,16 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     @Override
     public Track getTrack(String trackId) throws DatabaseException, NoSuchElementException {
-        Track track = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId)).first();
-        if (track == null) {
-            throw new NoSuchElementException(String.format("No such Track exist. trackID: %s", trackId));
+        try{
+            Track track = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId)).first();
+            if (track == null) {
+                throw new NoSuchElementException(String.format("No such Track exist. trackID: %s", trackId));
+            }
+            return track;
+        }catch(IllegalArgumentException e){
+            throw new NoSuchElementException();
         }
-        return track;
+
     }
 
     @Override
@@ -124,10 +132,11 @@ public class DatabaseDAO implements IDatabaseDAO {
     public Round getPreviousRound() throws DatabaseException, NoSuchElementException {
         Round currentRound = getCurrentRound();
         Round previousRound = getRoundFromRoundNumber(currentRound.getRoundNumber()-1);
-        if (currentRound == null) {
-            throw new NoSuchElementException(String.format("No such Round exist. RoundNumber: %s", previousRound.getRoundNumber()));
+        if (previousRound == null) {
+            throw new NoSuchElementException("No such Round exist. ");
         }
-        return getRoundFromRoundNumber(currentRound.getRoundNumber()-1);
+
+        return previousRound;
     }
 
     private Round getRoundFromEpochMillis(long epochMillis) {

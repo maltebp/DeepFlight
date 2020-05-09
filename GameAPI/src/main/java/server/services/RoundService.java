@@ -85,7 +85,7 @@ public class RoundService {
 
         }catch(NoSuchElementException e){
             context.status(HttpStatus.NOT_FOUND_404);
-            context.result("No round is currently active");
+            context.result("No previous rounds found");
             context.contentType("text/plain");
 
         }catch(DatabaseException e){
