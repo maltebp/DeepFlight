@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
     }
 
     char destinationPath[254] = {0};
-    unsigned int seed = 0;
+    unsigned long int seed = 0;
     GenParams genParams = {0};
 
     createFullPath(argv[1], argv[2], destinationPath);
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 
     printf("Recieved arguments:\n");
     printf("  Full Path: '%s'\n", destinationPath);
-    printf("  Seed: %d\n", seed);
+    printf("  Seed: %lu\n", seed);
     printf("  Length factor: %d\n", genParams.lengthFactor);
     printf("  Stretch factor: %d\n", genParams.stretchFactor);
     printf("  Length factor: %d\n", genParams.curveFactor);
