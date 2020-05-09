@@ -14,11 +14,9 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     private Datastore database;
 
-
     public DatabaseDAO(){
       database = DatabaseConnection.getInstance().getDatastore();
     }
-
 
     public List<Track> getAllTracks(){
         return database.createQuery(Track.class).find().toList();
@@ -26,7 +24,12 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     @Override
     public Planet getPlanet(String planetId) throws DatabaseException, NoSuchElementException {
-        return database.createQuery(Planet.class).field("id").equal(new ObjectId(planetId)).first();
+        Planet planet = database.createQuery(Planet.class).field("id").equal(new ObjectId(planetId)).first();
+
+        if (planet == null) {
+            throw new NoSuchElementException(String.format("No such Planet exist. PlanetID: %s", planetId));
+        }
+        return planet;
     }
 
     @Override
@@ -36,12 +39,20 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     @Override
     public User getUser(String userId) throws DatabaseException, NoSuchElementException {
-        return database.createQuery(User.class).field("id").equal(new ObjectId(userId)).first();
+        User user = database.createQuery(User.class).field("id").equal(new ObjectId(userId)).first();
+        if (user == null) {
+            throw new NoSuchElementException(String.format("No such User exist. UserID: %s", userId));
+        }
+        return user;
     }
 
     @Override
     public User getUserFromUsername(String username) throws DatabaseException, NoSuchElementException {
-        return database.createQuery(User.class).field("username").equal(username).first();
+        User user = database.createQuery(User.class).field("username").equal(username).first();
+        if (user == null) {
+            throw new NoSuchElementException(String.format("No such User exist. UserName: %s", username));
+        }
+        return user;
     }
 
     @Override
@@ -66,16 +77,24 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     @Override
     public Track getTrack(String trackId) throws DatabaseException, NoSuchElementException {
-        return database.createQuery(Track.class).field("id").equal(new ObjectId(trackId)).first();
+        Track track = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId)).first();
+        if (track == null) {
+            throw new NoSuchElementException(String.format("No such Track exist. trackID: %s", trackId));
+        }
+        return track;
     }
 
     @Override
     public Trackdata getTrackData(String trackId) throws DatabaseException, NoSuchElementException {
-        return database.createQuery(Trackdata.class).field("id").equal(new ObjectId(trackId)).first();
+        Trackdata trackdata = database.createQuery(Trackdata.class).field("id").equal(new ObjectId(trackId)).first();
+        if (trackdata == null) {
+            throw new NoSuchElementException(String.format("No such Track exist. trackID: %s", trackId));
+        }
+        return trackdata;
     }
 
     @Override
-    public boolean updateTrackTime(String trackId, String userId, int time) throws DatabaseException, NoSuchElementException {
+    public boolean updateTrackTime(String trackId, String userId, int time) throws DatabaseException {
         Query<Track> trackQuery = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId));
 
         UpdateOperations<Track> updateOperations = database.createUpdateOperations(Track.class)
@@ -92,14 +111,22 @@ public class DatabaseDAO implements IDatabaseDAO {
     }
 
     @Override
-    public Round getCurrentRound() throws DatabaseException {
+    public Round getCurrentRound() throws DatabaseException,NoSuchElementException {
         long currEpochMillis = System.currentTimeMillis();
-        return getRoundFromEpochMillis(currEpochMillis);
+        Round round = getRoundFromEpochMillis(currEpochMillis);
+        if (round == null) {
+            throw new NoSuchElementException(String.format("No such Round exist. currentEpochMillis: %d", currEpochMillis));
+        }
+        return round;
     }
 
     @Override
     public Round getPreviousRound() throws DatabaseException, NoSuchElementException {
         Round currentRound = getCurrentRound();
+        Round previousRound = getRoundFromRoundNumber(currentRound.getRoundNumber()-1);
+        if (currentRound == null) {
+            throw new NoSuchElementException(String.format("No such Round exist. RoundNumber: %s", previousRound.getRoundNumber()));
+        }
         return getRoundFromRoundNumber(currentRound.getRoundNumber()-1);
     }
 
