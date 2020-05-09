@@ -18,7 +18,7 @@ docker stop "$containerName" && docker rm "$containerName"
 
 # Start container
 printf "\nStarting container '$containerName'\n"
-docker run --name "$containerName" -d -p 7000:7000 "$imageName"
+docker run --name "$containerName" -d -p 7000:7000 -p 7001:7001 "$imageName"
 if [ $? -eq 0 ]; then
     printf "\nSuccess!" 
 fi
