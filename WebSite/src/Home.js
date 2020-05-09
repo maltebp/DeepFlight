@@ -7,24 +7,25 @@ class Home extends Component {
     super(props)
     this.state = {
       universal: [
-        'Loading high scores...',
-        null,
-        null,
-        null,
-        null,
+        {score: "Loading high scores...", name: null},
+        {score: null, name: null},
+        {score: null, name: null},
+        {score: null, name: null},
+        {score: null, name: null},
       ],
       lastRound: [
-        null,
-        null,
-        null,
-        null,
-        null,
-      ]
+              {score: "Loading high scores...", name: null},
+              {score: null, name: null},
+              {score: null, name: null},
+              {score: null, name: null},
+              {score: null, name: null},
+            ]
     }
   }
 
   componentDidMount() {
     const url = "http://maltebp.dk:10000/gameapi/round/current";
+    //const url = "http://localhost:10000/gameapi/rankings/universal"
     axios({
       method: 'get',
       url: url,
@@ -38,7 +39,7 @@ class Home extends Component {
     })
       .then(response => {
         console.log(response);
-        const scores = response.data.planets;
+        const scores = response.data;
         console.log(scores);
         this.setState({
           universal: [scores[0].name, scores[1].name, scores[2].name, scores[3].name],
@@ -58,10 +59,10 @@ class Home extends Component {
           <h1>Universal ratings (top 5)</h1>
           <table>
             <tbody>
-              <tr><td>{this.state.universal[0]}</td><td>{this.state.lastRound[0]}</td></tr>
-              <tr><td>{this.state.universal[1]}</td><td>{this.state.lastRound[1]}</td></tr>
-              <tr><td>{this.state.universal[2]}</td><td>{this.state.lastRound[2]}</td></tr>
-              <tr><td>{this.state.universal[3]}</td><td>{this.state.lastRound[3]}</td></tr>
+              <tr><td>{this.state.universal[0].score}</td><td>{this.state.universal[0].name}</td></tr>
+              <tr><td>{this.state.universal[1].score}</td><td>{this.state.universal[1].name}</td></tr>
+              <tr><td>{this.state.universal[2].score}</td><td>{this.state.universal[2].name}</td></tr>
+              <tr><td>{this.state.universal[3].score}</td><td>{this.state.universal[3].name}</td></tr>
             </tbody>
           </table>
             </div>
@@ -69,10 +70,10 @@ class Home extends Component {
             <h1 >Last round ratings (top 5)</h1>
             <table>
               <tbody>
-                <tr><td>{this.state.universal[0]}</td><td>{this.state.lastRound[0]}</td></tr>
-                <tr><td>{this.state.universal[1]}</td><td>{this.state.lastRound[1]}</td></tr>
-                <tr><td>{this.state.universal[2]}</td><td>{this.state.lastRound[2]}</td></tr>
-                <tr><td>{this.state.universal[3]}</td><td>{this.state.lastRound[3]}</td></tr>
+                <tr><td>{this.state.lastRound[0].score}</td><td>{this.state.lastRound[0].name}</td></tr>
+                <tr><td>{this.state.lastRound[1].score}</td><td>{this.state.lastRound[1].name}</td></tr>
+                <tr><td>{this.state.lastRound[2].score}</td><td>{this.state.lastRound[2].name}</td></tr>
+                <tr><td>{this.state.lastRound[3].score}</td><td>{this.state.lastRound[3].name}</td></tr>
               </tbody>
             </table>
           </div>

@@ -41,8 +41,7 @@ class Login extends Component {
             data: bodyFormData,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Access-Control-Allow-Origin': 'http://maltebp.dk:7000/login'
-                //'Access-Control-Allow-Origin': 'http://localhost:7000/login'
+                'Access-Control-Allow-Origin': url
             },
             withCredentials: true
         })
