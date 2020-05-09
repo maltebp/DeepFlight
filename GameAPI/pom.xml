@@ -142,6 +142,12 @@
         </dependency>
 
 
+<!--PROMETHEUS-->
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_httpserver</artifactId>
+            <version>0.1.0</version>
+        </dependency>
 
 
         <!--MORPHIA-->

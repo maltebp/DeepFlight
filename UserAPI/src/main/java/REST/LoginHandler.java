@@ -3,7 +3,6 @@ package REST;
 import Controller.Authendicator;
 import JWT.JWTHandler;
 import Respons.*;
-import Respons.Response;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.javalin.http.Handler;
 import brugerautorisation.data.Bruger;
