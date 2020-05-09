@@ -2,9 +2,9 @@
 
 #mvn clean package\
 
-mvn clean package &&\
-scp -r -i "$AMAZON_KEY" Dockerfile target/GameAPI.jar startContainer.sh ec2-user@maltebp.dk:./DeepFlight/GameAPI &&\
-ssh -i "$AMAZON_KEY" ec2-user@maltebp.dk "cd DeepFlight/GameAPI && ./startContainer.sh"
+#mvn clean package &&\
+scp -r -i "$AMAZON_KEY" Dockerfile target/GameAPI.jar startContainer.sh df-user@maltebp.dk:./DeepFlight/GameAPI &&\
+ssh -i "$AMAZON_KEY" df-user@maltebp.dk "cd DeepFlight/GameAPI &&  ./startContainer.sh"
 
 #scp -r -i "$AMAZON_KEY" pom.xml Dockerfile src ec2-user@maltebp.dk:./DeepFlight/server.GameAPI
 #scp -r -i "$AMAZON_KEY" src/main/java/* ec2-user@maltebp.dk:./DeepFlight/server.GameAPI/
