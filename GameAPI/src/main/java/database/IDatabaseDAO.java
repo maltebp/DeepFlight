@@ -1,9 +1,6 @@
 package database;
 
-import model.Planet;
-import model.Round;
-import model.Track;
-import model.User;
+import model.*;
 
 
 import java.util.List;
@@ -37,7 +34,7 @@ public interface IDatabaseDAO {
 
     Track getTrack(String trackId) throws DatabaseException, NoSuchElementException;
 
-    byte[] getTrackData(String trackId) throws DatabaseException, NoSuchElementException;
+    Trackdata getTrackData(String trackId) throws DatabaseException, NoSuchElementException;
 
     boolean updateTrackTime(String trackId, String userId, int time) throws DatabaseException, NoSuchElementException;
 

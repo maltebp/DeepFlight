@@ -3,8 +3,6 @@ import database.DatabaseDAO;
 import database.DatabaseException;
 import server.APIServer;
 import java.net.UnknownHostException;
-import java.time.LocalDate;
-import java.util.Calendar;
 
 public class Main {
 

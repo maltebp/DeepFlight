@@ -84,7 +84,7 @@ public class TrackService {
 
         try{
             IDatabaseDAO db = new DatabaseDAO();
-            byte[] trackData = db.getTrackData(trackId);
+            byte[] trackData = db.getTrackData(trackId).getTrackdata();
             context.result(new ByteArrayInputStream(trackData));
             context.contentType("application");
             context.status(HttpStatus.OK_200);

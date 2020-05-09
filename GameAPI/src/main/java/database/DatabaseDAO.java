@@ -3,9 +3,7 @@ package database;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
-import dev.morphia.query.Criteria;
-import dev.morphia.query.Query;
-import dev.morphia.query.Sort;
+import dev.morphia.query.*;
 import model.*;
 import org.bson.types.ObjectId;
 
@@ -72,13 +70,20 @@ public class DatabaseDAO implements IDatabaseDAO {
     }
 
     @Override
-    public byte[] getTrackData(String trackId) throws DatabaseException, NoSuchElementException {
-        return new byte[0];
+    public Trackdata getTrackData(String trackId) throws DatabaseException, NoSuchElementException {
+        return database.createQuery(Trackdata.class).field("id").equal(new ObjectId(trackId)).first();
     }
 
     @Override
     public boolean updateTrackTime(String trackId, String userId, int time) throws DatabaseException, NoSuchElementException {
-        return false;
+        Query<Track> trackQuery = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId));
+
+        UpdateOperations<Track> updateOperations = database.createUpdateOperations(Track.class)
+                .set(String.format("times.%s", userId),time);
+
+        UpdateResults updateResults = database.update(trackQuery,updateOperations);
+
+        return updateResults.getWriteResult().wasAcknowledged();
     }
 
     @Override
@@ -94,10 +99,8 @@ public class DatabaseDAO implements IDatabaseDAO {
 
     @Override
     public Round getPreviousRound() throws DatabaseException, NoSuchElementException {
-        long preEpochMillis = System.currentTimeMillis();
-        preEpochMillis -= 86400000;
-
-        return getRoundFromEpochMillis(preEpochMillis);
+        Round currentRound = getCurrentRound();
+        return getRoundFromRoundNumber(currentRound.getRoundNumber()-1);
     }
 
     private Round getRoundFromEpochMillis(long epochMillis) {
@@ -106,6 +109,10 @@ public class DatabaseDAO implements IDatabaseDAO {
                 q.criteria("endDate").greaterThanOrEq(epochMillis));
 
         return q.first();
+    }
+
+    private Round getRoundFromRoundNumber(long roundNumber) throws DatabaseException {
+        return database.createQuery(Round.class).field("roundNumber").equal(roundNumber).first();
     }
 
 
