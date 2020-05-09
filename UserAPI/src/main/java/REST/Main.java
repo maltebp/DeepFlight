@@ -106,6 +106,7 @@ public class Main {
         //Get user info in exchange for JWT.
         app.get("/jwt/exchangeUser",LoginHandler.exchangeUser );
 
+
     }
 
 

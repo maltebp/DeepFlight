@@ -10,9 +10,11 @@ import brugerautorisation.data.Bruger;
 import javalinjwt.JavalinJWT;
 import javalinjwt.examples.JWTResponse;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 public class LoginHandler {
+
 
     public static Handler login = ctx ->{
         try {
@@ -21,7 +23,7 @@ public class LoginHandler {
             String pwd = ctx.formParam("password");
 
             System.out.println(name + ",pwd " + pwd); //For debugging
-            Bruger user = Authendicator.Authendication(name, pwd);
+            Bruger user = checkloginType(name,pwd);
 
 
            // A null user will be thrown from Autheddication as an IllegalArgumentException
@@ -65,8 +67,8 @@ public class LoginHandler {
 
     public static Handler exchangeUser = ctx->{
         ctx.status(200);
-        ctx.result(Response.generateResponse(null,unpactkToken(ctx,"user")));
-        //ctx.result(unpactkToken(ctx,"user"));
+        //ctx.result(Response.generateResponse(null,unpactkToken(ctx,"user")));
+        ctx.result(unpactkToken(ctx,"user"));
     };
 
 
@@ -81,4 +83,21 @@ public class LoginHandler {
         return decodedJWT.get().getClaim(infoToRetrive).asString();
 
     }
+
+    private static Bruger checkloginType(String username, String password){
+        HashMap<String, String> guistLoginsList = Util.AddUserUtil.addPredifinedUsers();
+
+
+        if(guistLoginsList.containsKey(username)&& guistLoginsList.get(username).equals(password)){
+            Bruger guestUser = new Bruger();
+            guestUser.brugernavn = username;
+            if(Util.LoggedIn.addLogin(guestUser)) {
+                return guestUser;
+            }
+        }
+        return Authendicator.Authendication(username, password);
+    }
+
+
+
 }
