@@ -43,7 +43,7 @@ class Home extends Component {
         const scores = response.data;
         console.log(scores);
         this.setState({
-          universal: [scores[0].name, rating[1].name, scores[2].name, scores[3].name],
+          universal: [scores[0].name, scores[1].name, scores[2].name, scores[3].name],
           lastRound: [scores[0].color, scores[1].color, scores[2].color, scores[3].color]
         });
       })
