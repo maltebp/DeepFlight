@@ -10,4 +10,5 @@ COPY GameAPI.jar .
 CMD ["java", "-jar", "GameAPI.jar"]
 
 EXPOSE 10000
+EXPOSE 10001
 
