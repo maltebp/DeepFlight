@@ -36,13 +36,13 @@ class Login extends Component {
 
         axios({
             method: 'post',
-            url: 'http://maltebp.dk:7000/login',
-            //url: 'http://localhost:7000/login',
+            //url: 'http://maltebp.dk:7000/login',
+            url: 'http://localhost:7000/login',
             data: bodyFormData,
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Access-Control-Allow-Origin': 'http://maltebp.dk:7000/login'
-                //'Access-Control-Allow-Origin': 'http://localhost:7000/login'
+                //'Access-Control-Allow-Origin': 'http://maltebp.dk:7000/login'
+                'Access-Control-Allow-Origin': 'http://localhost:7000/login'
             },
             withCredentials: true
         })

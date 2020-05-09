@@ -13,8 +13,8 @@ import java.io.InputStream;
 import static org.eclipse.jetty.http.HttpStatus.*;
 
 public class DownloadGameService {
-    //final String AUTH_URL = "http://localhost:7000/jwt/exchangeUser";
-    final String AUTH_URL = "http://maltebp.dk:7000/jwt/exchangeUser";
+    final String AUTH_URL = "http://localhost:7000/jwt/exchangeUser";
+    //final String AUTH_URL = "http://maltebp.dk:7000/jwt/exchangeUser";
     final String FILE_NAME = "DeepFlight.zip";
 
     public DownloadGameService(Javalin server) {

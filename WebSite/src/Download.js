@@ -67,15 +67,14 @@ constructor(props) {
 
 downloadGame(){
         // source: https://medium.com/@drevets/you-cant-prompt-a-file-download-with-the-content-disposition-header-using-axios-xhr-sorry-56577aa706d6
-        //const url = "http://localhost:10000/gameapi/downloadgame";
-        const url = "htto://maltebp.dk:10000:10000/gameapi/downloadgame";
+        const url = "http://localhost:10000/gameapi/downloadgame";
+        //const url = "htto://maltebp.dk:10000:10000/gameapi/downloadgame";
         axios({
               method: 'get',
               url: url,
               responseType: 'arraybuffer',
               headers: {
                 'Content-Type': 'application/zip',
-
                 'Access-Control-Allow-Origin': url,
                 'Accept': 'json/application',
                 'Authorization': 'Bearer ' + localStorage.getItem("dftoken")
@@ -112,7 +111,6 @@ downloadGame(){
       <div className="box">
         <h2>Hello, {this.state.user}!</h2>
         <p>You are logged in and can download the game from here.</p>
-        <p>Just a dummy file, no need to install it :-)</p>
         <button type="button" disabled={!this.state.isToggleOn} onClick={this.handleDownload}>{this.state.isToggleOn ? 'Download' : 'Please wait...'}</button>
         <p className="alert">{this.state.message}</p>
         <p>Size: 8 MB</p>

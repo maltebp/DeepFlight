@@ -63,5 +63,6 @@ public class APIServer {
         new RankingsService(server);
         new RoundService(server);
         new TrackService(server);
+        new DownloadGameService(server);
     }
 }
