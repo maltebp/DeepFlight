@@ -26,6 +26,10 @@ h1.header {
   font-size: 6em;
 }
 
+p{
+  font-size:1.3em;
+}
+
 ul.header li {
   display: inline;
   list-style-type: none;
@@ -115,6 +119,10 @@ button:disabled {
   display: inline-block;
   text-align: center;
   box-sizing: border-box;
+}
+
+.alert{
+  color:red;
 }
 
 form {

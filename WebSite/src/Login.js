@@ -10,6 +10,7 @@ class Login extends Component {
             password: "",
             loginErrors: "",
             toggled: false,
+            message: ""
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,7 +25,10 @@ class Login extends Component {
     }
 
     handleSubmit(event) {
-        this.setState(state => ({ toggled: true }));
+        this.setState(state => ({
+            toggled: true,
+            message: ""
+        }));
         const { username, password } = this.state;
         var bodyFormData = new FormData();
         bodyFormData.append('name', username);
@@ -47,21 +51,17 @@ class Login extends Component {
                 const token = response.data.jwt;
                 var decoded = jwt.decode(token);
                 console.log(decoded);
-                //alert(jwt.decode(token.jwt));
-                //var result = JSON.stringify(response.statusText) + "\nJWT:\n" + JSON.stringify(decoded).replace(/\\/g, "");
-                //if (response.data.logged_in) {
-                //this.props.handleSuccessfulAuth(response.data);
-                //}
                 localStorage.setItem("dftoken", token);
-                //console.log("Token in child " + token);
                 console.log("Read from localStorage: \n" + localStorage.getItem("dftoken"));
                 this.handleParentState();
-                setTimeout(() => {  this.setState(state => ({ toggled: false })); }, 1000);
+                setTimeout(() => { this.setState(state => ({ toggled: false })); }, 1000);
             })
             .catch(error => {
                 console.log("axios login error", error);
-                alert("Login failed.")
-                setTimeout(() => {  this.setState(state => ({ toggled: false })); }, 200);
+                //TODO: Grade errors based on server reply
+
+                this.setState(state => ({ toggled: false, message: "Login failed" }));
+                setTimeout(() => {  this.setState(state => ({ toggled: false ,message: ""})); }, 3000); 
             });
 
         event.preventDefault();
@@ -93,6 +93,7 @@ class Login extends Component {
 
                     <button ref="btn" disabled={this.state.toggled} type="Login">Login</button>
                 </form>
+                <p className="alert">{this.state.message}</p>
             </div>
         );
     }
