@@ -9,6 +9,7 @@ import Respons.ResponseText;
 import brugerautorisation.data.Bruger;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import io.prometheus.client.exporter.HTTPServer;

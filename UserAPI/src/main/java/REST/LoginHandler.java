@@ -7,6 +7,7 @@ import Respons.Response;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.javalin.http.Handler;
 import brugerautorisation.data.Bruger;
+import io.javalin.plugin.openapi.annotations.ContentType;
 import javalinjwt.JavalinJWT;
 import javalinjwt.examples.JWTResponse;
 
@@ -23,6 +24,7 @@ public class LoginHandler {
             String pwd = ctx.formParam("password");
 
             System.out.println(name + ",pwd " + pwd); //For debugging
+            //Checking the if guestlogin or if
             Bruger user = checkloginType(name,pwd);
 
 
@@ -34,7 +36,8 @@ public class LoginHandler {
 
         }catch (IllegalArgumentException e) {
             ctx.status(401);
-            ctx.result(Response.generateResponse(ResponseText.INVALID_USERNAME_OR_PASSWORD,null));
+            ctx.contentType(ContentType.JSON);
+            ctx.result(ResponseText.INVALID_USERNAME_OR_PASSWORD);
         }
     };
 
@@ -52,21 +55,25 @@ public class LoginHandler {
             //We know that the user is in the authedication database so if no user is returned the server is down or the RMI connection has failed.
             if (newUser == null) {
                 ctx.status(500);
-                ctx.result(Response.generateResponse(ResponseText.INTERNAL_SERVER_ERROR,null));
+                ctx.contentType(ContentType.JSON);
+                ctx.result(ResponseText.INTERNAL_SERVER_ERROR);
                 //ctx.result("Internal server error");
             }
             ctx.status(200);
-            ctx.result(Response.generateResponse(ResponseText.SUCCESS_CHANGE_PASSWORD,null));
+            ctx.contentType(ContentType.JSON);
+            ctx.result(ResponseText.SUCCESS_CHANGE_PASSWORD);
 
         }catch (Exception e){
             e.printStackTrace();
             ctx.status(401);
-            ctx.result(Response.generateResponse(ResponseText.INVALID_USERNAME_OR_PASSWORD,null));
+            ctx.contentType(ContentType.JSON);
+            ctx.result(ResponseText.INVALID_USERNAME_OR_PASSWORD);
         }
     };
 
     public static Handler exchangeUser = ctx->{
         ctx.status(200);
+        ctx.contentType(ContentType.JSON);
         //ctx.result(Response.generateResponse(null,unpactkToken(ctx,"user")));
         ctx.result(unpactkToken(ctx,"user"));
     };
@@ -76,7 +83,7 @@ public class LoginHandler {
     A clumsy way of unpacking tokens
     TODO: Change if time
      */
-    private static String unpactkToken(io.javalin.http.Context ctx, String infoToRetrive){
+    public static String unpactkToken(io.javalin.http.Context ctx, String infoToRetrive){
         Optional<DecodedJWT> decodedJWT = JavalinJWT.getTokenFromHeader(ctx)
                 .flatMap(JWTHandler.provider::validateToken);
 
@@ -84,20 +91,21 @@ public class LoginHandler {
 
     }
 
+
+
+    /*
+    Method that tests if it is a guestlogin or a login that have to be handled at Javabog.dk Authendication service.
+    The predefined users can be seen in the package "Util"
+     */
     private static Bruger checkloginType(String username, String password){
         HashMap<String, String> guistLoginsList = Util.AddUserUtil.addPredifinedUsers();
-
 
         if(guistLoginsList.containsKey(username)&& guistLoginsList.get(username).equals(password)){
             Bruger guestUser = new Bruger();
             guestUser.brugernavn = username;
-            if(Util.LoggedIn.addLogin(guestUser)) {
-                return guestUser;
-            }
+            return guestUser;
         }
         return Authendicator.Authendication(username, password);
     }
-
-
 
 }

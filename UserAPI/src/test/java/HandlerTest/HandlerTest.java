@@ -216,14 +216,20 @@ public class HandlerTest {
         app.start(1234);
         app.post("/login",LoginHandler.login);
 
-        HttpResponse response = Unirest.post("http://localhost:1234/login").field("name",user1.brugernavn).field("password",user1.adgangskode).asString();
+        HttpResponse responseUser1 = Unirest.post("http://localhost:1234/login").field("name",user1.brugernavn).field("password",user1.adgangskode).asString();
         //Return status code Suceed
-        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(responseUser1.getStatus()).isEqualTo(200);
 
-        JSONObject json = new JSONObject(response.getBody().toString());
+        JSONObject json = new JSONObject(responseUser1.getBody().toString());
         System.out.println(json.toString());
         //Checking that the UserAPI returns a jwt in the body if the login suceed
         Assert.assertTrue(json.has("jwt"));
+
+
+        HttpResponse responseUser2 = Unirest.post("http://localhost:1234/login").field("name",user1.brugernavn).field("password",user1.adgangskode).asString();
+        //Return status code Suceed
+        assertThat(responseUser2.getStatus()).isEqualTo(401);
+
 
     }
 }
