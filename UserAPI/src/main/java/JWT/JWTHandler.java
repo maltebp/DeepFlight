@@ -12,6 +12,7 @@ import javalinjwt.JWTProvider;
 
 import java.util.Date;
 
+/*This code is heavely inspired by Javalin example: https://javalin.io/2018/09/11/javalin-jwt-example.html*/
 public class JWTHandler {
 
 
@@ -58,4 +59,6 @@ public class JWTHandler {
     The wrapper object is created
      */
     public static JWTProvider provider = new JWTProvider(algorithm, generator, verifier);
+
+
 }

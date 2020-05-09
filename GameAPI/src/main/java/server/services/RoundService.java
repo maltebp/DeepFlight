@@ -1,84 +1,125 @@
 package server.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import database.DatabaseConnector;
+import database.DatabaseDAO;
+import database.DatabaseException;
+import database.IDatabaseDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import model.Planet;
+import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Round;
-import model.Track;
+import model.User;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class RoundService {
 
 
     public RoundService(Javalin server) {
-
         server.get("round/current", this::getCurrentRound );
-
+        server.get("round/all", this::getAllRounds );
+        server.get("round/previous", this::getPreviousRound );
     }
 
 
-    private void getCurrentRound(Context context) {
-        DatabaseConnector db = DatabaseConnector.getInstance();
-
-        // Find the current round (using start and end time
-        long currentTime = System.currentTimeMillis();
-        Round current = null;
-        for(Round round : db.getRounds() ){
-            if( round.getStartDate() <= currentTime && round.getEndDate() > currentTime ){
-                if( current != null );
-                // TODO: Implement error: two rounds are current!
-                current = round;
-            }
-        }
-
-        if( current == null )
-            throw new NullPointerException("Couldn't find current round");
-        // TODO: Implement error: No round is running!
-
+    private void getAllRounds(Context context){
         try{
-            // Fetch track information
-            JSONObject response = current.toJSON();
+            IDatabaseDAO db = new DatabaseDAO();
+            List<Round> rounds = db.getRounds();
 
-            JSONArray jsonTracks = new JSONArray();
-            for( int trackId : current.getTrackIds() ){
-                Track track = db.getTrack(trackId);
-                if( track == null )
-                    // TODO: Implement proper error response
-                    throw new NullPointerException(String.format("Couldn't find Track with ID=%d in the database", trackId));
-
-                Planet planet = db.getPlanet(track.getPlanetId());
-                if( planet == null )
-                    // TODO: Implement proper error response
-                    throw new NullPointerException(String.format("Couldn't find Planet with ID=%d in the database", track.getPlanetId()));
-
-                JSONObject jsonTrack = track.toJSON();
-                jsonTrack.remove("planetId");
-                jsonTrack.put("planet", planet.toJSON());
-                System.out.println("Created Track JSON: " + jsonTrack);
-
-                jsonTracks.put(jsonTrack);
-
-                response.remove("trackIds");
-                response.put("tracks", jsonTracks);
-
-                db.close();
-
-                context.result(response.toString());
-                context.status(200);
+            // Convert to JSON List
+            JSONArray roundsJson = new JSONArray();
+            for( Round round : rounds ){
+                convertRankings(round);
+                roundsJson.put(round.toJSON());
             }
-        }catch(JsonProcessingException e){
+
+            context.status(HttpStatus.OK_200);
+            context.contentType(ContentType.JSON);
+            context.result(roundsJson.toString());
+
+        }catch(DatabaseException e){
             e.printStackTrace();
             context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+            context.contentType("text/plain");
+            context.result("An error occured when accessing the database");
         }
-
-
-
     }
 
+
+    private void getCurrentRound(Context context){
+        try{
+            IDatabaseDAO db = new DatabaseDAO();
+            Round round = db.getCurrentRound();
+            convertRankings(round);
+            context.result(round.toJSON().toString());
+            context.contentType(ContentType.JSON);
+            context.status(HttpStatus.OK_200);
+
+        }catch(NoSuchElementException e){
+            context.status(HttpStatus.NOT_FOUND_404);
+            context.result("No round is currently active");
+            context.contentType("text/plain");
+
+        }catch(DatabaseException e){
+            e.printStackTrace();
+            context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+            context.contentType("text/plain");
+            context.result("An error occured when accessing the database");
+
+        }
+    }
+
+
+    private void getPreviousRound(Context context){
+        try{
+            IDatabaseDAO db = new DatabaseDAO();
+            Round round = db.getPreviousRound();
+            convertRankings(round);
+            context.result(round.toJSON().toString());
+            context.contentType(ContentType.JSON);
+            context.status(HttpStatus.OK_200);
+
+        }catch(NoSuchElementException e){
+            context.status(HttpStatus.NOT_FOUND_404);
+            context.result("No round is currently active");
+            context.contentType("text/plain");
+
+        }catch(DatabaseException e){
+            e.printStackTrace();
+            context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+            context.contentType("text/plain");
+            context.result("An error occured when accessing the database");
+
+        }
+    }
+
+
+
+    /*
+        Convers the round rankings from (user id, rating), to
+        (username, rating), because it's much more convenient
+        on the client side.
+     */
+    private void convertRankings(Round round) throws DatabaseException {
+        if (round.getRankings() != null) {
+            IDatabaseDAO database = new DatabaseDAO();
+            List<User> users = database.getUsers();
+
+            HashMap<String, Double> newRankings = new HashMap<>();
+
+            for (User user : users) {
+                Double ranking = round.getRankings().get(user.getId());
+                if (ranking != null) {
+                    newRankings.put(user.getUsername(), ranking);
+                }
+            }
+
+            round.setRankings(newRankings);
+        }
+    }
 
 }
