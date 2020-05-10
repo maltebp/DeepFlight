@@ -4,6 +4,7 @@ import Controller.Authendicator;
 import REST.LoginHandler;
 import brugerautorisation.data.Bruger;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import io.javalin.Javalin;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -51,9 +52,12 @@ public class HandlerTest {
         notExist.brugernavn = "test";
         notExist.adgangskode="test";
 
-        HttpResponse responseFalse = Unirest.post("http://localhost:1234/login").field("name",notExist.brugernavn).field("password",notExist.adgangskode).asJson();
+        HttpResponse responseFalse = Unirest.post("http://localhost:1234/login").field("name",notExist.brugernavn).field("password",notExist.adgangskode).asString();
 
-        JSONObject jsonNy = new JSONObject(responseFalse.getBody().toString());
+        System.out.println(responseFalse.getBody().toString());
+
+
+
 
         //Return status code Unarthurized
         assertThat(responseFalse.getStatus()).isEqualTo(401);
@@ -61,10 +65,10 @@ public class HandlerTest {
         //System.out.println(jsonNy.get("error"));
 
         //Checking that the return message is right
-        assertTrue(jsonNy.get("error").equals("You have typed an invalid username or password"));
+        assertTrue(responseFalse.getBody().toString().equals("You have typed an invalid username or password"));
 
         //Checking that UserAPI does not return a jwt if the login request fails.
-        assertFalse(jsonNy.has("jwt"));
+        assertFalse(responseFalse.getBody().toString().contains("jwt"));
 
         app.stop();
     }
@@ -83,13 +87,13 @@ public class HandlerTest {
         user.brugernavn="s185139";
 
 
-        HttpResponse response = Unirest.post("http://localhost:1234/login").field("name",user.brugernavn).field("password",user.adgangskode).asJson();
+        HttpResponse response = Unirest.post("http://localhost:1234/login").field("name",user.brugernavn).field("password",user.adgangskode).asString();
         //Return status code Unarthurized
         assertThat(response.getStatus()).isEqualTo(401);
 
-        JSONObject json = new JSONObject(response.getBody().toString());
+        //JSONObject json = new JSONObject(response.getBody().toString());
 
-        assertThat(json.get("error").equals("You have typed an invalid username or password"));
+        assertThat(response.getBody().toString().equals("You have typed an invalid username or password"));
         app.stop();
 
     }
@@ -115,13 +119,13 @@ public class HandlerTest {
 
 
 
-        HttpResponse response = Unirest.post("http://localhost:1234/jwt/changeLogin").field("name",user.brugernavn).field("password",user.adgangskode).field("new_password",pwd).asJson();
+        HttpResponse response = Unirest.post("http://localhost:1234/jwt/changeLogin").field("name",user.brugernavn).field("password",user.adgangskode).field("new_password",pwd).asString();
         //Return status code Unarthurized
         assertThat(response.getStatus()).isEqualTo(200);
 
-        JSONObject json = new JSONObject(response.getBody().toString());
+        //JSONObject json = new JSONObject(response.getBody().toString());
 
-        assertThat(json.get("error").equals("You have succesfully changed password"));
+        assertThat(response.getBody().toString().equals("You have succesfully changed password"));
 
 
         //Checking chat we can login with the new password
@@ -129,10 +133,15 @@ public class HandlerTest {
 
         assertThat(responseTestlogin.getStatus()).isEqualTo(200);
 
-        JSONObject jsonTestLogin = new JSONObject(responseTestlogin.getBody().toString());
+
+        System.out.println(responseTestlogin.toString());
+        //Checking that the UserAPI returns a jwt in the body if the login suceed
+        Assert.assertTrue(responseTestlogin.getBody().toString().contains("jwt"));
+
+        /*JSONObject jsonTestLogin = new JSONObject(responseTestlogin.getBody().toString());
         System.out.println(jsonTestLogin.toString());
         //Checking that the UserAPI returns a jwt in the body if the login suceed
-        Assert.assertTrue(jsonTestLogin.has("jwt"));
+        Assert.assertTrue(jsonTestLogin.has("jwt"));*/
 
 
 
@@ -170,15 +179,21 @@ public class HandlerTest {
         String token = jsonTestLogin.get("jwt").toString();
         System.out.println("Token: "+token);
 
-        HttpResponse exchangeTokenRespons = Unirest.post("http://localhost:1234/jwt/exchangeUser").header("Authorization","Bearer "+token).asJson();
+        HttpResponse exchangeTokenRespons = Unirest.post("http://localhost:1234/jwt/exchangeUser").header("Authorization","Bearer "+token).asString();
 
-        JSONObject exchangeTokenJson = new JSONObject(exchangeTokenRespons.getBody().toString());
+        ObjectMapper mapper = new ObjectMapper();
+
+        user = mapper.readValue(exchangeTokenRespons.getBody().toString(),Bruger.class);
+        assertThat(exchangeTokenRespons.getStatus()).isEqualTo(200);
+        assertThat(testUser.toString().equals(user.toString()));
+
+       /* JSONObject exchangeTokenJson = new JSONObject(exchangeTokenRespons.getBody().toString());
 
         ObjectMapper mapper = new ObjectMapper();
 
         user = mapper.readValue(exchangeTokenJson.get("content").toString(),Bruger.class);
         assertThat(exchangeTokenRespons.getStatus()).isEqualTo(200);
-        assertThat(testUser.toString().equals(user.toString()));
+        assertThat(testUser.toString().equals(user.toString()));*/
         app.stop();
     }
 

@@ -1,11 +1,11 @@
 package Controller;
 
-import JWT.JWTHandler;
-import brugerautorisation.data.Bruger;
 
+import brugerautorisation.data.Bruger;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 public class Authendicator {
 
@@ -33,10 +33,22 @@ public class Authendicator {
             e.getStackTrace();
         }
 
-
         return null;
-
     }
 
 
+    /*
+   Method that tests if it is a guestlogin or a login that have to be handled at Javabog.dk Authendication service.
+   The predefined users can be seen in the package "Util"
+    */
+    public static Bruger checkloginType(String username, String password)throws IllegalArgumentException{
+        HashMap<String, String> guistLoginsList = Util.AddUserUtil.addPredifinedUsers();
+
+        if(guistLoginsList.containsKey(username)&& guistLoginsList.get(username).equals(password)){
+            Bruger guestUser = new Bruger();
+            guestUser.brugernavn = username;
+            return guestUser;
+        }
+        return Authendicator.Authendication(username, password);
+    }
 }
