@@ -12,5 +12,5 @@ COPY UserAPI.jar .
 CMD ["java","-jar","UserAPI.jar"]
 
 EXPOSE 7000
-EXPOSE 7080
+EXPOSE 7001
 

@@ -14,3 +14,5 @@ RUN pip install -r requirements.txt
 RUN ls
 
 CMD ["python", "-m", "source.updater.universeupdater"]
+
+EXPOSE 8000
