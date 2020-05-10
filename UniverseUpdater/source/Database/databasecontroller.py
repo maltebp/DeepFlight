@@ -75,7 +75,7 @@ def get_planetObjectList():
         # Convert to Track objects
         planets = []
         for planet in planetDocuments:
-            planetObject = Planet(planet["name"], planet["color"], planet["lengthFactor"], planet["curveFactor"], planet["stretchFactor"], planet["widthFactor"], planet["widthNoiseFactor"])
+            planetObject = Planet(planet["name"], planet["color"], planet["lengthFactor"],  planet["stretchFactor"], planet["curveFactor"], planet["widthFactor"], planet["widthNoiseFactor"])
             planetObject.setId(str(planet["_id"]))
             planets.append(planetObject)
         # Returning track object list

@@ -1,7 +1,7 @@
 
 class Planet:
 
-    def __init__(self,name, color, lengthFactor, curveFactor, stretchFactor, widthFactor, widthNoiseFactor):
+    def __init__(self,name, color, lengthFactor,  stretchFactor, curveFactor, widthFactor, widthNoiseFactor):
         self._id = None
         self.name = name
         self.color = color
@@ -22,8 +22,8 @@ class Planet:
 
 default_planets = [
 					    #l  #s  #c  #w  #wn
-    Planet("Smar",      [230, 90, 65],      11,  7, 20, 12, 25), # 11
+    Planet("Smar",      [180, 80, 70],      11,  9, 16, 12, 25), # 11
     Planet("Aerth",     [0, 102, 0],        10, 8, 14, 12, 10), # 10
-    Planet("Turnsa",    [127, 63, 192],     14, 13, 14, 14,  8), # 13
-    Planet("Lupto",     [100, 147, 219],    13, 10, 15, 12,  1) # 13
+    Planet("Turnsa",    [100, 40, 170],     14, 16, 14, 18,  5), # 13
+    Planet("Lupto",     [100, 147, 219],    15, 12, 13, 12,  1) # 13
 ]
