@@ -1,10 +1,9 @@
 package HandlerTest;
 
-import Controller.Authendicator;
+import Authendication.Authendicator;
 import REST.LoginHandler;
 import brugerautorisation.data.Bruger;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import io.javalin.Javalin;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;

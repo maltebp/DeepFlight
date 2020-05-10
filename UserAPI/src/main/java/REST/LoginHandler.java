@@ -1,6 +1,6 @@
 package REST;
 
-import Controller.Authendicator;
+import Authendication.Authendicator;
 import JWT.JWTHandler;
 import Util.ResponseText;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -10,7 +10,6 @@ import io.javalin.plugin.openapi.annotations.ContentType;
 import javalinjwt.JavalinJWT;
 import javalinjwt.examples.JWTResponse;
 
-import java.util.HashMap;
 import java.util.Optional;
 
 public class LoginHandler {
