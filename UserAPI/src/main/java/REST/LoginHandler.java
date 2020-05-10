@@ -10,6 +10,7 @@ import io.javalin.plugin.openapi.annotations.ContentType;
 import javalinjwt.JavalinJWT;
 import javalinjwt.examples.JWTResponse;
 
+import java.rmi.RemoteException;
 import java.util.Optional;
 
 public class LoginHandler {
@@ -23,20 +24,23 @@ public class LoginHandler {
 
             System.out.println(name + ",pwd " + pwd); //For debugging
             //Checking the if guestlogin or if
-            Bruger user = Authendicator.checkloginType(name,pwd);
+            Bruger user = Authendicator.checkloginType(name, pwd);
 
 
-           // A null user will be thrown from Autheddication as an IllegalArgumentException
+            // A null user will be thrown from Autheddication as an IllegalArgumentException
             if (user != null) {
                 String token = JWTHandler.provider.generateToken(user);
                 ctx.contentType(ContentType.JSON);
                 ctx.json(new JWTResponse(token));
             }
-
         }catch (IllegalArgumentException e) {
             ctx.status(401);
             ctx.contentType("text/plain");
             ctx.result(ResponseText.INVALID_USERNAME_OR_PASSWORD);
+        }catch (RemoteException e){
+            ctx.status(500);
+            ctx.contentType("text/plain");
+            ctx.result(ResponseText.AUTHENDICATOR_DATABASE_NOT_RESPONDING);
         }
     };
 

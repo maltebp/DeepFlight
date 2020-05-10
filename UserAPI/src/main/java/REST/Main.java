@@ -51,8 +51,6 @@ public class Main {
         If there is a token in the header it will pass.
         Only if the endpoint "/login" is access the filter will return
         */
-
-
         app.before("/jwt/*", ctx -> {
             String source = "Authfilter";
 
@@ -68,9 +66,7 @@ public class Main {
         });
 
 
-        /*
-        Response message for no access token.
-         */
+        //Response message for no access token
         app.get("/loginRequest",ctx->{
             ctx.status(401);
             ctx.result("Pleases provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
