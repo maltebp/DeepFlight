@@ -7,7 +7,7 @@ class Home extends Component {
     super(props)
     this.state = {
       universal: [
-        { rank: "Loading high scores...", name: null },
+        { rank: "Loading player ranking...", name: null },
         { rank: null, name: null },
         { rank: null, name: null },
         { rank: null, name: null },
@@ -68,16 +68,48 @@ class Home extends Component {
     })
       .then(response => {
         console.log(response);
-        const scores = response.data;
+        const scores = response.data.rankings;
         console.log(scores);
         let lastRound = [];
+        // Extract top 5
+        /*
+        data = [{
+    "id": "105",
+    "name": "FIAT",
+    "active": true,
+    "parentId": "1"
+}, {
+    "id": "106",
+    "name": "AUDI",
+    "active": true,
+    "parentId": "1"
+}, {
+    "id": "107",
+    "name": "BMW",
+    "active": true,
+    "parentId": "1"
+}, {
+    "id": "109",
+    "name": "RENAULT",
+    "active": true,
+    "parentId": "1"
+}];
+
+
+data.sort(function(a, b) {
+    return a.name > b.name;
+});
+
+console.log(data);
+        */
+
         // Show null users
         for (var i = 0; i < 5; i++ ){
-          //if (ranks[i] != null){
-          //  universal.push( { rank: i + 1, name: ranks[i].username });
-          //} else {
-          //  universal.push( { rank: i + 1, name: "_ _ _"});
-          //}
+          if (scores[i] != null){
+            lastRound.push( { "score": "nn", "name": "nn" });
+          } else {
+            lastRound.push( { score: "_ _ _", name: "_ _ _"});
+          }
         }
         console.log(lastRound);
         this.setState({"lastRound": lastRound});

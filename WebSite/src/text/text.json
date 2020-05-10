@@ -6,7 +6,7 @@
     "linheader": "Linux installation",
     "lintext": "First you need to install mono with 'sudo apt update' and 'sudo apt install mono-complete'.  Then you can navigate to the unzipped folder and type 'mono DeepFlight.exe'",
     "macheader": "OSX installation",
-    "mactext": "Edit this text in text/installationtext.json"
+    "mactext": "Install Mono from mono-project.com. Then you can navigate to the unzipped folder and type 'mono DeepFlight.exe'"
   },
   "about": {
     "mainheader": "Deep Flight",
