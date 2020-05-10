@@ -6,6 +6,9 @@ from source.model.round import Round
 from source.model.user import User
 from source.Database import databasecontroller
 from source.model.planet import *
+from prometheus_client import start_http_server
+
+start_http_server(8000)
 
 _UPDATE_FREQUENCY = 30 # seconds
 _ROUND_LENGTH = 10 # Minutes
