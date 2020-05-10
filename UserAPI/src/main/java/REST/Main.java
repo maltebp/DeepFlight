@@ -46,6 +46,14 @@ public class Main {
         }).start(JAVALIN_PORT);
 
 
+        // Root Resource
+        app.before("/", ctx -> {
+            ctx.result("UserAPI is up and running!");
+            ctx.status(200);
+            ctx.contentType("text/plain");
+        });
+
+
         /*This is the Authfilter.
         It will be run before any request reatches its endpoint.
         If there is a token in the header it will pass.

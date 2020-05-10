@@ -71,10 +71,10 @@ print("STARTING TIME UPDATE!")
 databasecontroller.initializeDatabase(testMode=True)
 
 userIds = createUsers([
-    User("Malte"),
-    User("Andreas"),
-    User("Rasmus"),
-    User("Erlend")
+    User("kingkong123"),
+    User("hagrid4ever"),
+    User("doctorwhat"),
+    User("torben")
 ])
 
 
