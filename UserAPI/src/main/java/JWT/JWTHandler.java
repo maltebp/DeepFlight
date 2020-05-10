@@ -33,7 +33,7 @@ public class JWTHandler {
 
         //Remove password from userobject
         user.adgangskode = "";
-        Date expiration = new Date(System.currentTimeMillis() + 12 * 60 * 1000); // + 12 minutes
+        Date expiration = new Date(System.currentTimeMillis() + 12 * 60 * 60 * 1000); // + 12 hours
 
         ObjectMapper mapper = new ObjectMapper();
         try {

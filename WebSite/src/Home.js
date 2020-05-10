@@ -103,6 +103,11 @@ data.sort(function(a, b) {
 console.log(data);
         */
 
+        // Data is null
+        if (i === 0){
+          lastRound.push({"score": "No data from last round."});
+        }
+
         // Show null users
         for (var i = 0; i < 5; i++ ){
           if (scores[i] != null){
