@@ -17,8 +17,7 @@ def get_tracksObjectsList():
             trackDocument["name"],
             trackDocument["planetId"],
             trackDocument["seed"],
-            trackDocument["times"],
-            get_single_trackdata(str(trackDocument["_id"]))["data"]
+            trackDocument["times"]
         )
         track.setId(str(trackDocument["_id"]))
         tracks.append(track)
