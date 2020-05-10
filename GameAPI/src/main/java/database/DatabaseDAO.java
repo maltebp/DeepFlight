@@ -102,11 +102,11 @@ public class DatabaseDAO implements IDatabaseDAO {
     }
 
     @Override
-    public boolean updateTrackTime(String trackId, String userId, int time) throws DatabaseException {
+    public boolean updateTrackTime(String trackId, String username, int time) throws DatabaseException {
         Query<Track> trackQuery = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId));
 
         UpdateOperations<Track> updateOperations = database.createUpdateOperations(Track.class)
-                .set(String.format("times.%s", userId),time);
+                .set(String.format("times.%s", username),time);
 
         UpdateResults updateResults = database.update(trackQuery,updateOperations);
 

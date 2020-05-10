@@ -21,7 +21,7 @@ public class DatabaseConnection {
     private final String DB_SERVER_URL = "mongodb+srv://"+DB_USER+":"+DB_PASSWORD+"@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority";
     private static String dbName = "";
 
-    private static boolean testMode = true;
+    private static boolean testMode = false;
 
     private Morphia morphia;
     private MongoClient mongoClient;

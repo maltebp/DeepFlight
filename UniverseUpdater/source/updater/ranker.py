@@ -53,7 +53,7 @@ def rankRound(round, tracks):
 def _rankTrack(track):
     trackRatings = {}
     times = track.times
-    if not times is None:
+    if times is not None:
         numTimes = len(times)
 
         # Sorts the times
@@ -61,9 +61,9 @@ def _rankTrack(track):
 
         # Calculate track rating for each user
         trackRank = 1
-        for user, time in sortedTimes:
+        for username, time in sortedTimes:
             # Round rating to 3 decimal places
-            trackRatings[user] = (1 - (trackRank-1)/(numTimes)) * 2.5
+            trackRatings[username] = (1 - (trackRank-1)/(numTimes)) * 2.5
             trackRank += 1
 
     return trackRatings
@@ -81,8 +81,8 @@ def rankUniversal(rounds, users):
 
     # Add all users with a rating of 0
     for user in users:
-        userRatings[str(user._id)] = 0
-        userRoundCount[str(user._id)] = 0
+        userRatings[user.username] = 0
+        userRoundCount[user.username] = 0
 
     # Sum the ratings of the given rounds for each user
     for round in rounds:
@@ -111,35 +111,35 @@ def rankUniversal(rounds, users):
 
 
 
-#--------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 # Just some test data
-#
-#
-# testTracks = [
-#     Track("test track", 1, times={ 1 : 10, 2 : 4, 3 : 1, 3 : 2} ),
-#     Track("test track", 1, times={ 1 : 2, 3 : 4, 3 : 1} ),
-#     Track("test track", 1, times={ 1 : 2, 2 : 2, 3 : 1} ),
-#     Track("test track", 1, times={ 1 : 2, 2 : 2, 3 : 1} )
-# ]
-#
-# rounds= [
-#     Round(1, 1, 0, 0),
-#     Round(2, 1, 0, 0),
-#     Round(3, 1, 0, 0),
-#     Round(4, 1, 0, 0)
-# ]
-# rankRound(rounds[0], testTracks)
-# rankRound(rounds[1], testTracks)
-# rankRound(rounds[2], testTracks)
-# rankRound(rounds[3], testTracks)
-#
-# users = [
-#      User("Erlend",  id=1),
-#      User("Malte",   id=2),
-#      User("Rasmus",  id=3),
-#      User("Andreas", id=4)
-# ]
-#
-#
-# universalRankings = rankUniversal(rounds,users)
-# print(universalRankings)
+
+
+testTracks = [
+    Track("test track", 1, times={ "Erlend" : 10, "Andreas" : 4, "Rasmus" : 1, "Malte" : 2} ),
+    Track("test track", 1, times={ "Malte" : 2, "Andreas" : 4, "Rasmus" : 1} ),
+    Track("test track", 1, times={ "Rasmus" : 2, "Malte" : 2, "Erlend" : 1} ),
+    Track("test track", 1, times={ "Andreas" : 2, "Malte" : 2, "Rasmu" : 1} )
+]
+
+rounds= [
+    Round(1, 1, 0, 0),
+    Round(2, 1, 0, 0),
+    Round(3, 1, 0, 0),
+    Round(4, 1, 0, 0)
+]
+rankRound(rounds[0], testTracks)
+rankRound(rounds[1], testTracks)
+rankRound(rounds[2], testTracks)
+rankRound(rounds[3], testTracks)
+
+users = [
+     User("Erlend",  id=1),
+     User("Malte",   id=2),
+     User("Rasmus",  id=3),
+     User("Andreas", id=4)
+]
+
+
+universalRankings = rankUniversal(rounds,users)
+print(universalRankings)

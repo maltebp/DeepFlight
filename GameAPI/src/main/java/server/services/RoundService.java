@@ -33,7 +33,6 @@ public class RoundService {
             // Convert to JSON List
             JSONArray roundsJson = new JSONArray();
             for( Round round : rounds ){
-                convertRankings(round);
                 roundsJson.put(round.toJSON());
             }
 
@@ -54,7 +53,6 @@ public class RoundService {
         try{
             IDatabaseDAO db = new DatabaseDAO();
             Round round = db.getCurrentRound();
-            convertRankings(round);
             context.result(round.toJSON().toString());
             context.contentType(ContentType.JSON);
             context.status(HttpStatus.OK_200);
@@ -78,7 +76,6 @@ public class RoundService {
         try{
             IDatabaseDAO db = new DatabaseDAO();
             Round round = db.getPreviousRound();
-            convertRankings(round);
             context.result(round.toJSON().toString());
             context.contentType(ContentType.JSON);
             context.status(HttpStatus.OK_200);
@@ -97,29 +94,4 @@ public class RoundService {
         }
     }
 
-
-
-    /*
-        Convers the round rankings from (user id, rating), to
-        (username, rating), because it's much more convenient
-        on the client side.
-     */
-    private void convertRankings(Round round) throws DatabaseException {
-        if (round.getRankings() != null) {
-            IDatabaseDAO database = new DatabaseDAO();
-            List<User> users = database.getUsers();
-
-            HashMap<String, Double> newRankings = new HashMap<>();
-
-            for (User user : users) {
-                Double ranking = round.getRankings().get(user.getId());
-                if (ranking != null) {
-                    newRankings.put(user.getUsername(), ranking);
-                }
-            }
-
-            round.setRankings(newRankings);
-        }
     }
-
-}

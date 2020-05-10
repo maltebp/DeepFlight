@@ -38,7 +38,6 @@ public class TrackService {
         try{
             IDatabaseDAO db = new DatabaseDAO();
             Track track = db.getTrack(trackId);
-            convertTimes(track);
             context.result(track.toJSON().toString());
             context.contentType(ContentType.JSON);
             context.status(HttpStatus.OK_200);
@@ -55,28 +54,6 @@ public class TrackService {
             context.result("An error occured when accessing the database");
         }
     }
-
-    /*
-       Convers the track times from (user id, rating), to
-       (username, rating), because it's much more convenient
-       on the client side.
-    */
-    private void convertTimes(Track track ) throws DatabaseException{
-        IDatabaseDAO database = new DatabaseDAO();
-        List<User> users = database.getUsers();
-
-        HashMap<String, Integer> newTimes = new HashMap<>();
-
-        for(User user : users){
-            Integer time = track.getTimes().get(user.getId());
-            if( time != null ){
-                newTimes.put(user.getUsername(), time);
-            }
-        }
-
-        track.setTimes(newTimes);
-    }
-
 
 
     private void getTrackData(Context context){
