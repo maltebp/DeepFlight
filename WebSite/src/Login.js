@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
+//import jwt from 'jsonwebtoken';
 
 class Login extends Component {
     constructor(props) {
@@ -33,11 +33,12 @@ class Login extends Component {
         var bodyFormData = new FormData();
         bodyFormData.append('name', username);
         bodyFormData.append('password', password);
+        const url = 'http://maltebp.dk:7000/login'
+        //url: 'http://localhost:7000/login',
 
         axios({
             method: 'post',
-            url: 'http://maltebp.dk:7000/login',
-            //url: 'http://localhost:7000/login',
+            url: url,
             data: bodyFormData,
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -48,19 +49,19 @@ class Login extends Component {
 
             .then(response => {
                 const token = response.data.jwt;
-                var decoded = jwt.decode(token);
-                console.log(decoded);
+                //var decoded = jwt.decode(token);
+                //console.log(decoded);
                 localStorage.setItem("dftoken", token);
-                console.log("Read from localStorage: \n" + localStorage.getItem("dftoken"));
+                //console.log("Read from localStorage: \n" + localStorage.getItem("dftoken"));
                 this.handleParentState();
-                setTimeout(() => { this.setState(state => ({ toggled: false })); }, 1000);
+                setTimeout(() => { this.setState(state => ({ toggled: false })); }, 2000);
             })
             .catch(error => {
                 console.log("axios login error", error);
                 //TODO: Grade errors based on server reply
 
                 this.setState(state => ({ toggled: false, message: "Login failed" }));
-                setTimeout(() => {  this.setState(state => ({ toggled: false ,message: ""})); }, 3000); 
+                setTimeout(() => { this.setState(state => ({ toggled: false, message: "" })); }, 3000);
             });
 
         event.preventDefault();
