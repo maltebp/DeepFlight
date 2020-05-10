@@ -7,33 +7,62 @@ class Home extends Component {
     super(props)
     this.state = {
       universal: [
-        {score: "Loading high scores...", name: null},
-        {score: null, name: null},
-        {score: null, name: null},
-        {score: null, name: null},
-        {score: null, name: null},
+        { rank: "Loading high scores...", name: null },
+        { rank: null, name: null },
+        { rank: null, name: null },
+        { rank: null, name: null },
+        { rank: null, name: null },
       ],
       lastRound: [
-              {score: "Loading high scores...", name: null},
-              {score: null, name: null},
-              {score: null, name: null},
-              {score: null, name: null},
-              {score: null, name: null},
-            ]
+        { score: "Loading high scores...", name: null },
+        { score: null, name: null },
+        { score: null, name: null },
+        { score: null, name: null },
+        { score: null, name: null },
+      ]
     }
   }
 
   componentDidMount() {
-    const url = "http://maltebp.dk:10000/gameapi/round/current";
-    //const url = "http://localhost:10000/gameapi/rankings/universal"
+    const BASE_URL = "http://maltebp.dk:10000/gameapi/";
+    const rankUrl = BASE_URL +  "rankings/universal";
+    const scoreUrl = BASE_URL + "round/previous";
     axios({
       method: 'get',
-      url: url,
+      url: rankUrl,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': url,
+        'Access-Control-Allow-Origin': rankUrl,
         'Accept': 'application/json',
-        'Authorization': localStorage.getItem("dftoken")
+        //'Authorization': localStorage.getItem("dftoken")
+      },
+      withCredentials: true
+    })
+      .then(response => {
+        const ranks = response.data;
+        let universal = [];
+        // Show null users
+        for (var i = 0; i < 5; i++ ){
+          if (ranks[i] != null){
+            universal.push( { rank: i + 1, name: ranks[i].username });
+          } else {
+            universal.push( { rank: i + 1, name: "_ _ _"});
+          }
+        }
+        this.setState({"universal": universal});
+      })
+      .catch(error => {
+        console.log("error downloading ranks", error);
+      });
+
+    axios({
+      method: 'get',
+      url: scoreUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': scoreUrl,
+        'Accept': 'application/json',
+        //'Authorization': localStorage.getItem("dftoken")
       },
       withCredentials: true
     })
@@ -41,16 +70,22 @@ class Home extends Component {
         console.log(response);
         const scores = response.data;
         console.log(scores);
-        this.setState({
-          universal: [scores[0].name, scores[1].name, scores[2].name, scores[3].name],
-          lastRound: [scores[0].color, scores[1].color, scores[2].color, scores[3].color]
-        });
+        let lastRound = [];
+        // Show null users
+        for (var i = 0; i < 5; i++ ){
+          //if (ranks[i] != null){
+          //  universal.push( { rank: i + 1, name: ranks[i].username });
+          //} else {
+          //  universal.push( { rank: i + 1, name: "_ _ _"});
+          //}
+        }
+        console.log(lastRound);
+        this.setState({"lastRound": lastRound});
       })
       .catch(error => {
-        console.log("axios download results error", error);
+        console.log("error downloading scores", error);
       });
   }
-
 
   render() {
     return (
@@ -59,25 +94,27 @@ class Home extends Component {
           <h1>Universal ratings (top 5)</h1>
           <table>
             <tbody>
-              <tr><td>{this.state.universal[0].score}</td><td>{this.state.universal[0].name}</td></tr>
-              <tr><td>{this.state.universal[1].score}</td><td>{this.state.universal[1].name}</td></tr>
-              <tr><td>{this.state.universal[2].score}</td><td>{this.state.universal[2].name}</td></tr>
-              <tr><td>{this.state.universal[3].score}</td><td>{this.state.universal[3].name}</td></tr>
+              <tr><td>{this.state.universal[0].rank}</td><td>{this.state.universal[0].name}</td></tr>
+              <tr><td>{this.state.universal[1].rank}</td><td>{this.state.universal[1].name}</td></tr>
+              <tr><td>{this.state.universal[2].rank}</td><td>{this.state.universal[2].name}</td></tr>
+              <tr><td>{this.state.universal[3].rank}</td><td>{this.state.universal[3].name}</td></tr>
+              <tr><td>{this.state.universal[4].rank}</td><td>{this.state.universal[4].name}</td></tr>
             </tbody>
           </table>
-            </div>
-        <div className="box whitebg">
-            <h1 >Last round ratings (top 5)</h1>
-            <table>
-              <tbody>
-                <tr><td>{this.state.lastRound[0].score}</td><td>{this.state.lastRound[0].name}</td></tr>
-                <tr><td>{this.state.lastRound[1].score}</td><td>{this.state.lastRound[1].name}</td></tr>
-                <tr><td>{this.state.lastRound[2].score}</td><td>{this.state.lastRound[2].name}</td></tr>
-                <tr><td>{this.state.lastRound[3].score}</td><td>{this.state.lastRound[3].name}</td></tr>
-              </tbody>
-            </table>
-          </div>
         </div>
+        <div className="box whitebg">
+          <h1 >Last round ratings (top 5)</h1>
+          <table>
+            <tbody>
+              <tr><td>{this.state.lastRound[0].score}</td><td>{this.state.lastRound[0].name}</td></tr>
+              <tr><td>{this.state.lastRound[1].score}</td><td>{this.state.lastRound[1].name}</td></tr>
+              <tr><td>{this.state.lastRound[2].score}</td><td>{this.state.lastRound[2].name}</td></tr>
+              <tr><td>{this.state.lastRound[3].score}</td><td>{this.state.lastRound[3].name}</td></tr>
+              <tr><td>{this.state.lastRound[4].score}</td><td>{this.state.lastRound[4].name}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     );
   }
 }

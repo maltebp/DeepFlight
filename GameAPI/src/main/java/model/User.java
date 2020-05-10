@@ -3,9 +3,7 @@ package model;
 import dev.morphia.annotations.*;
 import dev.morphia.utils.IndexType;
 import lombok.*;
-import lombok.AllArgsConstructor;
 import org.json.JSONObject;
-import lombok.Builder;
 
 @Getter
 @Setter
@@ -30,7 +28,6 @@ public class User {
     }
 
     // region Properties
-
 
     public String getId() {
         return id;
