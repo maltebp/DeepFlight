@@ -81,7 +81,6 @@ public class LoginHandler {
 
 
      /*
-    A clumsy way of unpacking tokens
     TODO: Change if time
      */
     public static String unpactkToken(io.javalin.http.Context ctx, String infoToRetrive){

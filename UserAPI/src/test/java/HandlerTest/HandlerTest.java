@@ -10,9 +10,7 @@ import kong.unirest.Unirest;
 import kong.unirest.json.JSONObject;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -86,13 +84,9 @@ public class HandlerTest {
         user.adgangskode="1234";
         user.brugernavn="s185139";
 
-
         HttpResponse response = Unirest.post("http://localhost:"+PORT+"/login").field("name",user.brugernavn).field("password",user.adgangskode).asString();
         //Return status code Unarthurized
         assertThat(response.getStatus()).isEqualTo(401);
-
-        //JSONObject json = new JSONObject(response.getBody().toString());
-
         assertThat(response.getBody().toString().equals("You have typed an invalid username or password"));
         app.stop();
     }
@@ -173,7 +167,6 @@ public class HandlerTest {
         user = mapper.readValue(exchangeTokenRespons.getBody().toString(),Bruger.class);
         assertThat(exchangeTokenRespons.getStatus()).isEqualTo(200);
         assertThat(testUser.toString().equals(user.toString()));
-
 
         app.stop();
     }
