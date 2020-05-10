@@ -6,16 +6,12 @@ import database.IDatabaseDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.ContentType;
-import model.Round;
 import model.Track;
-import model.User;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 public class TrackService {
