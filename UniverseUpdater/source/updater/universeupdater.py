@@ -11,7 +11,7 @@ from prometheus_client import start_http_server
 start_http_server(8000)
 
 _UPDATE_FREQUENCY = 30 # seconds
-_ROUND_LENGTH = 10 # Minutes
+_ROUND_LENGTH = 1440 # Minutes
 _CLEAR_DATABSE_ON_START = False
 _TEST_MODE = False
 
