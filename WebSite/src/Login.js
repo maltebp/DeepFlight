@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
+//import jwt from 'jsonwebtoken';
 
 class Login extends Component {
     constructor(props) {
@@ -49,7 +49,7 @@ class Login extends Component {
 
             .then(response => {
                 const token = response.data.jwt;
-                var decoded = jwt.decode(token);
+                //var decoded = jwt.decode(token);
                 //console.log(decoded);
                 localStorage.setItem("dftoken", token);
                 //console.log("Read from localStorage: \n" + localStorage.getItem("dftoken"));

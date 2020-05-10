@@ -68,7 +68,7 @@ class Home extends Component {
     })
       .then(response => {
         console.log(response);
-        const scores = response.data.rankings;
+        const scores = response.data.times;
         console.log(scores);
         let lastRound = [];
         // Extract top 5

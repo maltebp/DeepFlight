@@ -4,7 +4,7 @@
     "winheader": "Windows installation",
     "wintext": "Unzip and run the exe.",
     "linheader": "Linux installation",
-    "lintext": "First you need to install mono with 'sudo apt update' and 'sudo apt install mono-complete'.  Then you can navigate to the unzipped folder and type 'mono DeepFlight.exe'",
+    "lintext": "First you need to install mono with 'sudo apt update' and 'sudo apt install mono-complete' (Ubuntu).  Then you can navigate to the unzipped folder and type 'mono DeepFlight.exe'",
     "macheader": "OSX installation",
     "mactext": "Install Mono from mono-project.com. Then you can navigate to the unzipped folder and type 'mono DeepFlight.exe'"
   },
