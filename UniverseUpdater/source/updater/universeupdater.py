@@ -99,26 +99,31 @@ def createRound(startTime):
     print("Generating Tracks...")
     existingTracks = databasecontroller.get_tracksObjectsList()
     for planet in planets:
+        time_TrackGenStart = timeit.default_timer()
         existingPlanetTracks = []
         for track in existingTracks:
             if track.planetId is planet._id:
                 existingPlanetTracks.append(track)
         generatedTrack = generate.generateTrack(planet, existingPlanetTracks)
-        print(f"\t{planet.name}: {generatedTrack}")
+        print(f"\t{planet.name}: {generatedTrack} (Time: {timeit.default_timer()-time_TrackGenStart:.2f})")
         tracks.append(generatedTrack)
 
     # Save tracks in database
-    print("Storing Tracks in database")
+    print("Storing Tracks in database... ", end="")
+    timeStart_TrackStore = timeit.default_timer()
     for track in tracks:
         databasecontroller.add_TrackObject(track)
         trackIds.append(track._id)
+    print(f"Done! (Time: {timeit.default_timer()-timeStart_TrackStore:0.2f}")
 
     # Figure out the next round number
     roundNumber = len(databasecontroller.get_roundsObjectList()) + 1
 
-    print("Storing Round in database")
+    print("Storing Round in database... ", end="")
+    timeStart_RoundStore = timeit.default_timer()
     round =  Round(roundNumber, trackIds,  startTime, startTime + _ROUND_LENGTH*60000)
     databasecontroller.add_roundObject(round)
+    print(f"Done! (Time: {timeit.default_timer()-timeStart_RoundStore:0.2f}")
 
     return round
 
@@ -127,7 +132,10 @@ def createRound(startTime):
 # Updates the ranking of all the unranked rounds, and updates
 # the Universal Ranking
 def updateRankings(rankedRounds, unrankedRounds, allTracks):
+    timeStart_UpdateRankings = timeit.default_timer()
+
     print("\nRanking rounds..")
+    timeStart_RoundRanking = timeit.default_timer()
     for unrankedRound in unrankedRounds:
         print(f"\tRound {unrankedRound.roundNumber}.. ", end="")
         roundTracks = []
@@ -142,6 +150,7 @@ def updateRankings(rankedRounds, unrankedRounds, allTracks):
         print(f"Ranked {len(unrankedRound.rankings)} users.. ", end="")
         databasecontroller.update_round(unrankedRound)
         print("Updated in database")
+    print(f"Round ranking: Done! (Time: {timeit.default_timer()-timeStart_RoundRanking:.2f}")
 
 
     # Sort the ranked rounds (last end date to first end date)
@@ -149,7 +158,8 @@ def updateRankings(rankedRounds, unrankedRounds, allTracks):
     currentUniversalRounds = sortedRankedRounds[0:_UNIVERSAL_RANKING_ROUND_COUNT]
 
     # Get users and convert to dictionary (for faster acces)
-    print("\nRanking Universe")
+    print("\nRanking Universe... ", end="")
+    timeStart_UniverseRanking = timeit.default_timer()
     userList = databasecontroller.get_UserObjectList()
 
     universalRankings = ranker.rankUniversal(currentUniversalRounds, userList)
@@ -165,14 +175,18 @@ def updateRankings(rankedRounds, unrankedRounds, allTracks):
         users[userId].rank = rank
         users[userId].rating = rating
 
+    print(f"Done! (Time: {timeit.default_timer()-timeStart_UniverseRanking:.2f})")
+
     print("Storing in rankings in database:")
+    timeStart_StoreRankings = timeit.default_timer()
     for user in users.values():
         # TODO: Make user updating atomic!
         print(f"\t{user.username}: #{user.rank} ({user.rating})... ", end="")
         databasecontroller.updateUser(user)
         print("Updated!")
+    print(f"Done Storing in database (Time: {timeit.default_timer()-timeStart_StoreRankings:.2f}")
 
-    print("Universe ranked!")
+    print(f"Universe ranked! (Time: {timeit.default_timer()-timeStart_UpdateRankings:.2f})")
 
 
 
