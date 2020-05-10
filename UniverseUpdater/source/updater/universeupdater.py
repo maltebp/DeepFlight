@@ -170,13 +170,13 @@ def updateRankings(rankedRounds, unrankedRounds, allTracks):
     # Converts userlist to dictionary for ease of access
     users = {}
     for user in userList:
-        users[user._id] = user
+        users[user.username] = user
 
     rank = 0
-    for userId, rating in universalRankings:
+    for username, rating in universalRankings:
         rank += 1
-        users[userId].rank = rank
-        users[userId].rating = rating
+        users[username].rank = rank
+        users[username].rating = rating
 
     print(f"Done! (Time: {timeit.default_timer()-timeStart_UniverseRanking:.2f})")
 
