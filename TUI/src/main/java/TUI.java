@@ -10,13 +10,13 @@ public class TUI {
     private final String tuiHeader =
             "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "~~~~~~~~~~~~~~~~ DEEPFLIGHT - GAMEAPI ~~~~~~~~~~~~~~~~\n" +
-            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 
     private final String menuHeader =
             "~~~~~~~~~~~~~~~~~~~~~~~~~ MENU ~~~~~~~~~~~~~~~~~~~~~~~\n";
 
 
-    public static boolean testing = true;
+    public static boolean testing = false;
     private boolean running = true;
 
     private TuiFunctions functions;
@@ -56,15 +56,17 @@ public class TUI {
     private void printMenu () {
         StringBuilder menuBuilder = new StringBuilder();
         menuBuilder.append(menuHeader);
+        menuBuilder.append("\n");
         menuBuilder.append("\t\t1)\t\t Find Track by ID\n");
         menuBuilder.append("\t\t2)\t\t Find Planet by ID\n");
         menuBuilder.append("\t\t3)\t\t Find ALL Planets\n");
         menuBuilder.append("\t\t4)\t\t Find Current Round\n");
         menuBuilder.append("\t\t5)\t\t Find Previous Round\n");
         menuBuilder.append("\t\t6)\t\t Find ALL Rounds\n");
+        menuBuilder.append("\t\t7)\t\t Find Universal Rankings\n");
         menuBuilder.append("\n");
         menuBuilder.append("\t\t666)\t Exit\n");
-
+        menuBuilder.append("\n");
         menuBuilder.append("Enter the function you wish to use:");
 
         System.out.println(menuBuilder.toString());
@@ -112,6 +114,9 @@ public class TUI {
                 functions.roundAll();
                 break;
 
+            case 7:
+                functions.rankingUniversal();
+                break;
 
             case 666:
                 running = false;

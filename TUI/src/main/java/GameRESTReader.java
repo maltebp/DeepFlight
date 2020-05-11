@@ -108,7 +108,7 @@ public class GameRESTReader {
 
     public void getRoundPrevious (OnResponsCallback onResponsCallback) {
         try {
-            HttpResponse<JsonNode> response = Unirest.get(serverURL + Call.roundprevious.url())
+            HttpResponse<JsonNode> response = Unirest.get(serverURL + Call.roundPrevious.url())
                     .header("accept", "application/json")
                     .asJson();
             // Prints outputs for debugging
@@ -137,6 +137,21 @@ public class GameRESTReader {
     }
 
     // endregion
+
+    public void getRankingUniversal (OnResponsCallback onResponsCallback) {
+        try {
+            HttpResponse<JsonNode> response = Unirest.get(serverURL + Call.rankingUniversal.url())
+                    .header("accept", "application/json")
+                    .asJson();
+            // Prints outputs for debugging
+            testResponseStatusPrint(response);
+            // Redirects the HttpResponse depending on if it succeed or failed.
+            redirectHttpResponse(response,onResponsCallback);
+        } catch (Exception e) {
+            onResponsCallback.OnError(e);
+            e.printStackTrace();
+        }
+    }
 
 
     //---------------------- Support Methods ----------------------    
@@ -172,7 +187,8 @@ public class GameRESTReader {
      planetAll("planet/all"),
      roundCurrent("round/current"),
      roundAll("round/all"),
-     roundprevious("round/previous");
+     roundPrevious("round/previous"),
+     rankingUniversal("rankings/universal");
 
      // ----------------------- Enum Constructor -----------------------
      String callURL;

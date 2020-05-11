@@ -7,14 +7,11 @@
     <groupId>org.deepflight</groupId>
     <artifactId>gameapi</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-
     <properties>
         <project.java.version>1.8</project.java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
 
     <build>
         <plugins>
@@ -66,9 +63,6 @@
         </plugins>
     </build>
 
-
-
-
     <dependencies>
 
         <!-- Mongodb -->
@@ -77,6 +71,7 @@
             <artifactId>mongo-java-driver</artifactId>
             <version>3.7.1</version>
         </dependency>
+
         <!--JUnit-->
         <dependency>
             <groupId>junit</groupId>
@@ -84,18 +79,6 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- Mongodb -->
-        <!--
-        <dependency>
-            <groupId>org.jongo</groupId>
-            <artifactId>jongo</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-        -->
-
-
-
 
         <!-- https://mvnrepository.com/artifact/javelin/javelin -->
         <dependency>
@@ -141,18 +124,14 @@
             <version>3.7.02</version>
         </dependency>
 
-
-<!--PROMETHEUS-->
+        <!--PROMETHEUS-->
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_httpserver</artifactId>
             <version>0.1.0</version>
         </dependency>
 
-
-        <!--MORPHIA-->
-
-
+        <!--Lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -160,15 +139,12 @@
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
+
+        <!--MORPHIA-->
         <dependency>
             <groupId>dev.morphia.morphia</groupId>
             <artifactId>core</artifactId>
             <version>1.5.8</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13-beta-2</version>
         </dependency>
 
     </dependencies>
