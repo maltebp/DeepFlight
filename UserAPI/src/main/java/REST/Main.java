@@ -21,7 +21,7 @@ public class Main {
 
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         /*Code from https://javalin.io/tutorials/prometheus-example*/
         StatisticsHandler statisticsHandler = new StatisticsHandler();
         QueuedThreadPool queuedThreadPool = new QueuedThreadPool(200, 8, 60_000);
@@ -101,14 +101,16 @@ public class Main {
     }
 
 
-
-
-
     /*Code from https://javalin.io/tutorials/prometheus-example*/
 
-    private static void initializePrometheus(StatisticsHandler statisticsHandler, QueuedThreadPool queuedThreadPool) throws IOException {
+    private static void initializePrometheus(StatisticsHandler statisticsHandler, QueuedThreadPool queuedThreadPool) {
         StatisticsHandlerCollector.initialize(statisticsHandler); //Here we registrer
         QueuedThreadPoolCollector.initialize(queuedThreadPool); //Here we registrer
-        HTTPServer prometheusServer = new HTTPServer(PROMETHEUS__ETRIC_PORT);
+        try {
+            HTTPServer prometheusServer = new HTTPServer(PROMETHEUS__ETRIC_PORT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Prometheus endpoint is down!!");
+        }
     }
 }
