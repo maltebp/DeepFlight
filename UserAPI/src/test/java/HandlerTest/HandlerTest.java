@@ -55,8 +55,6 @@ public class HandlerTest {
         System.out.println(responseFalse.getBody().toString());
 
 
-
-
         //Return status code Unarthurized
         assertThat(responseFalse.getStatus()).isEqualTo(401);
         //System.out.println("json to string:" +jsonNy.toString());
@@ -70,6 +68,7 @@ public class HandlerTest {
 
         app.stop();
     }
+
 
     /*
     Testing that a user will get the right arguments when typing a invalid login informations
@@ -91,12 +90,12 @@ public class HandlerTest {
         app.stop();
     }
 
+
     /*
     Testing that a user can change password.
     The test also try to login with old credientials - and fails.
     Finally the test change the password back to the old username.
      */
-
     @Test
     public void POST_changeLogin() {
         int PORT = 1236;
@@ -110,8 +109,6 @@ public class HandlerTest {
 
         String pwd = "1234";
 
-
-
         HttpResponse response = Unirest.post("http://localhost:"+PORT+"/jwt/changeLogin").field("name",user.brugernavn).field("password",user.adgangskode).field("new_password",pwd).asString();
         //Return status code Unarthurized
         assertThat(response.getStatus()).isEqualTo(200);
@@ -124,7 +121,6 @@ public class HandlerTest {
         System.out.println(responseTestlogin.toString());
         //Checking that the UserAPI returns a jwt in the body if the login suceed
         Assert.assertTrue(responseTestlogin.getBody().toString().contains("jwt"));
-
 
         //Changing password back
        HttpResponse responseZeroBeginning = Unirest.post("http://localhost:"+PORT+"/jwt/changeLogin").field("name",user.brugernavn).field("password",pwd).field("new_password",user.adgangskode).asString();
