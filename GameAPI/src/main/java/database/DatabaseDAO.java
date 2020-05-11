@@ -1,7 +1,5 @@
 package database;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.query.*;
 import model.*;
@@ -15,12 +13,56 @@ public class DatabaseDAO implements IDatabaseDAO {
     private Datastore database;
 
     public DatabaseDAO(){
-      database = DatabaseConnection.getInstance().getDatastore();
+        database = DatabaseConnection.getInstance().getDatastore();
     }
+
+    // **************************** PUBLIC METHODS ****************************
+
+    public void setTestingMode (boolean isTesting) {
+        DatabaseConnection.getInstance().setTestMode(isTesting);
+        database = DatabaseConnection.getInstance().getDatastore();
+    }
+
+    // region Track Methods
 
     public List<Track> getAllTracks(){
         return database.createQuery(Track.class).find().toList();
     }
+
+    @Override
+    public Track getTrack(String trackId) throws DatabaseException, NoSuchElementException {
+        try{
+            Track track = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId)).first();
+            if (track == null) {
+                throw new NoSuchElementException(String.format("No such Track exist. trackID: %s", trackId));
+            }
+            return track;
+        }catch(IllegalArgumentException e){
+            throw new NoSuchElementException();
+        }
+
+    }
+
+    @Override
+    public boolean updateTrackTime(String trackId, String username, int time) throws DatabaseException {
+        Query<Track> trackQuery = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId));
+        String fieldName = String.format("times.%s", username);
+        // Checks if the user has a time already or if the new time is better than the current time.
+        trackQuery.or(
+                trackQuery.criteria(fieldName).greaterThan(time),
+                trackQuery.criteria(fieldName).doesNotExist());
+
+        UpdateOperations<Track> updateOperations = database.createUpdateOperations(Track.class)
+                .set(fieldName,time);
+
+        UpdateResults updateResults = database.update(trackQuery,updateOperations);
+
+        return updateResults.getUpdatedCount() != 0;
+    }
+
+    // endregion
+
+    // region Planet Methods
 
     @Override
     public Planet getPlanet(String planetId) throws DatabaseException, NoSuchElementException {
@@ -39,6 +81,10 @@ public class DatabaseDAO implements IDatabaseDAO {
     public List<Planet> getPlanets() throws DatabaseException {
         return database.createQuery(Planet.class).find().toList();
     }
+
+    // endregion
+
+    // region User Methods
 
     @Override
     public User getUser(String userId) throws DatabaseException, NoSuchElementException {
@@ -78,20 +124,9 @@ public class DatabaseDAO implements IDatabaseDAO {
         database.delete(deleteQuery);
     }
 
-    @Override
-    public Track getTrack(String trackId) throws DatabaseException, NoSuchElementException {
-        try{
-            Track track = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId)).first();
-            if (track == null) {
-                throw new NoSuchElementException(String.format("No such Track exist. trackID: %s", trackId));
-            }
-            return track;
-        }catch(IllegalArgumentException e){
-            throw new NoSuchElementException();
-        }
+    // endregion
 
-    }
-
+    // region TrackData
     @Override
     public Trackdata getTrackData(String trackId) throws DatabaseException, NoSuchElementException {
         Trackdata trackdata = database.createQuery(Trackdata.class).field("id").equal(new ObjectId(trackId)).first();
@@ -100,23 +135,9 @@ public class DatabaseDAO implements IDatabaseDAO {
         }
         return trackdata;
     }
+    // endregion
 
-    @Override
-    public boolean updateTrackTime(String trackId, String username, int time) throws DatabaseException {
-        Query<Track> trackQuery = database.createQuery(Track.class).field("id").equal(new ObjectId(trackId));
-        String fieldName = String.format("times.%s", username);
-        // Checks if the user has a time already or if the new time is better than the current time.
-        trackQuery.or(
-                trackQuery.criteria(fieldName).greaterThan(time),
-                trackQuery.criteria(fieldName).doesNotExist());
-
-        UpdateOperations<Track> updateOperations = database.createUpdateOperations(Track.class)
-                .set(fieldName,time);
-
-        UpdateResults updateResults = database.update(trackQuery,updateOperations);
-
-        return updateResults.getUpdatedCount() != 0;
-    }
+   // region Round Methods
 
     @Override
     public List<Round> getRounds() throws DatabaseException {
@@ -144,6 +165,10 @@ public class DatabaseDAO implements IDatabaseDAO {
         return previousRound;
     }
 
+    // endregion
+
+    // ************************ SUPPORT METHODS ************************
+
     private Round getRoundFromEpochMillis(long epochMillis) {
         Query<Round> q = database.createQuery(Round.class);
         q.and(q.criteria("startDate").lessThanOrEq(epochMillis),
@@ -155,30 +180,6 @@ public class DatabaseDAO implements IDatabaseDAO {
     private Round getRoundFromRoundNumber(long roundNumber) throws DatabaseException {
         return database.createQuery(Round.class).field("roundNumber").equal(roundNumber).first();
     }
-
-
-    /** String enum identifying a Collection within the Mongo database */
-  public enum Collection {
-        PLANETS("planets"),
-        TRACKS("Track"),
-        ROUNDS("rounds"),
-        TRACKDATA("trackdata");
-
-        private final String name;
-
-        Collection(String name){ this.name = name; }
-
-        @Override
-        public String toString() { return name; }
-    }
-
-
-    private static MongoClient createClient(){
-        return MongoClients.create("mongodb+srv://game:deepflightisawesome@deepflight-cu0et.mongodb.net/test?retryWrites=true&w=majority");
-    }
-
-
-
 
     // -----------------------------------------------------------------------------------------------
     // TEST MODE
