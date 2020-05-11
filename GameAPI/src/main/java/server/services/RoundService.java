@@ -7,11 +7,9 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.plugin.openapi.annotations.ContentType;
 import model.Round;
-import model.User;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -90,7 +88,6 @@ public class RoundService {
             context.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
             context.contentType("text/plain");
             context.result("An error occured when accessing the database");
-
         }
     }
 
