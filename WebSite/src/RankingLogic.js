@@ -23,10 +23,11 @@ export function getRankFromServer(setState) {
             // Show null users
             for (var i = 0; i < 5; i++) {
                 if (ranks[i] != null) {
-                    universal.push({ 
-                        rank: i + 1, 
-                        name: ranks[i].username, 
-                        rating: parseFloat(ranks[i].rating).toFixed(1) });
+                    universal.push({
+                        rank: i + 1,
+                        name: ranks[i].username,
+                        rating: parseFloat(ranks[i].rating).toFixed(1)
+                    });
                 } else {
                     universal.push({ rank: i + 1 });
                 }
@@ -63,10 +64,11 @@ export function getRankFromServer(setState) {
             // Show null users
             for (var i = 0; i < 5; i++) {
                 if (entries[i] != null) {
-                    lastRound.push({ 
-                        rank: i + 1, 
-                        name: objects[i].name, 
-                        rating: parseFloat(objects[i].rating).toFixed(1) });
+                    lastRound.push({
+                        rank: i + 1,
+                        name: objects[i].name,
+                        rating: parseFloat(objects[i].rating).toFixed(1)
+                    });
                 } else if (i === 0) {
                     lastRound.push({ rank: "No data from last round." });
                 } else {
@@ -74,37 +76,8 @@ export function getRankFromServer(setState) {
                 }
             }
             setState({ "lastRound": lastRound });
-            this.getTrackData(response.data.trackIds)
         })
         .catch(error => {
             console.log("error downloading scores", error);
         });
-}
-
-function getTrackData(ids) {
-    console.log("TRACK IDS:")
-    console.log(ids)
-    const url1 = "http://maltebp.dk/gameapi/track/:"
-    for (let i in ids) {
-        let trackid = ids[i];
-        let url = url1 + trackid;
-        console.log(url)
-        axios({
-            method: 'get',
-            url: url,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': url,
-                'Accept': 'application/json',
-                //'Authorization': localStorage.getItem("dftoken")
-            },
-            withCredentials: true
-        })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log("error downloading trackids", error);
-            });
-    }
 }

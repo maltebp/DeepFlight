@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Login from './Login';
 import jwt from 'jsonwebtoken';
-import axios from 'axios';
 import text from './text/text.json';
 import DownloadMenu from './DownloadMenu';
 
@@ -20,18 +19,29 @@ class Download extends Component {
   }
 
   render() {
+    let installheader = text.installation.winheader;
+    let installtext = text.installation.wintext;
+
+    if (window.navigator.platform.substr(0, 5) === 'Linux') {
+      installheader = text.installation.linheader;
+      installtext = text.installation.lintext;
+
+    } else if (window.navigator.platform.substr(0, 3) === 'Mac') {
+      installheader = text.installation.macheader;
+      installtext = text.installation.mactext;
+
+    } else if (window.navigator.platform.substr(0, 3) !== 'Win') { // If not windows
+      installheader = "The program does not run on your platform."
+      installtext = "DeepFlight is a C# program, and is not tested on mobile devices and systems other than Windows 10 and Ubuntu 18."
+    }
     return (
       <div>
         <div className="boxwrapper longread">
           <FilterDownload token={this.state.token} handleState={this.handleState.bind(this)} />
           <div className="box whitebg">
-            <h2>{text.installation.header}</h2>
-            <h3>{text.installation.winheader}</h3>
-            <p>{text.installation.wintext}</p>
-            <h3>{text.installation.macheader}</h3>
-            <p>{text.installation.mactext}</p>
-            <h3>{text.installation.linheader}</h3>
-            <p>{text.installation.lintext}</p>
+            <h2>{installheader}</h2>
+            <p>{installtext}</p>
+            <p className="footNote">{window.navigator.platform}</p>
           </div>
         </div>
       </div>
