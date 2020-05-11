@@ -10,7 +10,6 @@ import model.Planet;
 import model.Round;
 import model.Track;
 
-import java.net.UnknownHostException;
 import java.util.HashSet;
 
 public class DatabaseConnection {
