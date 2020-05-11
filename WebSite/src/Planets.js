@@ -38,50 +38,52 @@ class Planets extends Component {
                     <img src={smar} alt="planet" className="fullwidth" />
                     <p>planet: smar</p>
                     <p>cave: {this.state.tracks[0].name}</p>
-                    <ol>
-                        <li>{this.state.tracks[0].times[0].name} {this.state.tracks[0].times[0].time}</li>
-                        <li>{this.state.tracks[0].times[1].name} {this.state.tracks[0].times[1].time}</li>
-                        <li>{this.state.tracks[0].times[2].name} {this.state.tracks[0].times[2].time}</li>
-                        <li>{this.state.tracks[0].times[3].name} {this.state.tracks[0].times[3].time}</li>
-                        <li>{this.state.tracks[0].times[4].name} {this.state.tracks[0].times[4].time}</li>
-                    </ol>
+                    <table><tbody>
+                        <tr><td>1</td><td>{this.state.tracks[0].times[0].name}</td><td>{this.state.tracks[0].times[0].time}</td></tr>
+                        <tr><td>2</td><td>{this.state.tracks[0].times[1].name}</td><td>{this.state.tracks[0].times[1].time}</td></tr>
+                        <tr><td>3</td><td>{this.state.tracks[0].times[2].name}</td><td>{this.state.tracks[0].times[2].time}</td></tr>
+                        <tr><td>4</td><td>{this.state.tracks[0].times[3].name}</td><td>{this.state.tracks[0].times[3].time}</td></tr>
+                        <tr><td>5</td><td>{this.state.tracks[0].times[4].name}</td><td>{this.state.tracks[0].times[4].time}</td></tr>
+                    </tbody></table>
                 </div>
                 <div className="box">
                     <img src={aerth} alt="planet" className="fullwidth" />
                     <p>planet: aerth</p>
                     <p>cave: {this.state.tracks[1].name}</p>
-                    <ol>
-                        <li>{this.state.tracks[1].times[0].name} {this.state.tracks[1].times[0].time}</li>
-                        <li>{this.state.tracks[1].times[1].name} {this.state.tracks[1].times[1].time}</li>
-                        <li>{this.state.tracks[1].times[2].name} {this.state.tracks[1].times[2].time}</li>
-                        <li>{this.state.tracks[1].times[3].name} {this.state.tracks[1].times[3].time}</li>
-                        <li>{this.state.tracks[1].times[4].name} {this.state.tracks[1].times[4].time}</li>
-                    </ol>
-
+                    <table><tbody>
+                        <tr><td>1</td><td>{this.state.tracks[1].times[0].name}</td><td>{this.state.tracks[1].times[0].time}</td></tr>
+                        <tr><td>2</td><td>{this.state.tracks[1].times[1].name}</td><td>{this.state.tracks[1].times[1].time}</td></tr>
+                        <tr><td>3</td><td>{this.state.tracks[1].times[2].name}</td><td>{this.state.tracks[1].times[2].time}</td></tr>
+                        <tr><td>4</td><td>{this.state.tracks[1].times[3].name}</td><td>{this.state.tracks[1].times[3].time}</td></tr>
+                        <tr><td>5</td><td>{this.state.tracks[1].times[4].name}</td><td>{this.state.tracks[1].times[4].time}</td></tr>
+                    </tbody>
+                    </table>
                 </div>
                 <div className="box">
                     <img src={turnsa} alt="planet" className="fullwidth" />
                     <p>planet: turnsa</p>
                     <p>cave: {this.state.tracks[2].name}</p>
-                    <ol>
-                        <li>{this.state.tracks[2].times[0].name} {this.state.tracks[2].times[0].time}</li>
-                        <li>{this.state.tracks[2].times[1].name} {this.state.tracks[2].times[1].time}</li>
-                        <li>{this.state.tracks[2].times[2].name} {this.state.tracks[2].times[2].time}</li>
-                        <li>{this.state.tracks[2].times[3].name} {this.state.tracks[2].times[3].time}</li>
-                        <li>{this.state.tracks[2].times[4].name} {this.state.tracks[2].times[4].time}</li>
-                    </ol>
+                    <table><tbody>
+                        <tr><td>1</td><td>{this.state.tracks[2].times[0].name}</td><td>{this.state.tracks[2].times[0].time}</td></tr>
+                        <tr><td>2</td><td>{this.state.tracks[2].times[1].name}</td><td>{this.state.tracks[2].times[1].time}</td></tr>
+                        <tr><td>3</td><td>{this.state.tracks[2].times[2].name}</td><td>{this.state.tracks[2].times[2].time}</td></tr>
+                        <tr><td>4</td><td>{this.state.tracks[2].times[3].name}</td><td>{this.state.tracks[2].times[3].time}</td></tr>
+                        <tr><td>5</td><td>{this.state.tracks[2].times[4].name}</td><td>{this.state.tracks[2].times[4].time}</td></tr>
+                    </tbody>
+                    </table>
                 </div>
                 <div className="box">
                     <img src={lupto} alt="planet" className="fullwidth" />
                     <p>planet: lupto</p>
                     <p>cave: {this.state.tracks[3].name}</p>
-                    <ol>
-                        <li>{this.state.tracks[3].times[0].name} {this.state.tracks[3].times[0].time}</li>
-                        <li>{this.state.tracks[3].times[1].name} {this.state.tracks[3].times[1].time}</li>
-                        <li>{this.state.tracks[3].times[2].name} {this.state.tracks[3].times[2].time}</li>
-                        <li>{this.state.tracks[3].times[3].name} {this.state.tracks[3].times[3].time}</li>
-                        <li>{this.state.tracks[3].times[4].name} {this.state.tracks[3].times[4].time}</li>
-                    </ol>
+                    <table><tbody>
+                        <tr><td>1</td><td>{this.state.tracks[3].times[0].name}</td><td>{this.state.tracks[3].times[0].time}</td></tr>
+                        <tr><td>2</td><td>{this.state.tracks[3].times[1].name}</td><td>{this.state.tracks[3].times[1].time}</td></tr>
+                        <tr><td>3</td><td>{this.state.tracks[3].times[2].name}</td><td>{this.state.tracks[3].times[2].time}</td></tr>
+                        <tr><td>4</td><td>{this.state.tracks[3].times[3].name}</td><td>{this.state.tracks[3].times[3].time}</td></tr>
+                        <tr><td>5</td><td>{this.state.tracks[3].times[4].name}</td><td>{this.state.tracks[3].times[4].time}</td></tr>
+                    </tbody>
+                    </table>
                 </div>
             </div>
         );

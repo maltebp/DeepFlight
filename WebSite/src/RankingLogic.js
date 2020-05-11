@@ -72,7 +72,7 @@ export function getRankFromServer(setState) {
                 } else if (i === 0) {
                     lastRound.push({ rank: "No data from last round." });
                 } else {
-                    lastRound.push({ rank: "_ _ _" });
+                    lastRound.push({ rank: "-" });
                 }
             }
             setState({ "lastRound": lastRound });
