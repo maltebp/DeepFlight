@@ -26,8 +26,12 @@ h1.header {
   font-size: 6em;
 }
 
-p{
-  font-size:1.3em;
+p {
+  font-size: 1.3em;
+}
+
+.footNote{
+  color:#666;
 }
 
 ul.header li {
@@ -56,10 +60,6 @@ ul.header li a {
   border-bottom: 2px solid white !important;
 }
 
-.box {
-  margin: 1%;
-}
-
 .boxwrapper {
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -81,6 +81,11 @@ ul.header li a {
 .box {
   display: table-cell;
   box-sizing: border-box;
+  margin: 1%;
+}
+
+.box img {
+  width: 100%;
 }
 
 /*Style the web form*/
@@ -108,21 +113,21 @@ button, form button, .buttonLink {
   margin-top: 10px;
   margin-bottom: 20px;
   font-family: 'Courier New', Courier, monospace;
-  text-decoration:none;
+  text-decoration: none;
 }
 
 button:disabled {
   background: red;
 }
 
-.buttonLink{
+.buttonLink {
   display: inline-block;
   text-align: center;
   box-sizing: border-box;
 }
 
-.alert{
-  color:red;
+.alert {
+  color: red;
 }
 
 form {
@@ -131,16 +136,16 @@ form {
   max-width: 320px;
 }
 
-.imageoverlay{
+.imageoverlay {
   margin-top: -200px;
   text-align: right;
-  padding:20px;
+  padding: 20px;
   color: white;
 }
 
 .imageoverlay h1 {
   font-family: 'Pixellari', monospace;
-  font-size:3em;
+  font-size: 3em;
 }
 
 .imageoverlay p {
@@ -148,9 +153,9 @@ form {
 }
 
 table {
-  width:100%;
+  width: 100%;
   font-family: 'Pixellari';
-  font-size:1.2em;
+  font-size: 1.2em;
 }
 
 /*Smaller screens*/
@@ -159,14 +164,14 @@ table {
   .box, .box3, ul.header li {
     display: block;
     width: 100%;
-    margin-left:0px;
-    margin-right:0px;
+    margin-left: 0px;
+    margin-right: 0px;
   }
   /*reset imageoverlay*/
-  .imageoverlay{
-    margin:0;
+  .imageoverlay {
+    margin: 0;
     color: black;
-    background:white;
+    background: white;
   }
 }
 
