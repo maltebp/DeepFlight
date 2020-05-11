@@ -73,14 +73,18 @@ public class Main {
             }
         });
 
+        /*
+        Initialize all endpoints
+         */
+        initializeEndpoints(app);
 
+    }
+
+
+
+    private static void initializeEndpoints(Javalin app){
         //Response message for no access token
-        app.get("/loginRequest",ctx->{
-            ctx.status(401);
-            ctx.result("Pleases provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
-        });
-
-
+        app.get("/loginRequest",LoginHandler.loginRequest);
 
         /*
         Rest endpoint: param: logininformation
@@ -96,13 +100,11 @@ public class Main {
 
         //Get user info in exchange for JWT.
         app.get("/jwt/exchangeUser",LoginHandler.exchangeUser );
-
-
     }
 
 
-    /*Code from https://javalin.io/tutorials/prometheus-example*/
 
+    /*Code from https://javalin.io/tutorials/prometheus-example*/
     private static void initializePrometheus(StatisticsHandler statisticsHandler, QueuedThreadPool queuedThreadPool) {
         StatisticsHandlerCollector.initialize(statisticsHandler); //Here we registrer
         QueuedThreadPoolCollector.initialize(queuedThreadPool); //Here we registrer

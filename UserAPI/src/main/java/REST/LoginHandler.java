@@ -15,7 +15,9 @@ import java.util.Optional;
 
 public class LoginHandler {
 
-
+    /*
+    Handler for loginrequest
+    */
     public static Handler login = ctx ->{
         try {
             System.out.println("Endpoint: login");
@@ -25,7 +27,6 @@ public class LoginHandler {
             System.out.println(name + ",pwd " + pwd); //For debugging
             //Checking the if guestlogin or if
             Bruger user = Authendicator.checkloginType(name, pwd);
-
 
             // A null user will be thrown from Autheddication as an IllegalArgumentException
             if (user != null) {
@@ -45,7 +46,9 @@ public class LoginHandler {
     };
 
 
-
+    /*
+    Handler for request on changing password
+     */
     public static Handler changePassword = ctx->{
         System.out.println("Endpoint: /login/changeLogin");
         try {
@@ -72,6 +75,11 @@ public class LoginHandler {
         }
     };
 
+
+    /*
+    Handler for exchanging JWT for userinformations.
+    JWT is verified and if it is valid the userinformations will be returned
+     */
     public static Handler exchangeUser = ctx->{
         ctx.status(200);
         ctx.contentType(ContentType.JSON);
@@ -79,16 +87,20 @@ public class LoginHandler {
         ctx.result(unpactkToken(ctx,"user"));
     };
 
+    public static Handler loginRequest = ctx->{
+        ctx.status(401);
+        ctx.contentType("text/plain");
+        ctx.result("Pleases provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
+    };
+
 
      /*
-    TODO: Change if time
+    TODO: Change if time. Better if the claim gets unpaccked in AuthFilter
      */
     public static String unpactkToken(io.javalin.http.Context ctx, String infoToRetrive){
         Optional<DecodedJWT> decodedJWT = JavalinJWT.getTokenFromHeader(ctx)
                 .flatMap(JWTHandler.provider::validateToken);
 
         return decodedJWT.get().getClaim(infoToRetrive).asString();
-
     }
-
 }
