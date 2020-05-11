@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import circle from "./images/CircleTexture2.png"
+import smar from "./images/CircleSmar.png"
+import aerth from "./images/CircleAerth.png"
+import turnsa from "./images/CircleTurnsa.png"
+import lupto from "./images/CircleLupto.png"
 
 class Planets extends Component {
     constructor(props) {
@@ -22,20 +26,20 @@ class Planets extends Component {
             <div className="boxwrapper">
                 <div className="box">
 
-                    <img src={circle} alt="planet" className="fullwidth" />
-                    <h2>{this.state.planets[0].name}</h2>
+                    <img src={smar} alt="planet" className="fullwidth" />
+                    <h2>smar</h2>
                 </div>
                 <div className="box">
-                    <img src={circle} alt="planet" className="fullwidth" />
-                    <h2>{this.state.planets[1].name}</h2>
+                    <img src={aerth} alt="planet" className="fullwidth" />
+                    <h2>aerth</h2>
                 </div>
                 <div className="box">
-                    <img src={circle} alt="planet" className="fullwidth" />
-                    <h2>{this.state.planets[2].name}</h2>
+                    <img src={turnsa} alt="planet" className="fullwidth" />
+                    <h2>turnsa</h2>
                 </div>
                 <div className="box">
-                    <img src={circle} alt="planet" className="fullwidth" />
-                    <h2>{this.state.planets[3].name}</h2>
+                    <img src={lupto} alt="planet" className="fullwidth" />
+                    <h2>lupto</h2>
                 </div>
             </div>
         );
