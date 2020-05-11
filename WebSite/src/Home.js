@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import Planets from "./Planets";
 //import jwt from 'jsonwebtoken';
 
 class Home extends Component {
@@ -23,6 +24,35 @@ class Home extends Component {
     }
   }
 
+  getTrackData(ids) {
+    console.log("TRACK IDS:")
+    console.log(ids)
+    const url1 = "http://maltebp.dk/gameapi/track/:"
+    for (let i in ids) {
+        let trackid = ids[i];
+        let url = url1 + trackid;
+        console.log(url)
+        axios({
+            method: 'get',
+            url: url,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': url,
+                'Accept': 'application/json',
+                //'Authorization': localStorage.getItem("dftoken")
+            },
+            withCredentials: true
+        })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log("error downloading trackids", error);
+            });
+    }
+}
+
+
   componentDidMount() {
     const BASE_URL = "http://maltebp.dk:10000/gameapi/";
     const rankUrl = BASE_URL + "rankings/universal";
@@ -40,17 +70,18 @@ class Home extends Component {
     })
       .then(response => {
         const ranks = response.data;
-        console.log(ranks)
+        ranks.sort((a, b) => b.rating - a.rating);
+        //console.log(ranks)
         let universal = [];
         // Show null users
         for (var i = 0; i < 5; i++) {
           if (ranks[i] != null) {
             universal.push({ rank: i + 1, name: ranks[i].username, rating: parseFloat(ranks[i].rating).toFixed(1) });
           } else {
-            universal.push({ rank: i + 1, name: "_ _ _", rating: "_ _ _" });
+            universal.push({ rank: i + 1});
           }
         }
-        universal.sort((a, b) => b.rating - a.rating);
+
         this.setState({ "universal": universal });
       })
       .catch(error => {
@@ -77,7 +108,8 @@ class Home extends Component {
           objects[item] = { "name": entries[item][0], "rating": entries[item][1] }
         }
         objects.sort((a, b) => b.rating - a.rating);
-       
+
+        //console.log(objects);
         let lastRound = [];
         // Show null users
         for (var i = 0; i < 5; i++) {
@@ -86,10 +118,11 @@ class Home extends Component {
           } else if (i === 0) {
             lastRound.push({ rank: "No data from last round." });
           } else {
-            lastRound.push({ rank: "_ _ _", name: "_ _ _", rating: "_ _ _" });
+            lastRound.push({ rank: "_ _ _"});
           }
         }
-        this.setState({ "lastRound": lastRound });
+        this.setState({ "lastRound": lastRound});
+        this.getTrackData(response.data.trackIds)
       })
       .catch(error => {
         console.log("error downloading scores", error);
@@ -98,30 +131,35 @@ class Home extends Component {
 
   render() {
     return (
-      <div className="boxwrapper">
-        <div className="box whitebg">
-          <h1>Universal ratings (top 5)</h1>
-          <table>
-            <tbody>
-              <tr><td>{this.state.universal[0].rank}</td><td>{this.state.universal[0].name}</td><td>{this.state.universal[0].rating}</td></tr>
-              <tr><td>{this.state.universal[1].rank}</td><td>{this.state.universal[1].name}</td><td>{this.state.universal[1].rating}</td></tr>
-              <tr><td>{this.state.universal[2].rank}</td><td>{this.state.universal[2].name}</td><td>{this.state.universal[2].rating}</td></tr>
-              <tr><td>{this.state.universal[3].rank}</td><td>{this.state.universal[3].name}</td><td>{this.state.universal[3].rating}</td></tr>
-              <tr><td>{this.state.universal[4].rank}</td><td>{this.state.universal[4].name}</td><td>{this.state.universal[4].rating}</td></tr>
-            </tbody>
-          </table>
+      <div>
+        <div className="boxwrapper">
+          <div className="box">
+            <h1>Universal ratings (top 5)</h1>
+            <table>
+              <tbody>
+                <tr><td>{this.state.universal[0].rank}</td><td>{this.state.universal[0].name}</td><td>{this.state.universal[0].rating}</td></tr>
+                <tr><td>{this.state.universal[1].rank}</td><td>{this.state.universal[1].name}</td><td>{this.state.universal[1].rating}</td></tr>
+                <tr><td>{this.state.universal[2].rank}</td><td>{this.state.universal[2].name}</td><td>{this.state.universal[2].rating}</td></tr>
+                <tr><td>{this.state.universal[3].rank}</td><td>{this.state.universal[3].name}</td><td>{this.state.universal[3].rating}</td></tr>
+                <tr><td>{this.state.universal[4].rank}</td><td>{this.state.universal[4].name}</td><td>{this.state.universal[4].rating}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="box">
+            <h1 >Last round ratings (top 5)</h1>
+            <table>
+              <tbody>
+                <tr><td>{this.state.lastRound[0].rank}</td><td>{this.state.lastRound[0].name}</td><td>{this.state.lastRound[0].rating}</td></tr>
+                <tr><td>{this.state.lastRound[1].rank}</td><td>{this.state.lastRound[1].name}</td><td>{this.state.lastRound[1].rating}</td></tr>
+                <tr><td>{this.state.lastRound[2].rank}</td><td>{this.state.lastRound[2].name}</td><td>{this.state.lastRound[2].rating}</td></tr>
+                <tr><td>{this.state.lastRound[3].rank}</td><td>{this.state.lastRound[3].name}</td><td>{this.state.lastRound[3].rating}</td></tr>
+                <tr><td>{this.state.lastRound[4].rank}</td><td>{this.state.lastRound[4].name}</td><td>{this.state.lastRound[4].rating}</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div className="box whitebg">
-          <h1 >Last round ratings (top 5)</h1>
-          <table>
-            <tbody>
-              <tr><td>{this.state.lastRound[0].rank}</td><td>{this.state.lastRound[0].name}</td><td>{this.state.lastRound[0].rating}</td></tr>
-              <tr><td>{this.state.lastRound[1].rank}</td><td>{this.state.lastRound[1].name}</td><td>{this.state.lastRound[1].rating}</td></tr>
-              <tr><td>{this.state.lastRound[2].rank}</td><td>{this.state.lastRound[2].name}</td><td>{this.state.lastRound[2].rating}</td></tr>
-              <tr><td>{this.state.lastRound[3].rank}</td><td>{this.state.lastRound[3].name}</td><td>{this.state.lastRound[3].rating}</td></tr>
-              <tr><td>{this.state.lastRound[4].rank}</td><td>{this.state.lastRound[4].name}</td><td>{this.state.lastRound[4].rating}</td></tr>
-            </tbody>
-          </table>
+        <div className="boxwrapper">
+          <Planets/>
         </div>
       </div>
     );

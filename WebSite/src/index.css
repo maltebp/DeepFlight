@@ -56,10 +56,6 @@ ul.header li a {
   border-bottom: 2px solid white !important;
 }
 
-.box {
-  margin: 1%;
-}
-
 .boxwrapper {
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -81,6 +77,11 @@ ul.header li a {
 .box {
   display: table-cell;
   box-sizing: border-box;
+  margin: 1%;
+}
+
+.box img{
+  width: 100%;
 }
 
 /*Style the web form*/

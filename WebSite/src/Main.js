@@ -15,7 +15,7 @@ class Main extends Component {
         <div>
           <h1 className="header">DEEP FLIGHT</h1>
           <ul className="header">
-            <li><NavLink exact to="/">High Scores</NavLink></li>
+            <li><NavLink exact to="/">Ratings</NavLink></li>
             <li><NavLink to="/download">Download</NavLink></li>
             <li><NavLink to="/about">About the game</NavLink></li>
           </ul>
