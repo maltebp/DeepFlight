@@ -1,4 +1,4 @@
-package Controller;
+package Authendication;
 
 import brugerautorisation.data.Bruger;
 import brugerautorisation.transport.rmi.Brugeradmin;

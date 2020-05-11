@@ -1,0 +1,1358 @@
+{
+	"info": {
+		"_postman_id": "5271b142-6a6f-4fc3-826d-abee8a2bc80b",
+		"name": "Deep Flight Game API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Game API Test",
+			"item": [
+				{
+					"name": "Get Root",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "87567a0c-42af-4bb8-8987-f514ff13c0f3",
+								"exec": [
+									"pm.test(\"Status: OK\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Rounds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d478e46f-5ca6-4266-9628-4bc6f2900f76",
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"// There should always be a round\r",
+									"pm.test(\"Status: OK\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"// Test if response is an array and not an object\r",
+									"pm.test('Is an array', () => pm.expect(pm.response.json()).to.be.an('array').but.not.an('object'))\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/round/all",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"round",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Current Round",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b6ea00ef-efa0-49bd-973f-a2eb23c32592",
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"// There should always be a round\r",
+									"pm.test(\"Status: OK\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test('Is JSON object', function() {\r",
+									"    pm.expect(jsonData).to.be.an('object');\r",
+									"    pm.collectionVariables.set(\"round\", jsonData);\r",
+									"    pm.collectionVariables.set(\"track_id\", jsonData.trackIds[0]);\r",
+									"});\r",
+									"\r",
+									"pm.test('Not ranked', function() {\r",
+									"  pm.expect(jsonData).to.not.have.property('rankings');\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/round/current",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"round",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Previous Round",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "adaa86cd-3905-4bb3-9e53-6f1049421c3a",
+								"exec": [
+									"\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"if(pm.response.code == 200 ){\r",
+									"    pm.test('Is JSON object', function() {\r",
+									"      pm.expect(jsonData).to.be.an('object');\r",
+									"    });\r",
+									"    \r",
+									"    // pm.test('Ranked', function() {\r",
+									"    //   pm.expect(jsonData).to.have.property('rankings');\r",
+									"    // });     \r",
+									"}else{\r",
+									"    pm.expect(pm.response.code).to.equal(404);\r",
+									"}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/round/previous",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"round",
+								"previous"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single Track",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "853cd653-967d-4cca-b1c1-9a60e9bdfb52",
+								"exec": [
+									"pm.test(\"Status: OK\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"var responseTrack = pm.response.json();",
+									"",
+									"pm.test(\"Correct Track id\", () => {",
+									"    pm.expect(responseTrack.id).to.equal(pm.collectionVariables.get(\"track_id\"));",
+									"})",
+									"",
+									"pm.collectionVariables.set(\"planet_id\", responseTrack.planetId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5f7e4b37-94d6-4b85-8c5b-0ac444ec7c36",
+								"exec": [
+									"if( !pm.collectionVariables.get(\"track_id\") ){",
+									"    throw new Error(\"track_id is null\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/track/{{track_id}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"track",
+								"{{track_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single Track Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "892ea010-0ffc-48b8-8382-e566f95d4866",
+								"exec": [
+									"pm.test(\"Status: OK\", function () {",
+									"    pm.expect(pm.response.code).to.be.ok;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9ef01d19-8a11-4829-b41b-6cca1abd51bb",
+								"exec": [
+									"if( !pm.collectionVariables.get(\"track_id\") ){",
+									"    throw new Error(\"track_id is null\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/track/{{track_id}}/trackdata",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"track",
+								"{{track_id}}",
+								"trackdata"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Track's Planet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b3436f5e-2d16-4370-89a5-0f4a26114bf9",
+								"exec": [
+									"pm.test(\"Status: OK\", function () {",
+									"    pm.expect(pm.response.code).to.be.ok;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/planet/{{planet_id}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"planet",
+								"{{planet_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Planets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8617a796-8fc7-40c4-9ec6-dac7aa252820",
+								"exec": [
+									"",
+									"",
+									"",
+									"pm.test(\"Status: OK\", function () {",
+									"    pm.expect(pm.response.code).to.be.ok;",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"// Test if response is an array and not an object",
+									"pm.test('Is an array', () => pm.expect(pm.response.json()).to.be.an('array').but.not.an('object'))",
+									"",
+									"",
+									"pm.test(\"4 planets\", () => {",
+									"    pm.expect(jsonData).to.have.lengthOf(4);",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"planet\", jsonData[0])",
+									"pm.collectionVariables.set(\"planet_id\", jsonData[0].id)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ef9b829a-1cc6-4588-bfe4-15652cbabb2a",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/planet/all",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"planet",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single Planet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c90b3150-d2b4-484c-a526-fa9ec7120425",
+								"exec": [
+									"pm.test(\"Status: OK\", function () {",
+									"    pm.expect(pm.response.code).to.be.ok;",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Test same planet\", () => {",
+									"    expectedPlanet = pm.collectionVariables.get('planet');",
+									"    pm.expect(jsonData.name).to.equal(expectedPlanet.name);",
+									"    pm.expect(jsonData.id).to.equal(pm.collectionVariables.get(\"planet_id\"));",
+									"     pm.expect(jsonData.id).to.equal(expectedPlanet.id);",
+									"    pm.expect(jsonData.colors).to.equal(expectedPlanet.colors);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2eac37f0-fa81-42b2-a6e8-6ee665f5c6e3",
+								"exec": [
+									"if (!pm.collectionVariables.get(\"planet_id\")) {",
+									"    throw new Error(\"planet_id is null\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/planet/{{planet_id}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"planet",
+								"{{planet_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "687695fa-360d-4180-b0fe-1915825a4b38",
+								"exec": [
+									"pm.test(\"Status: OK\", function () {",
+									"    pm.expect(pm.response.code).to.be.ok;",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"// Test if response is an array and not an object",
+									"pm.test('Is an array', () => pm.expect(pm.response.json()).to.be.an('array').but.not.an('object'))",
+									"",
+									"// Saving single user for Single User request test",
+									"if( jsonData.length > 0 ){",
+									"    pm.collectionVariables.set(\"user\", jsonData[0]);",
+									"    pm.collectionVariables.set(\"username\", jsonData[0].username)",
+									"}else{",
+									"    user = null;",
+									"}",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/user/all",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"user",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3284df6e-2de2-487c-8934-b9114d95520b",
+								"exec": [
+									"",
+									"",
+									"pm.test(\"Status: OK\", function () {",
+									"    pm.expect(pm.response.code).to.be.ok;",
+									"});",
+									"",
+									"const expectedUser = pm.collectionVariables.get(\"user\");",
+									"const responseUser = pm.response.json();",
+									"",
+									"pm.test(\"Same user\", () => {",
+									"    pm.expect(responseUser.username).to.equal(expectedUser.username);",
+									"    pm.expect(responseUser.id).to.equal(expectedUser.id);",
+									"    pm.expect(responseUser.rating).to.equal(expectedUser.rating);",
+									"    pm.expect(responseUser.rank).to.equal(expectedUser.rank);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5e923141-a8da-4fc2-b47d-e1c7155b7b6d",
+								"exec": [
+									"if( !pm.collectionVariables.get(\"username\") ){",
+									"    throw new Error(\"username is null\");",
+									"}",
+									"",
+									"if( !pm.collectionVariables.get(\"user\") ){",
+									"    throw new Error(\"user is null\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/user/{{username}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"user",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Universal Rankings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "98b0ffed-72fb-44a3-a79c-0d9e19728c3e",
+								"exec": [
+									"pm.test(\"Status: OK\", function () {",
+									"    pm.expect(pm.response.code).to.be.ok;",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"// Test if response is an array and not an object",
+									"pm.test('Is an array', () => pm.expect(pm.response.json()).to.be.an('array').but.not.an('object'))",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/rankings/universal",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"rankings",
+								"universal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Not authorized user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "835e3961-6522-49e7-adfb-4236930ffabf",
+								"exec": [
+									"pm.test(\"Status: Not authorized\", function () {",
+									"    pm.expect(pm.response.code).to.equal(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ded01d31-cde3-40a2-8a5a-acf8fe6c62b0",
+								"exec": [
+									"if( !pm.collectionVariables.get(\"username\") ){",
+									"    throw new Error(\"username is null\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/user/{{username}}/private",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"user",
+								"{{username}}",
+								"private"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Track TIme not authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3aee18fc-7dd4-4231-9521-252623e8973a",
+								"exec": [
+									"pm.test(\"Status: Not authorized\", () => pm.expect(pm.response.code).to.equal(401));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "cb05800b-4e89-455e-acf8-9fc1d55b2eb4",
+								"exec": [
+									"if( !pm.collectionVariables.get(\"username\") ){",
+									"    throw new Error(\"username is null\");",
+									"}",
+									"",
+									"if( !pm.collectionVariables.get(\"username\") ){",
+									"    throw new Error(\"username is null\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"time\" : 1234, \"updateKey\" : \"thisisnotthecorrectupdatekey\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/gameapi/track/{{track_id}}/times/{{username}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"track",
+								"{{track_id}}",
+								"times",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Track TIme wrong json format",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c11df898-1c8d-4d29-8371-5679392e8a97",
+								"exec": [
+									"pm.test(\"Status: Bad Request\", () => pm.expect(pm.response.code).to.equal(400));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c0af22df-892c-4832-8681-9aa4cf5ab005",
+								"exec": [
+									"if( !pm.collectionVariables.get(\"username\") ){",
+									"    throw new Error(\"username is null\");",
+									"}",
+									"",
+									"if( !pm.collectionVariables.get(\"username\") ){",
+									"    throw new Error(\"username is null\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"time\" : 1234, \"thisnotcorrect\" : \"thisisnotthecorrectupdatekey\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/gameapi/track/{{track_id}}/times/{{username}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"track",
+								"{{track_id}}",
+								"times",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Track Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b3bea4f3-b728-4339-abcf-69cdf3d3e48b",
+								"exec": [
+									"pm.test(\"Status: Not found\", () => {",
+									"    pm.expect(pm.response.code).to.equal(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/track/thisshouldnotbeatrackid",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"track",
+								"thisshouldnotbeatrackid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4c7f2e85-1d5a-4e58-8d30-be209609846f",
+								"exec": [
+									"pm.test(\"Status: Not found\", () => {",
+									"    pm.expect(pm.response.code).to.equal(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/user/thisshouldnotbeauser",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"user",
+								"thisshouldnotbeauser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Planet Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e88f3d64-6b3a-444e-ae08-e5efca82677f",
+								"exec": [
+									"pm.test(\"Status: Not found\", () => {",
+									"    pm.expect(pm.response.code).to.equal(404);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/planet/thisshouldnotbeacorrectplanetid",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"planet",
+								"thisshouldnotbeacorrectplanetid"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Authentication Test",
+			"item": [
+				{
+					"name": "Get token (authenticate)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "94961568-4fd1-453e-aaf3-215e63bb490c",
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status: OK\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Has token', function() {\r",
+									"  pm.expect(jsonData).to.have.property('jwt');\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"token\", jsonData.jwt);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d0829c37-185f-4a87-8fd6-fdf84d9e3129",
+								"exec": [
+									"pm.collectionVariables.set('username', 's185139');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "s185139",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "qwerty",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "maltebp.dk:7000/login",
+							"host": [
+								"maltebp",
+								"dk"
+							],
+							"port": "7000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4e5d12cc-6425-4b37-9e55-2b21f7031b58",
+								"exec": [
+									"",
+									"",
+									"pm.test('Test token', function(){",
+									"   pm.expect(pm.response.code).to.be.ok;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "maltebp.dk:7000/jwt/exchangeUser",
+							"host": [
+								"maltebp",
+								"dk"
+							],
+							"port": "7000",
+							"path": [
+								"jwt",
+								"exchangeUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login to GameAPI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "15f64931-a2eb-47d9-95ac-4d832178eb8a",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test('Status ok', function(){",
+									"   pm.expect(pm.response.code).to.be.ok;",
+									"});",
+									"",
+									"pm.test('Username correct', function(){",
+									"    pm.expect(jsonData.username).to.eql(pm.collectionVariables.get('username'));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "maltebp.dk:10000/gameapi/user/{{username}}/private",
+							"host": [
+								"maltebp",
+								"dk"
+							],
+							"port": "10000",
+							"path": [
+								"gameapi",
+								"user",
+								"{{username}}",
+								"private"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Post Time Test",
+			"item": [
+				{
+					"name": "Get token (authenticate)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f6c37516-e7e8-4764-9d71-0984c9c06198",
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status: OK\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Has token', function() {\r",
+									"  pm.expect(jsonData).to.have.property('jwt');\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"token\", jsonData.jwt);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a949983a-6361-4fab-ac9c-4954f3661fba",
+								"exec": [
+									"pm.collectionVariables.set('username', 's185139');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "qwerty",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "maltebp.dk:7000/login",
+							"host": [
+								"maltebp",
+								"dk"
+							],
+							"port": "7000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "003ccb63-5be8-43f5-9403-1646e2595220",
+								"exec": [
+									"",
+									"",
+									"pm.test('Test token', function(){",
+									"   pm.expect(pm.response.code).to.be.ok;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "maltebp.dk:7000/jwt/exchangeUser",
+							"host": [
+								"maltebp",
+								"dk"
+							],
+							"port": "7000",
+							"path": [
+								"jwt",
+								"exchangeUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login to GameAPI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b32f0b3-36f0-4f9f-a3aa-7a1584b321e5",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test('Status ok', function(){",
+									"   pm.expect(pm.response.code).to.be.ok;",
+									"});",
+									"",
+									"pm.test('Username correct', function(){",
+									"    pm.expect(jsonData.username).to.eql(pm.collectionVariables.get('username'));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "maltebp.dk:10000/gameapi/user/{{username}}/private",
+							"host": [
+								"maltebp",
+								"dk"
+							],
+							"port": "10000",
+							"path": [
+								"gameapi",
+								"user",
+								"{{username}}",
+								"private"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Rounds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "22b4caae-f4a6-4765-a849-35696eae882b",
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"// There should always be a round\r",
+									"pm.test(\"Status: OK\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"jsonData[0].trackId\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/gameapi/round/all",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"gameapi",
+								"round",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Track time",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "676b42dc-4467-49b1-b997-a82c6f6f03be",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "16866fbb-bbf9-4cbc-8498-8f4cb3835b44",
+								"exec": [
+									"if( !pm.collectionVariables.get(\"username\") ){",
+									"    throw new Error(\"username is null\");",
+									"}",
+									"",
+									"if( !pm.collectionVariables.get(\"username\") ){",
+									"    throw new Error(\"username is null\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"time\" : 1234, \"updateKey\" : \"verysecurekey1234\" }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "maltebp.dk:10000/gameapi/track/{{trackId}}/times/{{username}}",
+							"host": [
+								"maltebp",
+								"dk"
+							],
+							"port": "10000",
+							"path": [
+								"gameapi",
+								"track",
+								"{{trackId}}",
+								"times",
+								"{{username}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "dc86487f-c8fd-4940-a035-949953740c00",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "eef6201e-d8b1-47c0-8ce4-eec34a6264e7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "67e84d8a-fe98-4239-a34d-267d331657b9",
+			"key": "api_url",
+			"value": "maltebp.dk:10000",
+			"type": "string"
+		},
+		{
+			"id": "4c49989b-c8a7-40d4-9d66-a8e7bf2116e7",
+			"key": "track",
+			"value": "null",
+			"type": "string"
+		},
+		{
+			"id": "efee6a77-c0b6-486a-a7b9-3a931ee81ddf",
+			"key": "user",
+			"value": "null",
+			"type": "string"
+		},
+		{
+			"id": "9e0ca0a0-1998-4205-849b-6b7398e039c2",
+			"key": "username",
+			"value": "null",
+			"type": "string"
+		},
+		{
+			"id": "25ed9798-1dcb-47ff-8703-616ebfe498d2",
+			"key": "round",
+			"value": "null",
+			"type": "string"
+		},
+		{
+			"id": "e277b79b-1f47-417d-b4ba-5285d85a2bac",
+			"key": "track_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "354e3aa2-67bd-4568-8b01-79efe4954492",
+			"key": "planet_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "ca59381a-a703-4475-a3cb-b9f7fd5c0998",
+			"key": "planet",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "72ad63e6-dce5-4d3b-80ab-d916d24ca554",
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

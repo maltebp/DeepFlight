@@ -10,11 +10,15 @@ import javalinjwt.JavalinJWT;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-
 import java.io.IOException;
 import java.util.Optional;
 
 public class Main {
+
+    //Ports that will be exposed at the Docker container
+    private static final int JAVALIN_PORT = 7000;
+    private static final int PROMETHEUS__ETRIC_PORT = 7001;
+
 
 
     public static void main(String[] args) throws IOException {
@@ -39,18 +43,22 @@ public class Main {
             //        "http://maltebp.dk/" // Web site remote
             //);
 
-        }).start(7000);
+        }).start(JAVALIN_PORT);
 
-/*
-#############################################AUTHFILTER########################################################################################
- */
+
+        // Root Resource
+        app.before("/", ctx -> {
+            ctx.result("UserAPI is up and running!");
+            ctx.status(200);
+            ctx.contentType("text/plain");
+        });
+
+
         /*This is the Authfilter.
         It will be run before any request reatches its endpoint.
         If there is a token in the header it will pass.
         Only if the endpoint "/login" is access the filter will return
         */
-
-
         app.before("/jwt/*", ctx -> {
             String source = "Authfilter";
 
@@ -66,20 +74,12 @@ public class Main {
         });
 
 
-        /*
-        Response message for no access token.
-         */
+        //Response message for no access token
         app.get("/loginRequest",ctx->{
             ctx.status(401);
             ctx.result("Pleases provide login information:\n POST information to /login\n The format should be: 'name':'username' 'password': 'password'\n\nThis game service is arthendicated througt javabog.dk. Please contact them if you have problems with authendication ");
         });
-/*
-#####################################################################################################################################
- */
 
-/*
-#############################################REST-LOGIN########################################################################################
- */
 
 
         /*
@@ -107,8 +107,8 @@ public class Main {
     /*Code from https://javalin.io/tutorials/prometheus-example*/
 
     private static void initializePrometheus(StatisticsHandler statisticsHandler, QueuedThreadPool queuedThreadPool) throws IOException {
-        StatisticsHandlerCollector.initialize(statisticsHandler); // collector is included in source code
-        QueuedThreadPoolCollector.initialize(queuedThreadPool); // collector is included in source code
-        HTTPServer prometheusServer = new HTTPServer(7001);
+        StatisticsHandlerCollector.initialize(statisticsHandler); //Here we registrer
+        QueuedThreadPoolCollector.initialize(queuedThreadPool); //Here we registrer
+        HTTPServer prometheusServer = new HTTPServer(PROMETHEUS__ETRIC_PORT);
     }
 }
