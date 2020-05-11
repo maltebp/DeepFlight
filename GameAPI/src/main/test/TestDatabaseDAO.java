@@ -1,127 +1,119 @@
-import database.DatabaseConnection;
+
 import database.DatabaseDAO;
 import database.DatabaseException;
 import model.*;
-import org.bson.types.ObjectId;
 import static org.junit.Assert.*;
-import org.junit.Test;
 
-import java.util.HashMap;
+import org.junit.*;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class TestDatabaseDAO {
-    DatabaseDAO databaseDAO = new DatabaseDAO();
 
+    static List<User> createdUsers;
 
-    @Test
-    public void getPlanet() throws DatabaseException {
+    static DatabaseDAO databaseDAO;
 
+    @BeforeClass
+    public static void createTestData () throws DatabaseException {
+        // Creates the databaseDAO and sets it in testing mode
+        databaseDAO = new DatabaseDAO();
+        databaseDAO.setTestingMode(true);
 
-        Planet wantedPLanet = databaseDAO.getPlanets().get(0);
-        String wantedPlanetID = wantedPLanet.getId();
+        createdUsers = new ArrayList<>();
+        createdUsers.add( databaseDAO.addUser(createUserNameString()));
+    }
 
-        Planet returnPlanet = databaseDAO.getPlanet(wantedPlanetID);
-        System.out.println(wantedPLanet);
-        System.out.println(returnPlanet);
-
-        //Checks if the return planet name is equal to wanted name and if the id's are equal.
-        assertEquals(wantedPLanet.getId(),returnPlanet.getId());
-        assertEquals(wantedPLanet.getName(),returnPlanet.getName());
-
-        //Checks if all the collars are equal
-        for(int i = 0; i<wantedPLanet.getColor().length;i++) {
-            assertEquals(wantedPLanet.getColor()[i], returnPlanet.getColor()[i]);
+    @AfterClass
+    public static void removeTestData() throws DatabaseException {
+        for (User user : createdUsers) {
+            databaseDAO.deleteUser(user.getId());
         }
     }
 
-
     @Test
-    public void getUser() throws DatabaseException {
-        User wantedUser = User.builder().id("5eb14d543ec1e875375f5f7b").username("Malte").rank(4).rating(5).build();
-        User returnUser = databaseDAO.getUser(wantedUser.getId());
-        System.out.println("Wanted User: "+returnUser);
-        System.out.println("Return User: "+wantedUser);
-        assertEquals(wantedUser.getUsername(),returnUser.getUsername());
-        assertEquals(wantedUser.getRank(), returnUser.getRank());
-        assertEquals(wantedUser.getRating(), returnUser.getRating(),0.0);
-
+    public void updateTrackTime() throws DatabaseException {
+        List<Track> allTrackList = databaseDAO.getAllTracks();
+        if (allTrackList.size() != 0) {
+            String trackIDOfTestingTrack = allTrackList.get(0).getId();
+            String userNameToUpdateTrackTimeFor = createUserNameString();
+            // Checks that there is no track time for the User.
+            assertNull(allTrackList.get(0).getTimes().get(userNameToUpdateTrackTimeFor));
+            int trackTime1 = 4300, trackTime2 = 4500, trackTime3 = 3400;
+            // Inserts the first TrackTime.
+            databaseDAO.updateTrackTime(trackIDOfTestingTrack,userNameToUpdateTrackTimeFor,trackTime1);
+            int trackTime1PostUpdate = databaseDAO.getAllTracks().get(0).getTimes().get(trackIDOfTestingTrack);
+            assertEquals(trackTime1PostUpdate,trackTime1);
+            // Tries to update TrackTime with a time that is not better than the current.
+            databaseDAO.updateTrackTime(trackIDOfTestingTrack,userNameToUpdateTrackTimeFor,trackTime2);
+            int trackTime2PostUpdate = databaseDAO.getAllTracks().get(0).getTimes().get(trackIDOfTestingTrack);
+            assertNotEquals(trackTime2PostUpdate,trackTime2);
+            assertEquals(trackTime2PostUpdate,trackTime1);
+            // Tries updating with a TrackTime that is lower than the current.
+            databaseDAO.updateTrackTime(trackIDOfTestingTrack,userNameToUpdateTrackTimeFor,trackTime3);
+            int trackTime3PostUpdate = databaseDAO.getAllTracks().get(0).getTimes().get(trackIDOfTestingTrack);
+            assertEquals(trackTime3PostUpdate,trackTime3);
+        }
 
     }
 
     @Test
-    public void getUserFromUsername() throws DatabaseException {
+    public void getCurrentRound() throws DatabaseException {
+        databaseDAO.setTestingMode(false);
+        long currentEpochMillis = System.currentTimeMillis();
+        try {
+            Round currentRound = databaseDAO.getCurrentRound();
+            assertTrue(currentEpochMillis > currentRound.getStartDate());
+            assertTrue(currentEpochMillis < currentRound.getEndDate());
+        } catch (NoSuchElementException e) {
+            List<Round> allRounds = databaseDAO.getRounds();
+            for (Round round : allRounds) {
+                assertTrue(round.getStartDate() < currentEpochMillis);
+                assertTrue(round.getEndDate() < currentEpochMillis);
+            }
+        }
+        databaseDAO.setTestingMode(true);
+    }
 
-        User wantedUser = User.builder().id("5eb14d543ec1e875375f5f7b").username("Malte").rank(4).rating(5).build();
+    @Test
+    public void getPreviousRound() throws DatabaseException,NoSuchElementException {
+        databaseDAO.setTestingMode(false);
+        long currentEpochMillis = System.currentTimeMillis();
+        Round currentRound = databaseDAO.getPreviousRound();
+        assertTrue(currentEpochMillis > currentRound.getStartDate());
+        assertTrue(currentEpochMillis > currentRound.getEndDate());
+        databaseDAO.setTestingMode(true);
+    }
 
-
-        User returnUser = databaseDAO.getUserFromUsername(wantedUser.getUsername());
-        System.out.println("Wanted User: "+returnUser);
-        System.out.println("Return User: "+wantedUser);
-        assertEquals(wantedUser.getId(),returnUser.getId());
-        assertEquals(wantedUser.getUsername(),returnUser.getUsername());
-        assertEquals(wantedUser.getRank(), returnUser.getRank());
-        assertEquals(wantedUser.getRating(), returnUser.getRating(),0.0);
-
+    @Test
+    public void getPlanet() throws DatabaseException {
+        List<Planet> allPlanetList = databaseDAO.getPlanets();
+        if (allPlanetList.size() != 0) {
+            String planetID = allPlanetList.get(0).getId();
+            Planet gettedPlanet = databaseDAO.getPlanet(planetID);
+            assertEquals(allPlanetList.get(0),gettedPlanet);
+        }
     }
 
     @Test
     public void addUser() throws DatabaseException {
-
-        User wantedUser = databaseDAO.addUser("Knud");
-
-        User returnUser = databaseDAO.getUserFromUsername("Knud");
-        System.out.println("Wanted User: "+returnUser);
-        System.out.println("Return User: "+wantedUser);
-        assertEquals(wantedUser.getId(),returnUser.getId());
-        assertEquals(wantedUser.getUsername(),returnUser.getUsername());
-        assertEquals(wantedUser.getRank(), returnUser.getRank());
-        assertEquals(wantedUser.getRating(), returnUser.getRating(),0.0);
-
+        int pre = databaseDAO.getUsers().size();
+        createdUsers.add(databaseDAO.addUser(createUserNameString()));
+        int post = databaseDAO.getUsers().size();
+        assertEquals(pre+1, post);
     }
 
     @Test
-    public void getTrack() throws DatabaseException {
-
-        HashMap<String,Integer> times = new HashMap<>();
-        times.put(    "5eb14d543ec1e875375f5f7b",689);
-        times.put("5eb14d543ec1e875375f5f7c",744);
-        times.put("5eb14d543ec1e875375f5f7d",429);
-        times.put("5eb14d543ec1e875375f5f7e",50);
-
-
-
-        Track wantedTrack = Track.builder().id("5eb14d50d9d2602cb220ce43").name("LDWG-511").planetId("5eb14d38d9d2602cb220ce3f").seed(Integer.toString((1383233762))).times(times).build();
-
-        Track returnTrack = databaseDAO.getTrack(wantedTrack.getId());
-        System.out.println("Wanted User: "+wantedTrack);
-        System.out.println("Return User: "+returnTrack);
-        assertEquals(wantedTrack.getId(),returnTrack.getId());
-        assertEquals(wantedTrack.getName(),returnTrack.getName());
-        assertEquals(wantedTrack.getPlanetId(),returnTrack.getPlanetId());
-        assertEquals(wantedTrack.getTimes().keySet(),returnTrack.getTimes().keySet());
-        assertEquals(wantedTrack.toString(),returnTrack.toString());
-
+    public void getUser() throws DatabaseException,NoSuchElementException {
+        for (User createdUser : createdUsers) {
+            User gettedUser = databaseDAO.getUser(createdUser.getId());
+            assertEquals(createdUser.getId(), gettedUser.getId());
+        }
     }
 
-    @Test
-    public void getRounds() throws DatabaseException {
-        long count = DatabaseConnection.getInstance().find(Round.class).count();
-
-        List<Round> roundsList = databaseDAO.getRounds();
-        System.out.println("returnList length: "+roundsList.size());
-        System.out.println("Count:" +count);
-        assertEquals(count,roundsList.size());
-
-    }
-
-
-    @Test
-    public void getTracksdata() throws DatabaseException {
-        Trackdata wantedTrackdata = Trackdata.builder().id("5eb14d50d9d2602cb220ce43").build();
-
-        byte[] returnTrackdata = databaseDAO.getTrackData(wantedTrackdata.getId());
-
-        System.out.println(returnTrackdata);
-
+    private static String createUserNameString() {
+        return "userName" + System.currentTimeMillis();
     }
 }

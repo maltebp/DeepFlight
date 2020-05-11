@@ -56,7 +56,7 @@ public class DatabaseConnection {
      * use a temporary test database.
      * The test database name is DB_NAME+_test, and it's recreated when this method
      * is called. */
-    public void setTestMode(boolean isTesting) throws UnknownHostException {
+    public void setTestMode(boolean isTesting) {
         if (testMode != isTesting) {
             testMode = isTesting;
             dbName = createDbNameFromMode(testMode);
