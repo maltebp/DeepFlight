@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { getPlanetStats } from './PlanetStatsLogic';
 import smar from "./images/CircleSmar.png"
 import aerth from "./images/CircleAerth.png"
 import turnsa from "./images/CircleTurnsa.png"
@@ -20,7 +19,7 @@ class Planets extends Component {
 
     componentDidMount() {
         // Ask planetStatsLogic to handle state and get tracks
-        getPlanetStats(this.setState.bind(this))
+        //getPlanetStats(this.setState.bind(this))
     }
 
 
