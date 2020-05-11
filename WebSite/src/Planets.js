@@ -7,7 +7,6 @@ import lupto from "./images/CircleLupto.png"
 class Planets extends Component {
    
     render() {
-        console.log(this.state.tracks)
         return (
             <div className="boxwrapper">
                 <div className="box">
