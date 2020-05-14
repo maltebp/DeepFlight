@@ -1,5 +1,6 @@
 package server;
 
+import Prometheus.DeepFlightMetric;
 import Prometheus.QueuedThreadPoolCollector;
 import Prometheus.StatisticsHandlerCollector;
 import io.javalin.Javalin;
@@ -27,11 +28,11 @@ public class APIServer {
             System.out.println("WARNING: Server isn't stopped before starting");
             stop();
         }
-
+        DeepFlightMetric deepflightMetricHandler = new DeepFlightMetric();
         /*Code from https://javalin.io/tutorials/prometheus-example*/
         StatisticsHandler statisticsHandler = new StatisticsHandler();
         QueuedThreadPool queuedThreadPool = new QueuedThreadPool(200, 8, 60_000);
-        initializePrometheus(statisticsHandler, queuedThreadPool);
+        initializePrometheus(statisticsHandler, queuedThreadPool, deepflightMetricHandler);
 
         // Setup generic config
         server = Javalin.create(config -> {
@@ -87,8 +88,8 @@ public class APIServer {
     }
 
 
-    private void initializePrometheus(StatisticsHandler statisticsHandler, QueuedThreadPool queuedThreadPool) {
-        StatisticsHandlerCollector.initialize(statisticsHandler);
+    private void initializePrometheus(StatisticsHandler statisticsHandler, QueuedThreadPool queuedThreadPool, DeepFlightMetric deepflightMetricHandler) {
+        StatisticsHandlerCollector.initialize(statisticsHandler,deepflightMetricHandler);
         QueuedThreadPoolCollector.initialize(queuedThreadPool);
         try {
             HTTPServer prometheusServer = new HTTPServer(PROMETHEUS_PORT);

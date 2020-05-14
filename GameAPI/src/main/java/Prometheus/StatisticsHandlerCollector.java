@@ -12,15 +12,17 @@ import java.util.List;
 
 public class StatisticsHandlerCollector extends Collector {
 
+    private final DeepFlightMetric deepflightMetrixHandler;
     private final StatisticsHandler statisticsHandler;
     private static final List<String> EMPTY_LIST = new ArrayList<>();
 
-    private StatisticsHandlerCollector(StatisticsHandler statisticsHandler) {
+    private StatisticsHandlerCollector(StatisticsHandler statisticsHandler, DeepFlightMetric deepflightMetrixHandler) {
         this.statisticsHandler = statisticsHandler;
+        this.deepflightMetrixHandler = deepflightMetrixHandler;
     }
 
-    public static void initialize(StatisticsHandler statisticsHandler) {
-        new StatisticsHandlerCollector(statisticsHandler).register();
+    public static void initialize(StatisticsHandler statisticsHandler, DeepFlightMetric deepflightMetrixHandler) {
+        new StatisticsHandlerCollector(statisticsHandler, deepflightMetrixHandler).register();
     }
 
     @Override
@@ -44,8 +46,8 @@ public class StatisticsHandlerCollector extends Collector {
                 buildStatusCounter(),
                 buildGauge("jetty_stats_seconds", "Time in seconds stats have been collected for", statisticsHandler.getStatsOnMs() / 1000.0),
                 buildCounter("jetty_responses_bytes_total", "Total number of bytes across all responses", statisticsHandler.getResponsesBytesTotal()),
-                buildCounter("DeepFlight downloaded", "Total number of DeepFlight game downloads",DeepFlightMetric.getDownloadCounter()),
-                buildCounter("GameAPI, Total_number of score updates", "Counter increments when user posts a new score",DeepFlightMetric.getRandUpdateCounter())
+                buildCounter("game_downloads", "Total number of DeepFlight game downloads",deepflightMetrixHandler.getDownloadCounter()),
+                buildCounter("game_update_time_count", "Counter increments when user posts a new score",deepflightMetrixHandler.getRandUpdateCounter())
         );
     }
 
