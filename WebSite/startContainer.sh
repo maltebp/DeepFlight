@@ -5,7 +5,7 @@ imageName="deepflight/website"
 containerName="df_website"
 
 printf "\nCreating image '$imageName'\n"
-docker build -f Dockerfile.development -t "$imageName" .
+docker build -f Dockerfile.PRODUCTION -t "$imageName" .
 # Check if build succeded ($? is result of last command)
 if [ $? -ne 0 ]; then
     printf "Build error"
@@ -18,7 +18,7 @@ docker stop "$containerName" && docker rm "$containerName"
 
 # Start container
 printf "\nStarting container '$containerName'\n"
-docker run --name "$containerName" -it -d -p 80:3000 "$imageName"
+docker run --name "$containerName" -itd -p 80:80 "$imageName"
 if [ $? -eq 0 ]; then
     printf "\nSuccess!\n" 
 fi

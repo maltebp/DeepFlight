@@ -31,13 +31,49 @@ public class Track {
 
     private HashMap<String,Integer> times;
 
-    public HashMap<String, Integer> getTimes(){
+    // region Getters and Setters
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPlanetId() {
+        return planetId;
+    }
+
+    public void setPlanetId(String planetId) {
+        this.planetId = planetId;
+    }
+
+    public String getSeed() {
+        return seed;
+    }
+
+    public void setSeed(String seed) {
+        this.seed = seed;
+    }
+
+    public HashMap<String, Integer> getTimes() {
         return times;
     }
 
     public void setTimes(HashMap<String, Integer> times) {
         this.times = times;
     }
+
+    // endregion
 
     public JSONObject toJSON() {
         return new JSONObject(this);

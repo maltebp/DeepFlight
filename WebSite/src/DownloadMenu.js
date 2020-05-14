@@ -14,7 +14,7 @@ class DownloadMenu extends React.Component {
 
     downloadGame() {
         // source: https://medium.com/@drevets/you-cant-prompt-a-file-download-with-the-content-disposition-header-using-axios-xhr-sorry-56577aa706d6
-        const url = "htto://maltebp.dk:10000:10000/gameapi/downloadgame";
+        const url = "http://maltebp.dk:10000/gameapi/downloadgame";
         axios({
             method: 'get',
             url: url,
