@@ -1,5 +1,6 @@
 package server.services;
 
+import Prometheus.DeepFlightMetric;
 import database.DatabaseDAO;
 import database.DatabaseException;
 import database.IDatabaseDAO;
@@ -113,6 +114,7 @@ public class TrackService {
             context.result(responseJson.toString());
             context.contentType(ContentType.JSON);
             context.status(HttpStatus.OK_200);
+            DeepFlightMetric.incrementrandUpdateCounter();
 
         } catch (JSONException e) {
             context.result(String.format("Couldn't parse JS ON body (%s)", e.getMessage()));
