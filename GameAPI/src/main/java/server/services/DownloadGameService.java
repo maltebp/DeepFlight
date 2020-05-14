@@ -1,5 +1,6 @@
 package server.services;
 
+import Prometheus.DeepFlightMetric;
 import io.javalin.Javalin;
 import io.javalin.core.util.Header;
 import io.javalin.http.Context;
@@ -13,8 +14,8 @@ import java.io.InputStream;
 import static org.eclipse.jetty.http.HttpStatus.*;
 
 public class DownloadGameService {
-    //final String AUTH_URL = "http://localhost:7000/jwt/exchangeUser";
-    final String AUTH_URL = "http://maltebp.dk:7000/jwt/exchangeUser";
+    final String AUTH_URL = "http://localhost:7000/jwt/exchangeUser";
+    //final String AUTH_URL = "http://maltebp.dk:7000/jwt/exchangeUser";
     final String FILE_NAME = "DeepFlight.zip";
 
     public DownloadGameService(Javalin server) {
@@ -45,6 +46,7 @@ public class DownloadGameService {
             context.header(Header.CONTENT_DISPOSITION, "attachment; filename=deepflight.zip");
             context.result(getFileAsStream(FILE_NAME));
             context.contentType("application/x-octet-stream");
+            DeepFlightMetric.incrementdownloadCounter();
         } catch (Exception e) {
             e.printStackTrace();
             context.status(INTERNAL_SERVER_ERROR_500);
