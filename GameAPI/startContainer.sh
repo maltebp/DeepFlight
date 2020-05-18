@@ -3,7 +3,7 @@
 
 imageName="deepflight/gameapi"
 containerName="df_gameapi"
-
+    
 printf "\nCreating image '$imageName'\n"
 docker build -t "$imageName" .
 # Check if build succeded ($? is result of last command)

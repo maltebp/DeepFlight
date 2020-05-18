@@ -44,8 +44,8 @@ public class StatisticsHandlerCollector extends Collector {
                 buildStatusCounter(),
                 buildGauge("jetty_stats_seconds", "Time in seconds stats have been collected for", statisticsHandler.getStatsOnMs() / 1000.0),
                 buildCounter("jetty_responses_bytes_total", "Total number of bytes across all responses", statisticsHandler.getResponsesBytesTotal()),
-                buildCounter("DeepFlight downloaded", "Total number of DeepFlight game downloads",DeepFlightMetric.getDownloadCounter()),
-                buildCounter("GameAPI, Total_number of score updates", "Counter increments when user posts a new score",DeepFlightMetric.getRandUpdateCounter())
+                buildCounter("game_downloads", "Total number of DeepFlight game downloads",DeepFlightMetric.getDownloadCounter()),
+                buildCounter("game_update_time_count", "Counter increments when user posts a new score",DeepFlightMetric.getRandUpdateCounter())
         );
     }
 

@@ -47,7 +47,7 @@ public class Main {
 
 
         // Root Resource
-        app.before("/", ctx -> {
+        app.get("/", ctx -> {
             ctx.result("UserAPI is up and running!");
             ctx.status(200);
             ctx.contentType("text/plain");
