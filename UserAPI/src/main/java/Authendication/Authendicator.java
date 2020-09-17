@@ -40,9 +40,7 @@ public class Authendicator {
    The predefined users can be seen in the package "Util"
     */
     public static Bruger checkloginType(String username, String password) throws IllegalArgumentException, RemoteException {
-        HashMap<String, String> guistLoginsList = Util.AddUserUtil.addPredifinedUsers();
-
-        if(guistLoginsList.containsKey(username)&& guistLoginsList.get(username).equals(password)){
+        if(PredefinedUsers.isPredefinedUser(username, password)){
             Bruger guestUser = new Bruger();
             guestUser.brugernavn = username;
             return guestUser;

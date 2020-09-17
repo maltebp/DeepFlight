@@ -18,7 +18,7 @@ docker stop "$containerName" && docker rm "$containerName"
 
 # Start container
 printf "\nStarting container '$containerName'\n"
-docker run --name "$containerName" -itd -p 80:80 "$imageName"
+docker run --name "$containerName" -itd -p 6999:80 "$imageName"
 if [ $? -eq 0 ]; then
     printf "\nSuccess!\n" 
 fi

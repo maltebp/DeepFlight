@@ -22,6 +22,3 @@ docker run --name "$containerName" -d -p 7000:7000 -p 7001:7001 "$imageName"
 if [ $? -eq 0 ]; then
     printf "\nSuccess!" 
 fi
-
-
-#  docker build -t deepflight/userapi . && docker run -d -p 7000:7000 deepflight/userapi"

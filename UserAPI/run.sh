@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
-if [ "$1" != "-d" ]; then
-    mvn clean package
-else
+USER=df-user
+
+# Check if Maven build should be skipped
+if [[ $* == *-d* ]]
+then
     printf "Skipping Maven Build\n"
+else
+    mvn clean package
 fi
 
 # Create target directory
-ssh -i "$AMAZON_KEY" df-user@maltebp.dk "mkdir -p ./DeepFlight/UserAPI" &&\
-scp -r -i "$AMAZON_KEY" Dockerfile startContainer.sh target/UserAPI.jar df-user@maltebp.dk:./DeepFlight/UserAPI &&\
-ssh -i "$AMAZON_KEY" df-user@maltebp.dk "cd ./DeepFlight/UserAPI && ./startContainer.sh"
+ssh -i "$DF_SERVER_KEY" "$USER"@maltebp.dk "mkdir -p ./DeepFlight/UserAPI" &&\
+scp -r -i "$DF_SERVER_KEY" Dockerfile startContainer.sh target/UserAPI.jar "$USER"@maltebp.dk:./DeepFlight/UserAPI &&\
+ssh -i "$DF_SERVER_KEY" "$USER"@maltebp.dk "cd ./DeepFlight/UserAPI && ./startContainer.sh"

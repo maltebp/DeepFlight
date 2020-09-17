@@ -4,4 +4,4 @@ COPY package.json ./
 CMD sudo npm clean-install
 COPY . .
 run npm start
-EXPOSE 3000
+EXPOSE 6999
