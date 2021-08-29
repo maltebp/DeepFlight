@@ -18,7 +18,6 @@ import java.util.HashMap;
 @AllArgsConstructor
 @Builder
 @Entity("tracks")
-
 public class Track {
     @Id
     private String id;
